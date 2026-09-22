@@ -6,16 +6,11 @@
 <title>Blob Studio</title>
 <style>
 :root {
-  color-scheme: light dark;
-  --background: light-dark(rgb(255 255 255), rgb(24 24 24));
-  --foreground: light-dark(rgb(26 28 31), rgb(255 255 255));
-  --card: color-mix(in oklab, var(--foreground) 5%, var(--background));
-  --muted-foreground: light-dark(rgb(26 28 31 / 49.4%), rgb(255 255 255 / 49.8%));
-  --primary: light-dark(rgb(51 156 255), rgb(131 195 255));
-  --primary-foreground: light-dark(rgb(255 255 255), rgb(13 13 13));
-  --border: light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%));
-  --radius: 10px;
-  --font-sans: -apple-system, system-ui, "Segoe UI", sans-serif;
+  --ink: #232321;
+  --quiet: #797a75;
+  --line: #e4e4de;
+  --paper: #f6f6f1;
+  --panel: #fff;
 }
 
 * { box-sizing: border-box; }
@@ -27,119 +22,146 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 32px;
+  gap: 40px;
   padding: 48px 20px;
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans);
+  background: var(--paper);
+  color: var(--ink);
+  font: 14px/1.45 "Segoe UI", Arial, sans-serif;
 }
 
-header {
-  text-align: center;
-  max-width: 560px;
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  white-space: nowrap;
+  font-weight: 500;
 }
 
-h1 {
-  margin: 0 0 8px;
-  font-size: 32px;
-  font-weight: 600;
-}
+.brand svg { width: 90px; height: 30px; display: block; }
+
+.brand-divider { height: 24px; width: 1px; background: var(--line); }
+
+.brand span:last-child { font-size: 15px; }
+
+header { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
 
 p.subtitle {
   margin: 0;
-  color: var(--muted-foreground);
-  font-size: 15px;
+  max-width: 420px;
+  color: var(--quiet);
+  font-size: 13px;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(220px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(2, minmax(240px, 1fr));
+  gap: 20px;
   width: 100%;
-  max-width: 720px;
+  max-width: 640px;
 }
 
-@media (max-width: 620px) {
+@media (max-width: 560px) {
   .grid { grid-template-columns: 1fr; }
 }
 
 .card {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 22px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--card);
+  gap: 14px;
+  padding: 24px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
 }
 
-.card h2 {
-  margin: 0;
-  font-size: 17px;
-  font-weight: 600;
+.card-icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e6e7df;
+  border-radius: 12px;
+  background: var(--paper);
 }
+
+.card-icon svg { width: 24px; height: 24px; }
+
+.card h2 { margin: 0; font-size: 15px; font-weight: 500; }
 
 .card p {
   margin: 0;
   flex: 1;
-  color: var(--muted-foreground);
-  font-size: 13px;
+  color: var(--quiet);
+  font-size: 12px;
   line-height: 1.5;
 }
 
-.btn {
+.button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 16px;
-  border: none;
+  border: 1px solid transparent;
   border-radius: 8px;
-  background: var(--primary);
-  color: var(--primary-foreground);
-  font-size: 13px;
-  font-weight: 500;
-  text-decoration: none;
-  cursor: pointer;
-  transition: opacity .12s;
-}
-
-.btn:hover { opacity: 0.85; }
-
-footer {
-  color: var(--muted-foreground);
+  padding: 10px 15px;
   font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  min-height: 39px;
+  text-decoration: none;
+  transition: background .12s;
 }
+
+.button.primary { background: #252821; color: #fff; }
+.button.primary:hover { background: #454c3b; }
+
+footer { color: var(--quiet); font-size: 11px; }
 </style>
 </head>
 <body>
 <header>
-  <h1>Blob Studio</h1>
+  <div class="brand">
+<svg xmlns="http://www.w3.org/2000/svg" width="2800" height="900" viewBox="0 0 28 9" role="img" aria-labelledby="wordmark-title wordmark-description">
+  <title id="wordmark-title">blob — pixel wordmark</title>
+  <desc id="wordmark-description">The black lowercase blob pixel wordmark.</desc>
+  <g id="wordmark" fill="#232321">
+    <g id="letter-b-first" aria-label="b">
+      <path d="M0 0H1V3H3V4H2V5H1V6H2V8H5V7H6V9H0Z"/>
+      <path d="M4 3H6V4H7V7H6V5H5V4H4Z"/>
+    </g>
+    <g id="letter-l" aria-label="l">
+      <path d="M9 0H10V8H11V9H9Z"/>
+    </g>
+    <g id="letter-o" aria-label="o">
+      <path d="M13 3H18V4H14V8H13Z"/>
+      <path d="M18 4H19V8H18V9H14V8H17V7H18Z"/>
+    </g>
+    <g id="letter-b-last" aria-label="b">
+      <path d="M21 0H22V3H24V4H23V5H22V7H23V8H26V6H27V5H26V4H25V3H27V4H28V7H27V9H21Z"/>
+    </g>
+  </g>
+</svg>
+<span class="brand-divider"></span><span>studio</span></div>
   <p class="subtitle">Pick an editor to open. Each app runs entirely in your browser.</p>
 </header>
 
 <main class="grid">
   <div class="card">
-    <h2>Blob Logo Studio</h2>
-    <p>Design and export the blob-shaped logo mark.</p>
-    <a class="btn" href="blob-logo-studio.html">Open editor</a>
-  </div>
-
-  <div class="card">
+    <div class="card-icon">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.8 13.6 5v6L8 14.2 2.4 11V5Z M2.4 5 8 8.2 13.6 5 M8 8.2v6" fill="none" stroke="#232321" stroke-width="1.3" stroke-linejoin="round"/></svg>
+    </div>
     <h2>Blob Logo Studio 3D</h2>
     <p>Explore and render the logo in an interactive 3D scene.</p>
-    <a class="btn" href="blob-logo-studio-3d.html">Open editor</a>
+    <a class="button primary" href="blob-logo-studio-3d.html">Open editor</a>
   </div>
 
   <div class="card">
+    <div class="card-icon">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="#232321" stroke-width="1.3"/><circle cx="8" cy="8" r="1.4" fill="#232321"/></svg>
+    </div>
     <h2>Blob Record Studio</h2>
     <p>Build cover art and layouts for the record series.</p>
-    <a class="btn" href="blob-record-studio.html">Open editor</a>
-  </div>
-
-  <div class="card">
-    <h2>Asteroid Bandit Logo Editor</h2>
-    <p>Craft the Asteroid Bandit logo variant.</p>
-    <a class="btn" href="asteroid-bandit-logo-editor.html">Open editor</a>
+    <a class="button primary" href="blob-record-studio.html">Open editor</a>
   </div>
 </main>
 
