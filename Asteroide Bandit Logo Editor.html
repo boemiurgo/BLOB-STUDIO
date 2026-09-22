@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="en" data-visualize-standalone>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src blob: data:; font-src 'none'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Bandit Logo Studio</title>
+<style>:root {
+  color-scheme: light dark;
+  background-color: var(
+    --background,
+    var(--color-background-primary, light-dark(rgb(255 255 255), rgb(24 24 24)))
+  ) !important;
+
+  /* Agent-facing contract; keep in sync with SKILL.md. */
+  --background: var(
+    --color-background-primary,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --card: color-mix(in oklab, var(--foreground) 5%, var(--background));
+  --card-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --popover: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255), rgb(45 45 45))
+  );
+  --popover-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --primary: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --primary-foreground: var(
+    --color-text-inverse,
+    light-dark(rgb(255 255 255), rgb(13 13 13))
+  );
+  --secondary: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%))
+  );
+  --secondary-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
+  --muted-foreground: var(
+    --color-text-secondary,
+    light-dark(rgb(26 28 31 / 49.4%), rgb(255 255 255 / 49.8%))
+  );
+  --accent: var(
+    --color-background-info,
+    light-dark(rgb(229 242 255), rgb(13 39 63))
+  );
+  --accent-foreground: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --destructive: var(
+    --color-text-warning,
+    light-dark(rgb(226 85 7), rgb(255 133 73))
+  );
+  --border: var(
+    --color-border-secondary,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+  --input: var(
+    --color-border-primary,
+    light-dark(
+      rgb(26 28 31 / 11.8%),
+      color-mix(in oklab, rgb(0 0 0) 10%, transparent)
+    )
+  );
+  --ring: var(
+    --color-ring-primary,
+    light-dark(rgb(51 156 255), rgb(131 195 255 / 76%))
+  );
+  --font-size-base: var(--font-text-md-size, 14px);
+  --blue: light-dark(rgb(51 156 255), rgb(51 156 255));
+  --orange: light-dark(rgb(226 85 7), rgb(251 106 34));
+  --green: light-dark(rgb(0 162 64), rgb(64 201 119));
+  --red: light-dark(rgb(224 46 42), rgb(255 103 100));
+  --purple: light-dark(rgb(146 79 247), rgb(173 123 249));
+  --yellow: light-dark(rgb(255 195 0), rgb(255 210 64));
+  --viz-series-1: var(--primary);
+  --viz-series-2: light-dark(rgb(243 136 59), rgb(245 154 86));
+  --viz-series-3: light-dark(rgb(93 201 119), rgb(116 213 139));
+  --viz-series-4: light-dark(rgb(235 119 177), rgb(240 143 192));
+  --viz-series-5: light-dark(rgb(155 121 236), rgb(170 145 239));
+  --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
+
+  /* Internal implementation variables; not part of the agent contract. */
+  --font-sans: -apple-system, system-ui, "Segoe UI", sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
+    monospace;
+  --font-size-normal: max(11px, var(--font-size-base));
+  --font-size-tooltip: calc(var(--font-size-base) - 1px);
+  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
+  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
+  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
+  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
+  --font-weight-normal: 430;
+  --font-weight-medium: 500;
+  --icon-size: 16px;
+  --line-height-normal: calc(var(--font-size-normal) * 1.5);
+  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
+  --line-height-small: calc(var(--font-size-small) + 4px);
+  --corner-shape: round;
+  --radius: var(--border-radius-lg, 10px);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-2xl: calc(var(--radius) * 1.6);
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
+  --checkmark-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17 17'%3E%3Cpath d='M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z'/%3E%3C/svg%3E");
+
+  /* Legacy aliases; not part of the current agent contract. */
+  --viz-bg: transparent;
+  --viz-panel: var(--card);
+  --viz-border: var(--border);
+  --viz-text: var(--foreground);
+  --viz-muted: var(--muted-foreground);
+  --viz-accent: var(--primary);
+  --viz-accent-text: var(--primary-foreground);
+  --viz-accent-bg: var(--accent);
+  --viz-font-size: var(--font-size-base);
+  --viz-warning: var(--destructive);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html > body {
+  /* Preserve MCP aliases for older inline renderers without creating :root cycles. */
+  --color-background-primary: var(
+    --background,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --color-text-primary: var(
+    --foreground,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --color-border-secondary: var(
+    --border,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+
+  margin: 0;
+  padding: var(--visualize-paint-gutter, 0px);
+  color: var(--foreground);
+  background: transparent !important;
+  font-family: var(--font-sans) !important;
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+#widget > svg {
+  width: 100%;
+}
+
+html>body{padding:0}</style>
+<style>html[data-visualize-standalone],body{background:#fafaf7;color:#232321;color-scheme:light;margin:0;padding:0}html{scrollbar-gutter:stable}</style>
+</head>
+<body>
+<main id="bandit-app">
+  <header class="app-header">
+    <div class="brand">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="1196 119 94 50" width="64" height="34" role="img" aria-labelledby="mark-title">
+  <title id="mark-title">Bandit 112 — mascot eyes mark</title>
+  <g fill="#232321" fill-rule="evenodd">
+    <path d="M1233.0,127.5L1240.5,138.0L1240.5,150.0L1230.0,160.5L1215.0,160.5L1204.5,147.0L1207.5,135.0L1215.0,127.5Z M1275.0,127.5L1282.5,138.0L1282.5,150.0L1272.0,160.5L1257.0,160.5L1246.5,147.0L1249.5,135.0L1257.0,127.5Z M1213.5,141.0L1218.0,136.5L1227.0,136.5L1231.5,147.0L1227.0,151.5L1218.0,151.5Z M1255.5,141.0L1260.0,136.5L1269.0,136.5L1273.5,147.0L1269.0,151.5L1260.0,151.5Z"/>
+  </g>
+</svg>
+<span class="brand-divider"></span><span>bandit logo studio</span></div>
+    <div class="header-right"><span class="offline-badge">OFFLINE</span></div>
+  </header>
+  <div class="workspace">
+    <aside class="settings-panel" aria-label="Logo settings" tabindex="0">
+      <div class="panel-heading"><h1>Your Bandit, your colors.</h1></div>
+      <label class="field">Palette<select id="version-select" aria-label="Starting palette"></select></label>
+      <section class="control-section" aria-labelledby="colors-heading"><h2 id="colors-heading">Colors</h2>
+        <div class="color-row"><label for="text-color-btn">Letters</label><div class="color-picker"><output id="text-value">#2D66D0</output><button type="button" id="text-color-btn" class="color-swatch-btn" aria-label="Letters color"></button><input id="text-color" type="color" value="#2d66d0" data-setting="text" class="color-input-hidden" tabindex="-1" aria-hidden="true"></div></div>
+        <div class="color-row"><label for="bg-color-btn">Background</label><div class="color-picker"><output id="bg-value">#CF3A3A</output><button type="button" id="bg-color-btn" class="color-swatch-btn" aria-label="Background color"></button><input id="bg-color" type="color" value="#cf3a3a" data-setting="bg" class="color-input-hidden" tabindex="-1" aria-hidden="true"></div></div>
+        <label class="check-field"><input id="transparent-bg" type="checkbox" data-setting="transparentBg" aria-label="Transparent background"> Transparent background</label>
+      </section>
+      <section class="control-section" aria-labelledby="shadow-heading"><h2 id="shadow-heading">Offset shadow</h2>
+        <label class="check-field"><input id="shadow-on" type="checkbox" data-setting="shadow" aria-label="Show offset shadow"> Show offset shadow</label>
+        <div class="color-row"><label for="shadow-color-btn">Shadow color</label><div class="color-picker"><output id="shadowColor-value">#000000</output><button type="button" id="shadow-color-btn" class="color-swatch-btn" aria-label="Shadow color"></button><input id="shadow-color" type="color" value="#000000" data-setting="shadowColor" class="color-input-hidden" tabindex="-1" aria-hidden="true"></div></div>
+        <label class="slider-field"><span>Offset<output data-value="shadowOffset" data-unit="px">10 px</output></span><input type="range" min="0" max="40" value="10" data-setting="shadowOffset" aria-label="Shadow offset"></label>
+      </section>
+      <section class="control-section" aria-labelledby="shape-heading"><h2 id="shape-heading">Shape</h2>
+        <label class="slider-field"><span>Stretch<output data-value="stretch">100%</output></span><input type="range" min="70" max="130" value="100" data-setting="stretch" aria-label="Logo stretch"></label>
+      </section>
+      <p id="notice" class="notice" role="status" aria-live="polite">The logo is loaded. Start editing.</p>
+    </aside>
+    <section class="preview-panel" aria-label="Logo preview and downloads" tabindex="0">
+      <div id="stage" class="logo-stage" aria-label="Live logo preview"></div>
+      <section class="download-panel" aria-label="Image downloads">
+        <div class="export-controls"><label class="field png-size">PNG size<select id="export-size" aria-label="PNG size"><option value="1024">1024 px</option><option value="2048">2048 px</option><option value="4096" selected>4096 px · HD</option></select></label><button id="download-png" class="button primary">Download PNG</button><button id="download-svg" class="button secondary">Download SVG</button></div>
+      </section>
+    </section>
+  </div>
+  <div id="color-sheet-backdrop" class="color-sheet-backdrop" hidden></div>
+  <div id="color-sheet" class="color-sheet" hidden role="dialog" aria-modal="true" aria-labelledby="color-sheet-title">
+    <div class="color-sheet-bar"></div>
+    <div class="color-sheet-head"><span id="color-sheet-title">Color</span><button type="button" id="color-sheet-close" class="button quiet">Done</button></div>
+    <div class="color-sv" id="color-sv"><div class="color-sv-thumb" id="color-sv-thumb"></div></div>
+    <div class="color-hue" id="color-hue"><div class="color-hue-thumb" id="color-hue-thumb"></div></div>
+    <div class="color-hex-row"><span class="color-hex-swatch" id="color-hex-swatch"></span><input id="color-hex-input" type="text" maxlength="7" aria-label="Hex color value" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
+  </div>
+  <template id="logo-source"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-70 -130 1940 980" role="img" aria-labelledby="title desc">
+<title id="title">ASTEROÏDE BANDIT 112 — logotype</title>
+<desc id="desc">A clean vector reconstruction of the Asteroïde Bandit 112 logotype: the wordmark letters, the small mascot eyes above the Ï, an optional offset shadow duplicate, and a solid backdrop. All editable vector paths.</desc>
+<g id="backdrop"><rect id="backdrop-rect" x="-70" y="-130" width="1940" height="980"/></g>
+<g id="art-stretch">
+<g id="shadow-layer"><path id="shadow-path" fill-rule="evenodd" d="M226.5,339.0L271.5,183.0L303.0,178.5L348.0,181.5L355.5,204.0L358.5,234.0L388.5,339.0L384.0,343.5L345.0,343.5L330.0,304.5L285.0,304.5L270.0,340.5L231.0,343.5Z M660.0,343.5L619.5,339.0L619.5,225.0L606.0,220.5L564.0,223.5L559.5,219.0L559.5,183.0L564.0,178.5L718.5,180.0L717.0,223.5L664.5,225.0L664.5,297.0Z M411.0,334.5L394.5,312.0L391.5,294.0L396.0,289.5L402.0,292.5L432.0,289.5L438.0,298.5L501.0,298.5L508.5,288.0L501.0,280.5L432.0,280.5L411.0,271.5L394.5,249.0L394.5,213.0L400.5,201.0L417.0,187.5L435.0,181.5L504.0,181.5L531.0,190.5L550.5,213.0L552.0,229.5L507.0,229.5L498.0,223.5L441.0,223.5L433.5,228.0L433.5,234.0L438.0,238.5L516.0,238.5L528.0,244.5L544.5,261.0L553.5,282.0L550.5,312.0L519.0,340.5L459.0,343.5L456.0,340.5L423.0,340.5Z M726.0,343.5L724.5,183.0L873.0,181.5L876.0,184.5L882.0,181.5L882.0,226.5L766.5,228.0L768.0,241.5L840.0,241.5L844.5,246.0L843.0,283.5L768.0,283.5L766.5,300.0L882.0,301.5L883.5,342.0Z M891.0,181.5L1017.0,184.5L1042.5,207.0L1048.5,222.0L1048.5,246.0L1042.5,261.0L1018.5,282.0L1036.5,312.0L1042.5,333.0L1048.5,339.0L1047.0,343.5L1044.0,340.5L1002.0,340.5L991.5,327.0L972.0,283.5L934.5,285.0L934.5,327.0L930.0,343.5L894.0,343.5L889.5,339.0Z M1431.0,343.5L1429.5,183.0L1578.0,181.5L1581.0,184.5L1584.0,181.5L1588.5,186.0L1587.0,226.5L1473.0,226.5L1468.5,231.0L1473.0,241.5L1545.0,241.5L1549.5,246.0L1548.0,283.5L1473.0,283.5L1468.5,288.0L1468.5,300.0L1587.0,301.5L1588.5,339.0L1584.0,343.5Z M1176.0,193.5L1201.5,219.0L1210.5,240.0L1213.5,249.0L1210.5,288.0L1198.5,309.0L1179.0,328.5L1158.0,340.5L1140.0,343.5L1104.0,337.5L1095.0,328.5L1089.0,328.5L1060.5,294.0L1054.5,273.0L1054.5,249.0L1060.5,231.0L1086.0,199.5L1116.0,184.5L1149.0,184.5L1167.0,193.5Z M1221.0,343.5L1219.5,186.0L1257.0,184.5L1258.5,339.0L1254.0,343.5Z M1269.0,184.5L1368.0,187.5L1383.0,193.5L1411.5,216.0L1423.5,240.0L1423.5,288.0L1411.5,312.0L1395.0,328.5L1371.0,343.5L1267.5,342.0Z M306.0,220.5L319.5,252.0L318.0,259.5L295.5,258.0Z M934.5,225.0L999.0,223.5L1006.5,228.0L1006.5,234.0L1002.0,238.5L936.0,238.5Z M1146.0,226.5L1168.5,249.0L1168.5,273.0L1162.5,285.0L1143.0,298.5L1116.0,295.5L1105.5,288.0L1099.5,276.0L1096.5,252.0L1116.0,229.5Z M1309.5,297.0L1311.0,232.5L1347.0,229.5L1365.0,235.5L1378.5,249.0L1381.5,273.0L1365.0,295.5L1359.0,298.5Z M345.0,535.5L345.0,373.5L348.0,376.5L357.0,373.5L366.0,376.5L375.0,373.5L432.0,373.5L435.0,376.5L465.0,373.5L480.0,379.5L496.5,393.0L502.5,405.0L502.5,432.0L496.5,447.0L484.5,456.0L502.5,474.0L502.5,504.0L496.5,519.0L483.0,532.5L477.0,535.5Z M511.5,534.0L541.5,420.0L556.5,378.0L561.0,373.5L606.0,373.5L609.0,376.5L630.0,373.5L637.5,384.0L640.5,414.0L661.5,483.0L670.5,534.0L627.0,535.5L615.0,499.5L570.0,499.5L555.0,535.5Z M1152.0,535.5L1116.0,535.5L1111.5,531.0L1111.5,420.0L1107.0,415.5L1056.0,415.5L1056.0,373.5L1213.5,375.0L1212.0,415.5L1161.0,415.5L1156.5,420.0L1156.5,531.0Z M1008.0,376.5L1041.0,376.5L1045.5,381.0L1044.0,535.5L1006.5,534.0Z M676.5,534.0L678.0,379.5L717.0,379.5L789.0,463.5L793.5,462.0L793.5,381.0L832.5,381.0L835.5,483.0L832.5,486.0L831.0,535.5L792.0,535.5L720.0,448.5L715.5,450.0L712.5,534.0Z M846.0,379.5L936.0,379.5L963.0,388.5L978.0,400.5L991.5,414.0L1000.5,435.0L1000.5,483.0L988.5,507.0L966.0,526.5L948.0,535.5L846.0,535.5Z M1332.0,391.5L1333.5,534.0L1311.0,535.5L1309.5,411.0Z M1365.0,391.5L1366.5,534.0L1347.0,535.5L1345.5,408.0Z M1464.0,538.5L1378.5,534.0L1447.5,444.0L1444.5,429.0L1434.0,418.5L1422.0,415.5L1413.0,418.5L1399.5,435.0L1404.0,457.5L1383.0,457.5L1375.5,450.0L1375.5,423.0L1380.0,424.5L1384.5,414.0L1407.0,394.5L1440.0,394.5L1455.0,403.5L1465.5,417.0L1468.5,456.0L1429.5,507.0L1431.0,514.5L1464.0,511.5Z M451.5,429.0L435.0,433.5L396.0,433.5L384.0,430.5L382.5,420.0L387.0,415.5L444.0,415.5L451.5,420.0Z M591.0,415.5L604.5,447.0L603.0,454.5L580.5,453.0Z M891.0,424.5L930.0,424.5L952.5,438.0L958.5,468.0L942.0,490.5L933.0,493.5L894.0,490.5L891.0,493.5L886.5,489.0L886.5,429.0Z M460.5,486.0L447.0,496.5L396.0,496.5L382.5,492.0L384.0,478.5L447.0,478.5Z M1233.0,127.5L1240.5,138.0L1240.5,150.0L1230.0,160.5L1215.0,160.5L1204.5,147.0L1207.5,135.0L1215.0,127.5Z M1275.0,127.5L1282.5,138.0L1282.5,150.0L1272.0,160.5L1257.0,160.5L1246.5,147.0L1249.5,135.0L1257.0,127.5Z M1213.5,141.0L1218.0,136.5L1227.0,136.5L1231.5,147.0L1227.0,151.5L1218.0,151.5Z M1255.5,141.0L1260.0,136.5L1269.0,136.5L1273.5,147.0L1269.0,151.5L1260.0,151.5Z"/></g>
+<g id="letters-group"><path id="letters-path" fill-rule="evenodd" d="M226.5,339.0L271.5,183.0L303.0,178.5L348.0,181.5L355.5,204.0L358.5,234.0L388.5,339.0L384.0,343.5L345.0,343.5L330.0,304.5L285.0,304.5L270.0,340.5L231.0,343.5Z M660.0,343.5L619.5,339.0L619.5,225.0L606.0,220.5L564.0,223.5L559.5,219.0L559.5,183.0L564.0,178.5L718.5,180.0L717.0,223.5L664.5,225.0L664.5,297.0Z M411.0,334.5L394.5,312.0L391.5,294.0L396.0,289.5L402.0,292.5L432.0,289.5L438.0,298.5L501.0,298.5L508.5,288.0L501.0,280.5L432.0,280.5L411.0,271.5L394.5,249.0L394.5,213.0L400.5,201.0L417.0,187.5L435.0,181.5L504.0,181.5L531.0,190.5L550.5,213.0L552.0,229.5L507.0,229.5L498.0,223.5L441.0,223.5L433.5,228.0L433.5,234.0L438.0,238.5L516.0,238.5L528.0,244.5L544.5,261.0L553.5,282.0L550.5,312.0L519.0,340.5L459.0,343.5L456.0,340.5L423.0,340.5Z M726.0,343.5L724.5,183.0L873.0,181.5L876.0,184.5L882.0,181.5L882.0,226.5L766.5,228.0L768.0,241.5L840.0,241.5L844.5,246.0L843.0,283.5L768.0,283.5L766.5,300.0L882.0,301.5L883.5,342.0Z M891.0,181.5L1017.0,184.5L1042.5,207.0L1048.5,222.0L1048.5,246.0L1042.5,261.0L1018.5,282.0L1036.5,312.0L1042.5,333.0L1048.5,339.0L1047.0,343.5L1044.0,340.5L1002.0,340.5L991.5,327.0L972.0,283.5L934.5,285.0L934.5,327.0L930.0,343.5L894.0,343.5L889.5,339.0Z M1431.0,343.5L1429.5,183.0L1578.0,181.5L1581.0,184.5L1584.0,181.5L1588.5,186.0L1587.0,226.5L1473.0,226.5L1468.5,231.0L1473.0,241.5L1545.0,241.5L1549.5,246.0L1548.0,283.5L1473.0,283.5L1468.5,288.0L1468.5,300.0L1587.0,301.5L1588.5,339.0L1584.0,343.5Z M1176.0,193.5L1201.5,219.0L1210.5,240.0L1213.5,249.0L1210.5,288.0L1198.5,309.0L1179.0,328.5L1158.0,340.5L1140.0,343.5L1104.0,337.5L1095.0,328.5L1089.0,328.5L1060.5,294.0L1054.5,273.0L1054.5,249.0L1060.5,231.0L1086.0,199.5L1116.0,184.5L1149.0,184.5L1167.0,193.5Z M1221.0,343.5L1219.5,186.0L1257.0,184.5L1258.5,339.0L1254.0,343.5Z M1269.0,184.5L1368.0,187.5L1383.0,193.5L1411.5,216.0L1423.5,240.0L1423.5,288.0L1411.5,312.0L1395.0,328.5L1371.0,343.5L1267.5,342.0Z M306.0,220.5L319.5,252.0L318.0,259.5L295.5,258.0Z M934.5,225.0L999.0,223.5L1006.5,228.0L1006.5,234.0L1002.0,238.5L936.0,238.5Z M1146.0,226.5L1168.5,249.0L1168.5,273.0L1162.5,285.0L1143.0,298.5L1116.0,295.5L1105.5,288.0L1099.5,276.0L1096.5,252.0L1116.0,229.5Z M1309.5,297.0L1311.0,232.5L1347.0,229.5L1365.0,235.5L1378.5,249.0L1381.5,273.0L1365.0,295.5L1359.0,298.5Z M345.0,535.5L345.0,373.5L348.0,376.5L357.0,373.5L366.0,376.5L375.0,373.5L432.0,373.5L435.0,376.5L465.0,373.5L480.0,379.5L496.5,393.0L502.5,405.0L502.5,432.0L496.5,447.0L484.5,456.0L502.5,474.0L502.5,504.0L496.5,519.0L483.0,532.5L477.0,535.5Z M511.5,534.0L541.5,420.0L556.5,378.0L561.0,373.5L606.0,373.5L609.0,376.5L630.0,373.5L637.5,384.0L640.5,414.0L661.5,483.0L670.5,534.0L627.0,535.5L615.0,499.5L570.0,499.5L555.0,535.5Z M1152.0,535.5L1116.0,535.5L1111.5,531.0L1111.5,420.0L1107.0,415.5L1056.0,415.5L1056.0,373.5L1213.5,375.0L1212.0,415.5L1161.0,415.5L1156.5,420.0L1156.5,531.0Z M1008.0,376.5L1041.0,376.5L1045.5,381.0L1044.0,535.5L1006.5,534.0Z M676.5,534.0L678.0,379.5L717.0,379.5L789.0,463.5L793.5,462.0L793.5,381.0L832.5,381.0L835.5,483.0L832.5,486.0L831.0,535.5L792.0,535.5L720.0,448.5L715.5,450.0L712.5,534.0Z M846.0,379.5L936.0,379.5L963.0,388.5L978.0,400.5L991.5,414.0L1000.5,435.0L1000.5,483.0L988.5,507.0L966.0,526.5L948.0,535.5L846.0,535.5Z M1332.0,391.5L1333.5,534.0L1311.0,535.5L1309.5,411.0Z M1365.0,391.5L1366.5,534.0L1347.0,535.5L1345.5,408.0Z M1464.0,538.5L1378.5,534.0L1447.5,444.0L1444.5,429.0L1434.0,418.5L1422.0,415.5L1413.0,418.5L1399.5,435.0L1404.0,457.5L1383.0,457.5L1375.5,450.0L1375.5,423.0L1380.0,424.5L1384.5,414.0L1407.0,394.5L1440.0,394.5L1455.0,403.5L1465.5,417.0L1468.5,456.0L1429.5,507.0L1431.0,514.5L1464.0,511.5Z M451.5,429.0L435.0,433.5L396.0,433.5L384.0,430.5L382.5,420.0L387.0,415.5L444.0,415.5L451.5,420.0Z M591.0,415.5L604.5,447.0L603.0,454.5L580.5,453.0Z M891.0,424.5L930.0,424.5L952.5,438.0L958.5,468.0L942.0,490.5L933.0,493.5L894.0,490.5L891.0,493.5L886.5,489.0L886.5,429.0Z M460.5,486.0L447.0,496.5L396.0,496.5L382.5,492.0L384.0,478.5L447.0,478.5Z"/></g>
+<g id="eyes-group"><path id="eyes-path" fill-rule="evenodd" d="M1233.0,127.5L1240.5,138.0L1240.5,150.0L1230.0,160.5L1215.0,160.5L1204.5,147.0L1207.5,135.0L1215.0,127.5Z M1275.0,127.5L1282.5,138.0L1282.5,150.0L1272.0,160.5L1257.0,160.5L1246.5,147.0L1249.5,135.0L1257.0,127.5Z M1213.5,141.0L1218.0,136.5L1227.0,136.5L1231.5,147.0L1227.0,151.5L1218.0,151.5Z M1255.5,141.0L1260.0,136.5L1269.0,136.5L1273.5,147.0L1269.0,151.5L1260.0,151.5Z"/></g>
+</g>
+</svg></template>
+</main>
+<style>
+#bandit-app { --ink:#232321;--quiet:#797a75;--line:#e4e4de;--paper:#f6f6f1;--panel:#fff; font:14px/1.45 "Segoe UI",Arial,sans-serif;color:var(--ink);max-width:1440px;margin:0 auto;padding:8px 20px 0;color-scheme:light; }
+#bandit-app * {box-sizing:border-box;}
+#bandit-app button,#bandit-app input,#bandit-app select {font:inherit;color:inherit;}
+#bandit-app button {cursor:pointer;}
+#bandit-app button:disabled {cursor:default;opacity:.35;}
+#bandit-app button:focus-visible,#bandit-app input:focus-visible,#bandit-app select:focus-visible {outline:3px solid #82896e;outline-offset:3px;}
+#bandit-app .app-header {display:flex;align-items:center;justify-content:space-between;gap:20px;padding:20px 0 28px;}
+#bandit-app .brand {display:flex;align-items:center;gap:18px;white-space:nowrap;font-weight:500;}
+#bandit-app .brand svg {display:block;}
+#bandit-app .brand-divider {height:24px;width:1px;background:var(--line);}
+#bandit-app .header-right {display:flex;align-items:center;gap:14px;color:var(--quiet);font-size:12px;}
+#bandit-app .offline-badge {border:1px solid var(--line);border-radius:5px;padding:4px 7px;letter-spacing:.08em;color:#55594d;font-size:10px;font-weight:600;}
+#bandit-app .workspace {display:grid;grid-template-columns:290px minmax(0,1fr);gap:34px;align-items:start;}
+#bandit-app .settings-panel {padding:23px;background:var(--panel);border:1px solid var(--line);border-radius:16px;}
+#bandit-app .panel-heading {margin-bottom:24px;}
+#bandit-app [hidden] {display:none!important;}
+#bandit-app h1 {font-size:24px;line-height:1.15;letter-spacing:-.6px;font-weight:500;margin:0 0 8px;}
+#bandit-app h2 {font-size:12px;line-height:1.4;letter-spacing:.06em;text-transform:uppercase;font-weight:600;margin:0 0 16px;color:#686b60;}
+#bandit-app p {margin:0;}
+#bandit-app .panel-heading p {color:var(--quiet);font-size:12px;}
+#bandit-app .field {display:flex;flex-direction:column;gap:7px;font-size:12px;font-weight:500;min-width:0;}
+#bandit-app select,#bandit-app input[type="text"] {width:100%;height:39px;border:1px solid var(--line);border-radius:7px;padding:0 10px;background:var(--panel);font-size:13px;}
+#bandit-app .control-section {border-top:1px solid var(--line);padding-top:20px;margin-top:23px;}
+#bandit-app .color-row {display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;font-size:13px;}
+#bandit-app .color-picker {display:flex;align-items:center;gap:10px;}
+#bandit-app .color-picker output {font-size:11px;font-family:Consolas,monospace;color:var(--quiet);}
+#bandit-app .color-swatch-btn {appearance:none;-webkit-appearance:none;width:33px;height:29px;padding:0;border:1px solid var(--line);border-radius:6px;cursor:pointer;}
+#bandit-app .color-input-hidden {position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;opacity:0;overflow:hidden;pointer-events:none;}
+#bandit-app .slider-field {display:block;margin:16px 0 0;font-size:13px;}
+#bandit-app .slider-field:first-child {margin-top:0;}
+#bandit-app .slider-field > span {display:flex;justify-content:space-between;margin-bottom:7px;}
+#bandit-app .slider-field output {color:var(--quiet);font-size:12px;font-variant-numeric:tabular-nums;}
+#bandit-app input[type="range"] {display:block;width:100%;height:14px;margin:0;accent-color:#30342c;cursor:pointer;}
+#bandit-app .check-field {display:flex;align-items:center;gap:8px;font-size:12px;color:#3a3c35;margin-top:14px;}
+#bandit-app input[type="checkbox"] {accent-color:#30342c;width:15px;height:15px;margin:0;}
+#bandit-app .color-sheet-backdrop {position:fixed;inset:0;z-index:55;background:transparent;}
+#bandit-app .color-sheet-backdrop[hidden] {display:none;}
+#bandit-app .color-sheet {position:fixed;left:0;right:0;bottom:0;z-index:60;max-width:660px;margin:0 auto;background:#fff;border-radius:16px 16px 0 0;box-shadow:0 -10px 30px rgba(20,20,18,.25);padding:12px 18px 22px;}
+#bandit-app .color-sheet[hidden] {display:none;}
+#bandit-app .color-sheet-bar {width:36px;height:4px;border-radius:2px;background:#dcded4;margin:0 auto 14px;}
+#bandit-app .color-sheet-head {display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;font-weight:500;font-size:14px;}
+#bandit-app .color-sv {position:relative;width:100%;height:150px;border-radius:10px;overflow:hidden;touch-action:none;margin-bottom:18px;background-image:linear-gradient(to top,#000,transparent),linear-gradient(to right,#fff,transparent);cursor:pointer;}
+#bandit-app .color-sv-thumb {position:absolute;width:18px;height:18px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.35),0 1px 3px rgba(0,0,0,.4);transform:translate(-50%,-50%);pointer-events:none;}
+#bandit-app .color-hue {position:relative;width:100%;height:22px;border-radius:11px;touch-action:none;margin-bottom:18px;background:linear-gradient(to right,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00);cursor:pointer;}
+#bandit-app .color-hue-thumb {position:absolute;top:50%;width:24px;height:24px;border-radius:50%;background:#fff;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.35),0 1px 3px rgba(0,0,0,.4);transform:translate(-50%,-50%);pointer-events:none;}
+#bandit-app .color-hex-row {display:flex;align-items:center;gap:10px;}
+#bandit-app .color-hex-swatch {width:33px;height:29px;border-radius:6px;border:1px solid var(--line);flex:none;}
+#bandit-app .color-hex-row input {flex:1;height:39px;border:1px solid var(--line);border-radius:7px;padding:0 10px;background:var(--panel);font-size:13px;text-transform:uppercase;font-family:Consolas,monospace;}
+#bandit-app .button {border:1px solid transparent;border-radius:8px;padding:10px 15px;font-size:12px;font-weight:500;white-space:nowrap;min-height:39px;transition:background .12s;}
+#bandit-app .button.full {width:100%;}
+#bandit-app .button.primary {background:#252821;color:#fff;}
+#bandit-app .button.primary:hover {background:#454c3b;}
+#bandit-app .button.secondary {background:#fff;border-color:#dadbd3;}
+#bandit-app .button.secondary:hover {background:#f2f3ed;}
+#bandit-app .button.quiet {background:transparent;color:#606457;padding:6px 10px;min-height:32px;font-size:12px;}
+#bandit-app .button.quiet:hover:not(:disabled) {background:#eceee5;}
+#bandit-app .preview-panel {min-width:0;padding-top:4px;}
+#bandit-app .checker {background-color:#f8f8f5;background-image:conic-gradient(#eeefe9 25%,transparent 0 50%,#eeefe9 0 75%,transparent 0);background-size:22px 22px;}
+#bandit-app .logo-stage {width:100%;height:100%;min-height:0;display:flex;align-items:center;justify-content:center;border:1px solid #e6e7df;border-radius:14px;padding:0;overflow:hidden;}
+#bandit-app .logo-stage > svg {display:block;width:100%;height:100%;}
+#bandit-app .download-panel {margin:0;padding:16px;background:#eeefe8;border-radius:13px;}
+#bandit-app .export-controls {display:flex;align-items:end;gap:9px;flex-wrap:wrap;margin:0;}
+#bandit-app .png-size {width:138px;margin-right:auto;}
+#bandit-app .notice {min-height:20px;margin:18px 0 0;font-size:12px;color:#6c735d;}
+#bandit-app .notice.error {color:#a43c31;}
+#bandit-app .settings-panel {overflow-y:auto;overscroll-behavior-y:contain;scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:#b8bcb0 transparent;}
+#bandit-app .settings-panel:focus-visible,#bandit-app .preview-panel:focus-visible {outline:2px solid #82896e;outline-offset:2px;}
+#bandit-app .preview-panel {display:grid;grid-template-rows:minmax(0,1fr) auto;gap:16px;overflow:hidden;padding:4px 0 0;}
+@media(min-width:661px) {
+  #bandit-app {height:100vh;height:100dvh;box-sizing:border-box;display:grid;grid-template-rows:auto minmax(0,1fr);padding-bottom:20px;}
+  #bandit-app .workspace {min-height:0;align-items:stretch;}
+  #bandit-app .settings-panel,#bandit-app .preview-panel {min-height:0;height:100%;}
+  #bandit-app .preview-panel {overflow-y:auto;overscroll-behavior-y:contain;scrollbar-gutter:stable;padding-right:4px;}
+}
+@media(min-width:1500px) {#bandit-app .workspace {grid-template-columns:310px minmax(0,1fr);gap:48px;}}
+@media(max-width:900px) {#bandit-app{padding:0 4px;}#bandit-app .workspace{grid-template-columns:250px minmax(0,1fr);gap:20px;}#bandit-app .settings-panel{padding:18px;}#bandit-app .export-controls>.png-size{width:100%;}#bandit-app .export-controls>.button{flex:1;}#bandit-app .header-right{gap:7px;}#bandit-app .brand{gap:12px;}}
+@media(max-width:660px) {
+  #bandit-app .workspace{display:flex;flex-direction:column;}
+  #bandit-app .preview-panel{display:contents;}
+  #bandit-app .logo-stage{order:1;position:sticky;top:0;z-index:5;width:100%;height:auto;aspect-ratio:1;box-shadow:0 10px 14px -10px rgba(35,35,33,.2);}
+  #bandit-app .settings-panel{order:2;width:100%;max-height:none;overflow-y:visible;margin-top:16px;}
+  #bandit-app .download-panel{order:3;width:100%;margin:16px 0 24px;}
+  #bandit-app .app-header{flex-wrap:wrap;gap:12px;padding-bottom:16px;}
+  #bandit-app .header-right{margin-left:auto;}
+  #bandit-app .brand svg{width:52px;height:28px;}
+  #bandit-app .brand{font-size:12px;}
+  #bandit-app .export-controls>.button{padding:10px 12px;}
+}
+</style>
+<script>
+(() => {
+  'use strict';
+  const $=id=>document.getElementById(id);
+  const root=$('bandit-app');
+  const defaults={bg:'#cf3a3a',transparentBg:false,text:'#2d66d0',shadow:false,shadowColor:'#000000',shadowOffset:10,stretch:100};
+  const presets=[
+    {id:'arcade-blue',name:'Arcade Blue',bg:'#cf3a3a',text:'#2d66d0',shadow:false,shadowColor:'#000000'},
+    {id:'midnight-ember',name:'Midnight Ember',bg:'#000000',text:'#cf3a3a',shadow:false,shadowColor:'#000000'},
+    {id:'storm-gold',name:'Storm Gold',bg:'#434343',text:'#cfc33a',shadow:false,shadowColor:'#000000'},
+    {id:'rust-gold',name:'Rust & Gold',bg:'#503a18',text:'#cf3a3a',shadow:true,shadowColor:'#cfc33a'},
+    {id:'deep-teal',name:'Deep Teal',bg:'#15666b',text:'#cfc33a',shadow:true,shadowColor:'#cf3a3a'},
+    {id:'retro-magenta',name:'Retro Magenta',bg:'#cfc33a',text:'#cf3aca',shadow:false,shadowColor:'#000000'},
+    {id:'ice-teal',name:'Ice Teal',bg:'#ffffff',text:'#3acfb8',shadow:true,shadowColor:'#cf3a87'},
+    {id:'gold-rush',name:'Gold Rush',bg:'#cc2424',text:'#c79221',shadow:true,shadowColor:'#165430'},
+    {id:'alien-green',name:'Alien Green',bg:'#57bc4d',text:'#28261c',shadow:true,shadowColor:'#dadada'},
+    {id:'cosmic-purple',name:'Cosmic Purple',bg:'#8338a9',text:'#d0893c',shadow:true,shadowColor:'#2e2720'}
+  ];
+  const resetValues={shadowOffset:10,stretch:100};
+  let state={...defaults}, committed={...defaults}, undoStack=[], redoStack=[];
+  let preferences={size:4096,selected:'preset:arcade-blue'};
+  const inputList=[...root.querySelectorAll('[data-setting]')];
+  $('stage').appendChild($('logo-source').content.cloneNode(true));
+  const svg=$('stage').querySelector('svg');
+  const backdropRect=svg.querySelector('#backdrop-rect');
+  const artStretch=svg.querySelector('#art-stretch');
+  const shadowLayer=svg.querySelector('#shadow-layer');
+  const shadowPath=svg.querySelector('#shadow-path');
+  const lettersPath=svg.querySelector('#letters-path');
+  const eyesPath=svg.querySelector('#eyes-path');
+  const BASE_W=1800,BASE_H=720,PAD_X=70,PAD_Y=130;
+  const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+  function isHex(v){return /^#[0-9a-f]{6}$/i.test(v||'');}
+  function validState(value) {
+    if(!value||typeof value!=='object'||Array.isArray(value))throw Error('This file does not contain logo settings.');
+    const next={...defaults};
+    for(const name of ['bg','text','shadowColor'])if(isHex(value[name]))next[name]=value[name].toLowerCase();
+    const ranges={shadowOffset:[0,40],stretch:[70,130]};
+    for(const [name,[min,max]] of Object.entries(ranges))if(typeof value[name]==='number'&&Number.isFinite(value[name]))next[name]=Math.round(Math.max(min,Math.min(max,value[name])));
+    next.transparentBg=!!value.transparentBg;
+    next.shadow=!!value.shadow;
+    return next;
+  }
+  function notice(text,error=false){$('notice').textContent=text;$('notice').classList.toggle('error',error);}
+  function rebuildVersionMenu(){
+    $('version-select').innerHTML='';
+    const presetGroup=document.createElement('optgroup');presetGroup.label='Palettes';
+    for(const p of presets){const option=document.createElement('option');option.value='preset:'+p.id;option.textContent=p.name;presetGroup.appendChild(option);}
+    $('version-select').appendChild(presetGroup);
+    const customOption=document.createElement('option');customOption.value='custom';customOption.textContent='Custom edits';
+    $('version-select').appendChild(customOption);
+    $('version-select').value=preferences.selected;
+  }
+  function paint(){
+    backdropRect.setAttribute('fill',state.bg);
+    svg.querySelector('#backdrop').style.display=state.transparentBg?'none':'';
+    lettersPath.setAttribute('fill',state.text);
+    eyesPath.setAttribute('fill',state.text);
+    shadowLayer.style.display=state.shadow?'':'none';
+    shadowPath.setAttribute('fill',state.shadowColor);
+    shadowLayer.setAttribute('transform','translate('+state.shadowOffset+' '+state.shadowOffset+')');
+    artStretch.setAttribute('transform','translate('+(BASE_W/2)+' '+(BASE_H/2)+') scale(1 '+(state.stretch/100)+') translate('+(-BASE_W/2)+' '+(-BASE_H/2)+')');
+    const vx=-PAD_X,vy=-PAD_Y,vw=BASE_W+2*PAD_X,vh=BASE_H+2*PAD_Y;
+    svg.setAttribute('viewBox',vx+' '+vy+' '+vw+' '+vh);
+    backdropRect.setAttribute('x',vx);backdropRect.setAttribute('y',vy);backdropRect.setAttribute('width',vw);backdropRect.setAttribute('height',vh);
+    $('stage').classList.toggle('checker',state.transparentBg);
+    $('stage').style.background=state.transparentBg?'':state.bg;
+    for(const input of inputList){const key=input.dataset.setting;if(input.type==='checkbox')input.checked=state[key];else input.value=state[key];}
+    root.querySelectorAll('[data-value]').forEach(el=>el.textContent=state[el.dataset.value]+(el.dataset.unit==='px'?' px':'%'));
+    $('text-value').textContent=state.text.toUpperCase();$('bg-value').textContent=state.bg.toUpperCase();$('shadowColor-value').textContent=state.shadowColor.toUpperCase();
+    $('text-color-btn').style.background=state.text;$('bg-color-btn').style.background=state.bg;$('shadow-color-btn').style.background=state.shadowColor;
+    root.querySelector('#shadow-heading').closest('.control-section').querySelectorAll('.color-row,.slider-field').forEach(el=>el.style.opacity=state.shadow?'1':'.4');
+    $('export-size').value=preferences.size;
+    $('version-select').value=preferences.selected;
+  }
+  function commit(){if(!same(state,committed)){undoStack.push({...committed});if(undoStack.length>80)undoStack.shift();redoStack=[];committed={...state};}paint();}
+  function changeTo(next){state=validState(next);commit();}
+  for(const input of inputList){
+    input.addEventListener('input',()=>{state[input.dataset.setting]=input.type==='checkbox'?input.checked:input.type==='color'?input.value:Number(input.value);preferences.selected='custom';paint();notice('Preview updated.');});
+    input.addEventListener('change',commit);
+  }
+  function hex2rgb(hex){let s=(hex||'#000000').replace('#','');if(s.length===3)s=[...s].map(c=>c+c).join('');const n=parseInt(s,16)||0;return {r:(n>>16)&255,g:(n>>8)&255,b:n&255};}
+  function rgb2hex(c){return '#'+['r','g','b'].map(k=>Math.round(Math.max(0,Math.min(255,c[k]))).toString(16).padStart(2,'0')).join('');}
+  function rgb2hsv({r,g,b}){r/=255;g/=255;b/=255;const max=Math.max(r,g,b),min=Math.min(r,g,b),d=max-min;let h=0;if(d!==0){if(max===r)h=60*(((g-b)/d)%6);else if(max===g)h=60*((b-r)/d+2);else h=60*((r-g)/d+4);}if(h<0)h+=360;const s=max===0?0:d/max;return {h,s,v:max};}
+  function hsv2rgb({h,s,v}){const c=v*s,x=c*(1-Math.abs((h/60)%2-1)),m=v-c;let r=0,g=0,b=0;if(h<60){r=c;g=x;}else if(h<120){r=x;g=c;}else if(h<180){g=c;b=x;}else if(h<240){g=x;b=c;}else if(h<300){r=x;b=c;}else{r=c;b=x;}return {r:(r+m)*255,g:(g+m)*255,b:(b+m)*255};}
+  function isMobileViewport(){return matchMedia('(max-width:660px)').matches;}
+  let sheetTarget=null,sheetHue=0,sheetSat=0,sheetVal=0;
+  function sheetHex(){return rgb2hex(hsv2rgb({h:sheetHue,s:sheetSat,v:sheetVal}));}
+  function updateSheetVisual(){
+    const hex=sheetHex();
+    $('color-sv').style.backgroundColor='hsl('+sheetHue+',100%,50%)';
+    $('color-sv-thumb').style.left=(sheetSat*100)+'%';
+    $('color-sv-thumb').style.top=((1-sheetVal)*100)+'%';
+    $('color-hue-thumb').style.left=(sheetHue/360*100)+'%';
+    $('color-hex-swatch').style.background=hex;
+    $('color-hex-input').value=hex.slice(1).toUpperCase();
+  }
+  function applySheetColor(commitNow){
+    if(!sheetTarget)return;
+    sheetTarget.value=sheetHex();
+    sheetTarget.dispatchEvent(new Event('input',{bubbles:true}));
+    if(commitNow)sheetTarget.dispatchEvent(new Event('change',{bubbles:true}));
+  }
+  function openColorSheet(input,label){
+    sheetTarget=input;
+    const {h,s,v}=rgb2hsv(hex2rgb(input.value));
+    sheetHue=h;sheetSat=s;sheetVal=v;
+    $('color-sheet-title').textContent=label;
+    updateSheetVisual();
+    $('color-sheet').hidden=false;
+    $('color-sheet-backdrop').hidden=false;
+  }
+  function closeColorSheet(){
+    $('color-sheet').hidden=true;
+    $('color-sheet-backdrop').hidden=true;
+    sheetTarget=null;
+  }
+  function bindDrag(el,handler){
+    el.addEventListener('pointerdown',event=>{
+      event.preventDefault();
+      el.setPointerCapture(event.pointerId);
+      handler(event);
+      const move=e=>handler(e);
+      const up=()=>{
+        el.releasePointerCapture(event.pointerId);
+        el.removeEventListener('pointermove',move);
+        el.removeEventListener('pointerup',up);
+        el.removeEventListener('pointercancel',up);
+        applySheetColor(true);
+      };
+      el.addEventListener('pointermove',move);
+      el.addEventListener('pointerup',up);
+      el.addEventListener('pointercancel',up);
+    });
+  }
+  bindDrag($('color-sv'),event=>{
+    const rect=$('color-sv').getBoundingClientRect();
+    sheetSat=Math.min(1,Math.max(0,(event.clientX-rect.left)/rect.width));
+    sheetVal=1-Math.min(1,Math.max(0,(event.clientY-rect.top)/rect.height));
+    updateSheetVisual();applySheetColor(false);
+  });
+  bindDrag($('color-hue'),event=>{
+    const rect=$('color-hue').getBoundingClientRect();
+    sheetHue=Math.min(1,Math.max(0,(event.clientX-rect.left)/rect.width))*360;
+    updateSheetVisual();applySheetColor(false);
+  });
+  $('color-hex-input').addEventListener('input',()=>{
+    const v=$('color-hex-input').value.trim();
+    if(/^[0-9a-f]{6}$/i.test(v)){const {h,s,v:val}=rgb2hsv(hex2rgb('#'+v));sheetHue=h;sheetSat=s;sheetVal=val;
+      $('color-sv').style.backgroundColor='hsl('+sheetHue+',100%,50%)';
+      $('color-sv-thumb').style.left=(sheetSat*100)+'%';$('color-sv-thumb').style.top=((1-sheetVal)*100)+'%';
+      $('color-hue-thumb').style.left=(sheetHue/360*100)+'%';$('color-hex-swatch').style.background='#'+v;
+      applySheetColor(false);
+    }
+  });
+  $('color-hex-input').addEventListener('change',()=>applySheetColor(true));
+  $('color-sheet-close').addEventListener('click',closeColorSheet);
+  $('color-sheet-backdrop').addEventListener('click',closeColorSheet);
+  function wireSwatch(btnId,inputId,label){
+    const btn=$(btnId),input=$(inputId);
+    btn.addEventListener('click',()=>{isMobileViewport()?openColorSheet(input,label):input.click();});
+  }
+  wireSwatch('text-color-btn','text-color','Letters color');
+  wireSwatch('bg-color-btn','bg-color','Background color');
+  wireSwatch('shadow-color-btn','shadow-color','Shadow color');
+  root.querySelectorAll('.slider-field').forEach(line=>{
+    const input=line.querySelector('input[type="range"]');
+    if(!input)return;
+    const key=input.dataset.setting,value=resetValues[key],unit=key==='shadowOffset'?' px':'%';
+    line.title='Double-click to reset to '+value+unit;
+    line.addEventListener('dblclick',event=>{
+      event.preventDefault();
+      preferences.selected='custom';changeTo({...state,[key]:value});
+      notice(input.getAttribute('aria-label')+' reset to '+value+unit+'.');
+    });
+  });
+  $('version-select').addEventListener('change',()=>{
+    const key=$('version-select').value;preferences.selected=key;
+    if(key==='custom')return;
+    const preset=presets.find(p=>'preset:'+p.id===key);
+    if(preset){changeTo({...state,bg:preset.bg,text:preset.text,shadow:preset.shadow,shadowColor:preset.shadowColor,shadowOffset:preset.shadow?resetValues.shadowOffset:0,transparentBg:false});notice('“'+preset.name+'” palette applied.');}
+  });
+  function doUndo(){if(!undoStack.length)return;redoStack.push({...state});state=undoStack.pop();committed={...state};preferences.selected='custom';paint();notice('Previous edit restored.');}
+  function doRedo(){if(!redoStack.length)return;undoStack.push({...state});state=redoStack.pop();committed={...state};preferences.selected='custom';paint();notice('Edit restored.');}
+  document.addEventListener('keydown',event=>{if(!(event.ctrlKey||event.metaKey)||event.target.matches('input[type="text"],textarea'))return;if(event.key.toLowerCase()==='z'){event.preventDefault();event.shiftKey?doRedo():doUndo();}else if(event.key.toLowerCase()==='y'){event.preventDefault();doRedo();}});
+  $('export-size').addEventListener('change',()=>{preferences.size=Number($('export-size').value);paint();});
+  function paletteSlug(){
+    if(preferences.selected.startsWith('preset:')){const preset=presets.find(p=>'preset:'+p.id===preferences.selected);if(preset)return preset.id;}
+    return 'custom';
+  }
+  function filename(){return 'asteroide-bandit-112-'+paletteSlug();}
+  function download(blob,name){
+    const url=URL.createObjectURL(blob);const anchor=document.createElement('a');anchor.href=url;anchor.download=name;anchor.rel='noopener';document.body.appendChild(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
+  }
+  function svgExport(){
+    const copy=svg.cloneNode(true);const box=svg.viewBox.baseVal;
+    copy.setAttribute('xmlns','http://www.w3.org/2000/svg');copy.setAttribute('width',String(box.width));copy.setAttribute('height',String(box.height));
+    copy.removeAttribute('style');copy.querySelector('title').textContent='Asteroïde Bandit 112 logo';
+    copy.querySelector('desc').textContent='Editable Asteroïde Bandit 112 logo, exported from Bandit Logo Studio.'+(state.transparentBg?' Transparent background.':' Solid background.');
+    copy.querySelectorAll('*').forEach(el=>el.removeAttribute('style'));
+    return '<?xml version="1.0" encoding="UTF-8"?>\n'+new XMLSerializer().serializeToString(copy);
+  }
+  $('download-svg').addEventListener('click',()=>{try{commit();download(new Blob([svgExport()],{type:'image/svg+xml;charset=utf-8'}),filename()+'.svg');notice('SVG download started.');}catch(e){notice('Could not export SVG: '+e.message,true);}});
+  $('download-png').addEventListener('click',async()=>{
+    const button=$('download-png');button.disabled=true;button.textContent='Preparing PNG…';
+    let url;
+    try{
+      commit();const box=svg.viewBox.baseVal;const width=preferences.size,height=Math.round(width*box.height/box.width);
+      const name=filename();url=URL.createObjectURL(new Blob([svgExport()],{type:'image/svg+xml;charset=utf-8'}));
+      const image=new Image();await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=()=>reject(Error('The logo could not be rendered.'));image.src=url;});
+      const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const context=canvas.getContext('2d');if(!context)throw Error('Canvas is unavailable.');
+      context.drawImage(image,0,0,width,height);
+      const png=await new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(Error('PNG creation failed.')),'image/png'));
+      download(png,name+'-'+width+'px.png');notice((state.transparentBg?'Transparent':'Solid background')+' PNG download started.');canvas.width=canvas.height=1;
+    }catch(e){notice('Could not export PNG: '+e.message,true);}finally{if(url)URL.revokeObjectURL(url);button.disabled=false;button.textContent='Download PNG';}
+  });
+  rebuildVersionMenu();paint();
+})();
+</script>
+
+</body>
+</html>

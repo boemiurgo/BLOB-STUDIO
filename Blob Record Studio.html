@@ -1,0 +1,2216 @@
+<!doctype html>
+<html lang="en" data-visualize-standalone>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src blob: data:; font-src 'none'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Blob Record Studio</title>
+<style>:root {
+  color-scheme: light dark;
+  background-color: var(
+    --background,
+    var(--color-background-primary, light-dark(rgb(255 255 255), rgb(24 24 24)))
+  ) !important;
+
+  /* Agent-facing contract; keep in sync with SKILL.md. */
+  --background: var(
+    --color-background-primary,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --card: color-mix(in oklab, var(--foreground) 5%, var(--background));
+  --card-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --popover: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255), rgb(45 45 45))
+  );
+  --popover-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --primary: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --primary-foreground: var(
+    --color-text-inverse,
+    light-dark(rgb(255 255 255), rgb(13 13 13))
+  );
+  --secondary: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%))
+  );
+  --secondary-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
+  --muted-foreground: var(
+    --color-text-secondary,
+    light-dark(rgb(26 28 31 / 49.4%), rgb(255 255 255 / 49.8%))
+  );
+  --accent: var(
+    --color-background-info,
+    light-dark(rgb(229 242 255), rgb(13 39 63))
+  );
+  --accent-foreground: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --destructive: var(
+    --color-text-warning,
+    light-dark(rgb(226 85 7), rgb(255 133 73))
+  );
+  --border: var(
+    --color-border-secondary,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+  --input: var(
+    --color-border-primary,
+    light-dark(
+      rgb(26 28 31 / 11.8%),
+      color-mix(in oklab, rgb(0 0 0) 10%, transparent)
+    )
+  );
+  --ring: var(
+    --color-ring-primary,
+    light-dark(rgb(51 156 255), rgb(131 195 255 / 76%))
+  );
+  --font-size-base: var(--font-text-md-size, 14px);
+  --blue: light-dark(rgb(51 156 255), rgb(51 156 255));
+  --orange: light-dark(rgb(226 85 7), rgb(251 106 34));
+  --green: light-dark(rgb(0 162 64), rgb(64 201 119));
+  --red: light-dark(rgb(224 46 42), rgb(255 103 100));
+  --purple: light-dark(rgb(146 79 247), rgb(173 123 249));
+  --yellow: light-dark(rgb(255 195 0), rgb(255 210 64));
+  --viz-series-1: var(--primary);
+  --viz-series-2: light-dark(rgb(243 136 59), rgb(245 154 86));
+  --viz-series-3: light-dark(rgb(93 201 119), rgb(116 213 139));
+  --viz-series-4: light-dark(rgb(235 119 177), rgb(240 143 192));
+  --viz-series-5: light-dark(rgb(155 121 236), rgb(170 145 239));
+  --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
+
+  /* Internal implementation variables; not part of the agent contract. */
+  --font-sans: -apple-system, system-ui, "Segoe UI", sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
+    monospace;
+  --font-size-normal: max(11px, var(--font-size-base));
+  --font-size-tooltip: calc(var(--font-size-base) - 1px);
+  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
+  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
+  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
+  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
+  --font-weight-normal: 430;
+  --font-weight-medium: 500;
+  --icon-size: 16px;
+  --line-height-normal: calc(var(--font-size-normal) * 1.5);
+  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
+  --line-height-small: calc(var(--font-size-small) + 4px);
+  --corner-shape: round;
+  --radius: var(--border-radius-lg, 10px);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-2xl: calc(var(--radius) * 1.6);
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
+  --checkmark-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17 17'%3E%3Cpath d='M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z'/%3E%3C/svg%3E");
+
+  /* Legacy aliases; not part of the current agent contract. */
+  --viz-bg: transparent;
+  --viz-panel: var(--card);
+  --viz-border: var(--border);
+  --viz-text: var(--foreground);
+  --viz-muted: var(--muted-foreground);
+  --viz-accent: var(--primary);
+  --viz-accent-text: var(--primary-foreground);
+  --viz-accent-bg: var(--accent);
+  --viz-font-size: var(--font-size-base);
+  --viz-warning: var(--destructive);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html > body {
+  /* Preserve MCP aliases for older inline renderers without creating :root cycles. */
+  --color-background-primary: var(
+    --background,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --color-text-primary: var(
+    --foreground,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --color-border-secondary: var(
+    --border,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+
+  margin: 0;
+  padding: var(--visualize-paint-gutter, 0px);
+  color: var(--foreground);
+  background: transparent !important;
+  font-family: var(--font-sans) !important;
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+}
+
+.cursor-interaction {
+  cursor: var(--cursor-interaction, pointer);
+}
+
+a {
+  color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
+  cursor: var(--cursor-interaction, pointer);
+  font-weight: var(--font-weight-medium, 500);
+  text-decoration: none;
+  text-underline-offset: 2px;
+}
+
+a:is(:hover, :focus-visible) {
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 0.5px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-block: 0;
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.3;
+}
+
+b,
+strong,
+th {
+  font-weight: var(--font-weight-medium);
+}
+
+code:not(pre code) {
+  display: inline;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  corner-shape: var(--corner-shape);
+  background: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  word-break: break-word;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--foreground);
+  font: inherit;
+  text-align: start;
+}
+
+.table :is(th, td) {
+  padding-block: 10px;
+  padding-inline: 0 24px;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid var(--border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.table-responsive > .table :is(th, td) {
+  overflow-wrap: break-word;
+}
+
+.table :is(th, td):last-child {
+  padding-inline-end: 0;
+}
+
+.table :is(caption, thead th) {
+  font-weight: 600;
+}
+
+.table thead th {
+  padding-block: 8px;
+  border-bottom-color: color-mix(in srgb, var(--foreground) 16%, transparent);
+}
+
+.table tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+
+.table.table-sm :is(th, td) {
+  padding-block: 6px;
+}
+
+.table.table-sm :is(th, td):not(:last-child) {
+  padding-inline-end: 16px;
+}
+
+.table :is(.text-end, [align="right"]) {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.table :is(.text-center, [align="center"]) {
+  text-align: center;
+}
+
+.table .text-nowrap {
+  white-space: nowrap;
+}
+
+#widget {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  background: transparent !important;
+}
+
+.card {
+  min-width: 0;
+  padding: 12px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  border-radius: var(--radius-2xl);
+  corner-shape: var(--corner-shape);
+  color: var(--card-foreground);
+  background: var(--card);
+}
+
+#widget > :not(.card, .progress) {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: min(
+    20rem,
+    var(--tooltip-available-width, calc(100vw - 10px)),
+    calc(100vw - 10px)
+  );
+  max-height: min(
+    var(--tooltip-available-height, calc(100vh - 10px)),
+    calc(100vh - 10px)
+  );
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  color: var(--popover-foreground);
+  background: var(--popover);
+  box-shadow: none;
+  font-size: var(--font-size-tooltip);
+  line-height: var(--line-height-tooltip);
+  overflow-wrap: break-word;
+  white-space: normal;
+  pointer-events: none;
+  user-select: none;
+}
+
+.viz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(max(180px, 24%), 1fr));
+  gap: 10px;
+}
+
+.viz-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.viz-stat-value {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+.viz-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+hr {
+  width: 100%;
+  height: 1px;
+  margin-block: 6px;
+  border: 0;
+  background: var(--border);
+}
+
+.nav {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 4px;
+}
+
+.progress {
+  display: flex;
+  height: 8px;
+  margin-block: calc((var(--line-height-normal, 1.5em) - 8px) / 2);
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+}
+
+.progress-bar:only-child {
+  border-radius: var(--radius-full);
+}
+
+.progress-bar {
+  height: 100%;
+  flex-shrink: 0;
+  border: 0;
+  background: var(--viz-series-1);
+}
+
+.viz-badge {
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  color: var(--accent-foreground);
+  background: var(--accent);
+  font-weight: var(--font-weight-medium);
+}
+
+small,
+.text-small,
+.viz-badge {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.viz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.viz-controls > .form-label {
+  display: grid;
+  min-width: min(100%, 260px);
+  flex: 1 1 280px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 2px 12px;
+  margin-bottom: 0;
+}
+
+.viz-controls > .form-label > :is(.form-control, .form-range, .form-select) {
+  grid-column: 1 / -1;
+}
+
+.btn,
+.nav-link,
+.form-check-input,
+.form-control,
+.form-range,
+.form-select {
+  font: inherit;
+}
+
+.btn,
+.nav-link {
+  appearance: button;
+  display: inline-flex;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  min-height: 28px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0 8px;
+  -webkit-app-region: no-drag;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: var(--cursor-interaction, pointer);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn:is(.btn-block, .viz-tile) {
+  inline-size: 100%;
+}
+
+.btn.viz-tile {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+a.btn {
+  cursor: var(--cursor-interaction, pointer);
+  text-decoration: none;
+}
+
+.btn:not(:disabled):hover,
+.nav-link:not(:disabled):not([aria-disabled="true"]):hover {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn-primary {
+  border-color: transparent;
+  color: var(--primary-foreground);
+  background: var(--foreground);
+  background-clip: padding-box;
+}
+
+.btn-primary .text-muted {
+  color: color-mix(in srgb, var(--primary-foreground) 50%, transparent);
+}
+
+.btn-primary:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 80%, transparent);
+  background-clip: padding-box;
+}
+
+.btn-ghost {
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.btn-ghost:not(:disabled):hover {
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.nav-pills .nav-link {
+  min-width: 0;
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.nav-justified .nav-link {
+  flex: 1 1 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.nav-pills .nav-link.active {
+  color: var(--foreground);
+  background: var(--muted);
+}
+
+.btn:disabled,
+.nav-link:disabled,
+.nav-link[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+[data-lucide] {
+  stroke-width: 1.6;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--foreground);
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  padding: 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  color: var(--foreground);
+  background: var(--secondary);
+}
+
+.form-control::placeholder {
+  color: var(--muted-foreground);
+}
+
+.form-control[type="file"] {
+  padding: 0;
+  overflow: hidden;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control[type="file"]::file-selector-button {
+  min-height: 26px;
+  margin-right: 8px;
+  padding: 0 8px;
+  border: 0;
+  border-right: 1px solid var(--input);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: inherit;
+  font: inherit;
+}
+
+.form-control[type="file"]:not(:disabled):hover::file-selector-button {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-control-color[type="color"] {
+  width: 40px;
+  height: 28px;
+  padding: 3px;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control-color[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.form-control-color[type="color"]::-webkit-color-swatch {
+  border: 0;
+  border-radius: calc(var(--radius-lg) - 4px);
+  corner-shape: var(--corner-shape);
+}
+
+textarea.form-control {
+  height: auto;
+  min-height: 72px;
+  padding: 8px 10px;
+  resize: vertical;
+}
+
+.form-control:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.form-select {
+  appearance: none;
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  margin: 0;
+  padding: 0 32px 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  color: var(--foreground);
+  background-color: var(--secondary);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
+    linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) 50%,
+    calc(100% - 10px) 50%;
+  background-repeat: no-repeat;
+  background-size: 4px 4px;
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-select:not(:disabled):hover {
+  background-color: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-select:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-check {
+  display: flex;
+  min-height: 20px;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-check-input {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 1px solid var(--input);
+  color: var(--primary-foreground);
+  background-color: transparent;
+  cursor: var(--cursor-interaction, default);
+  transition:
+    background-color 150ms,
+    border-color 150ms,
+    box-shadow 150ms;
+}
+
+.form-check:not(.form-switch) .form-check-input[type="checkbox"] {
+  border-color: var(--input);
+  border-radius: var(--radius-sm);
+  corner-shape: var(--corner-shape);
+  background-color: var(--secondary);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input:not(:disabled):not(:checked):hover {
+  background-color: var(--card);
+}
+
+.form-check:not(.form-switch) .form-check-input[type="checkbox"]:checked {
+  border-color: var(--primary);
+  background-color: var(--primary);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type="checkbox"]:checked::before {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-foreground);
+  content: "";
+  mask: var(--checkmark-image) center / 12px 12px no-repeat;
+}
+
+.form-check-input[type="radio"] {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+}
+
+.form-check-input[type="radio"]:checked {
+  border: 2px solid var(--primary);
+  background:
+    radial-gradient(circle, var(--primary-foreground) 0 2.5px, transparent 3px),
+    var(--primary);
+}
+
+.form-check:not(.form-switch) .form-check-input:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+}
+
+.form-switch .form-check-input:disabled,
+.form-switch .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-check-label {
+  color: var(--foreground);
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-switch .form-check-input {
+  position: relative;
+  width: 32px;
+  height: 20px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+  box-shadow: none;
+  transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+  box-shadow: var(--shadow-sm);
+  content: "";
+  transform: translate(2px, -50%);
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input:checked {
+  background: var(--primary);
+}
+
+.form-switch .form-check-input:checked::before {
+  transform: translate(14px, -50%);
+}
+
+.form-switch .form-check-input:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.form-range {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 28px;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: 0;
+  accent-color: var(--primary);
+  background: linear-gradient(
+      color-mix(in srgb, var(--foreground) 7%, transparent),
+      color-mix(in srgb, var(--foreground) 7%, transparent)
+    )
+    center / 100% 2px no-repeat;
+}
+
+.form-range::-webkit-slider-runnable-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-webkit-slider-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range::-moz-range-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-moz-range-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.btn:not(.btn-primary, .viz-tile):is(
+  [aria-pressed="true"],
+  [aria-selected="true"],
+  .is-selected
+) {
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+  background: var(--primary);
+}
+
+.btn.viz-tile:is([aria-pressed="true"], [aria-selected="true"], .is-selected) {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.btn:focus-visible,
+.nav-link:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+@media (pointer: coarse) {
+  .btn,
+  .nav-link,
+  .form-control,
+  .form-select {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Keep small-screen WebKit from zooming when a text field receives focus. */
+  .form-control,
+  .form-select {
+    font-size: max(16px, var(--font-size-normal));
+  }
+
+  .form-control[type="file"]::file-selector-button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .form-control-color[type="color"] {
+    width: 44px;
+    height: 44px;
+  }
+
+  .form-control:is(
+    [type="date"],
+    [type="datetime-local"],
+    [type="month"],
+    [type="time"],
+    [type="week"]
+  ) {
+    min-width: 0;
+    max-width: 100%;
+    padding-block: 8px;
+  }
+
+  .form-check {
+    min-height: 44px;
+    padding-inline: 15px;
+  }
+
+  .form-check-input {
+    position: relative;
+  }
+
+  .form-check-input::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    content: "";
+    transform: translate(-50%, -50%);
+  }
+
+  .form-check-label {
+    display: inline-flex;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+  }
+
+  .form-range {
+    height: 44px;
+    touch-action: pan-y;
+  }
+
+  .form-range::-webkit-slider-runnable-track {
+    height: 44px;
+  }
+
+  .form-range::-moz-range-track {
+    height: 44px;
+  }
+
+  .form-range::-webkit-slider-thumb {
+    margin-top: 12px;
+  }
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+#widget > svg {
+  width: 100%;
+}
+
+/* Model-authored chart rules can otherwise stretch icons after these styles load. */
+svg.lucide {
+  display: block;
+  width: var(--icon-size) !important;
+  height: var(--icon-size) !important;
+  flex: none;
+  margin: 0 !important;
+  stroke-width: 1.6;
+}
+
+.text-warning,
+.text-destructive {
+  color: var(--destructive);
+}
+
+html>body{padding:0}</style>
+<style>html[data-visualize-standalone],body{background:#fafaf7;color:#232321;color-scheme:light;margin:0;padding:0}html{scrollbar-gutter:stable}</style>
+</head>
+<body>
+<main id="blob-app">
+  <header class="app-header">
+    <div class="brand">
+<svg xmlns="http://www.w3.org/2000/svg" width="2800" height="900" viewBox="0 0 28 9" role="img" aria-labelledby="wordmark-title wordmark-description">
+  <title id="wordmark-title">blob — pixel wordmark</title>
+  <desc id="wordmark-description">The black lowercase blob pixel wordmark.</desc>
+  <g id="wordmark" fill="#000000">
+    <g id="letter-b-first" aria-label="b">
+      <path id="b-first-stem-and-bowl" d="M0 0H1V3H3V4H2V5H1V6H2V8H5V7H6V9H0Z"/>
+      <path id="b-first-upper-right" d="M4 3H6V4H7V7H6V5H5V4H4Z"/>
+    </g>
+    <g id="letter-l" aria-label="l">
+      <path d="M9 0H10V8H11V9H9Z"/>
+    </g>
+    <g id="letter-o" aria-label="o">
+      <path id="o-upper-left" d="M13 3H18V4H14V8H13Z"/>
+      <path id="o-lower-right" d="M18 4H19V8H18V9H14V8H17V7H18Z"/>
+    </g>
+    <g id="letter-b-last" aria-label="b">
+      <path d="M21 0H22V3H24V4H23V5H22V7H23V8H26V6H27V5H26V4H25V3H27V4H28V7H27V9H21Z"/>
+    </g>
+  </g>
+</svg>
+<span class="brand-divider"></span><span>record studio</span></div>
+    <div class="header-right"><span class="offline-badge">OFFLINE</span></div>
+  </header>
+  <div class="workspace">
+    <aside class="settings-panel" aria-label="Record settings" tabindex="0">
+      <div class="field version-field"><span id="version-label">Starting version</span><div class="version-picker" id="version-picker"><button type="button" id="version-button" class="version-button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="version-label version-current"><span id="version-current">Classic black</span></button><ul id="version-list" class="version-list" role="listbox" aria-labelledby="version-label" hidden></ul><select id="version-select" hidden aria-hidden="true" tabindex="-1"><option value="classic">Classic black</option><option value="clear">Clear vinyl</option><option value="marble">Marble</option><option value="splatter">Splatter</option><option value="custom">Custom edits</option></select></div></div>
+      <div class="mode-picker app-mode" role="group" aria-label="What to show"><button type="button" data-mode="cover" aria-pressed="false">Cover</button><button type="button" data-mode="record" aria-pressed="false">Record</button><button type="button" data-mode="both" aria-pressed="true">Cover + record</button></div>
+      <section class="control-section layout-section" data-layout-controls aria-labelledby="scene-heading"><h2 id="scene-heading">Cover + record layout</h2>
+        <div class="icon-choice three" role="group" aria-label="Scene">
+          <button type="button" data-choice="scene" data-option="slide" aria-label="Sliding out of the sleeve" title="Sliding out" aria-pressed="true"><svg viewBox="0 0 36 28" aria-hidden="true"><circle class="i-disc" cx="21.5" cy="14" r="9.5"/><circle class="i-hole" cx="21.5" cy="14" r="1.6"/><rect class="i-sleeve" x="4" y="4" width="20" height="20" rx="1"/></svg></button>
+          <button type="button" data-choice="scene" data-option="side" aria-label="Record beside the sleeve" title="Side by side" aria-pressed="false"><svg viewBox="0 0 36 28" aria-hidden="true"><circle class="i-disc" cx="11" cy="15.5" r="8.5"/><circle class="i-hole" cx="11" cy="15.5" r="1.5"/><rect class="i-sleeve" x="15" y="6" width="18" height="18" rx="1"/></svg></button>
+          <button type="button" data-choice="scene" data-option="flat" aria-label="Flat lay from above" title="Flat lay" aria-pressed="false"><svg viewBox="0 0 36 28" aria-hidden="true"><rect class="i-sleeve" x="12" y="3" width="17" height="17" rx="1" transform="rotate(-12 20.5 11.5)"/><circle class="i-disc" cx="14" cy="17" r="8"/><circle class="i-hole" cx="14" cy="17" r="1.4"/></svg></button>
+        </div>
+        <label class="slider-field"><span><span id="position-label">Slide out</span><output data-value="position">50%</output></span><input type="range" min="0" max="100" value="50" data-setting="position" aria-label="Slide out"></label>
+      </section>
+      <details class="control-menu" id="cover-menu" data-cover-controls open><summary>Cover options</summary><div class="menu-controls">
+        <section class="control-section" aria-labelledby="art-heading"><h2 id="art-heading">Cover art</h2>
+          <div class="art-row"><div id="art-thumb" class="art-thumb" role="img" aria-label="Front cover preview"><span>No front</span></div><div class="art-actions"><span class="sub-label">Front cover</span><button type="button" id="art-upload" class="button secondary">Upload front</button><button type="button" id="art-remove" class="button quiet" disabled>Remove</button></div></div>
+          <div class="art-row label-row"><div id="back-thumb" class="art-thumb" role="img" aria-label="Back cover preview"><span>No back</span></div><div class="art-actions"><span class="sub-label">Back cover</span><button type="button" id="back-upload" class="button secondary">Upload back</button><button type="button" id="back-remove" class="button quiet" disabled>Remove</button></div></div>
+          <p class="control-note">Square images work best; others are cropped to fit. You can also drop an image on the preview.</p>
+          <div class="field segment-field" data-show="closedView"><span>Show</span><div class="mode-picker three" role="group" aria-label="Side of the sleeve to show"><button type="button" data-choice="coverView" data-option="front" aria-pressed="true">Front</button><button type="button" data-choice="coverView" data-option="back" aria-pressed="false">Back</button><button type="button" data-choice="coverView" data-option="both" data-show="coverOnly" aria-pressed="false">Front + back</button></div></div>
+          <div class="color-row"><label for="sleeve-color-btn">Sleeve color</label><div class="color-picker"><output data-color-value="sleeveColor"></output><button type="button" id="sleeve-color-btn" class="color-swatch-btn" data-color-for="sleeve-color" data-setting-key="sleeveColor" aria-label="Sleeve color"></button><input id="sleeve-color" type="color" value="#d8c4a4" data-setting="sleeveColor" class="color-input-hidden" tabindex="-1" aria-hidden="true"></div></div>
+        </section>
+        <section class="control-section" aria-labelledby="sleeve-heading"><h2 id="sleeve-heading">Sleeve</h2>
+          <div class="mode-picker" role="group" aria-label="Cover type"><button type="button" data-choice="cover" data-option="single" aria-pressed="true">Normal</button><button type="button" data-choice="cover" data-option="gatefold" aria-pressed="false">Gatefold</button></div>
+          <div data-show="gatefold">
+            <div class="field segment-field"><span>Gatefold</span><div class="mode-picker" role="group" aria-label="Gatefold closed or open"><button type="button" data-choice="gateOpen" data-option="closed" aria-pressed="true">Closed</button><button type="button" data-choice="gateOpen" data-option="open" aria-pressed="false">Open</button></div></div>
+            <div class="art-row label-row"><div id="inside-thumb" class="art-thumb wide" role="img" aria-label="Inside spread preview"><span>No inside art</span></div><div class="art-actions"><span class="sub-label">Inside spread · 2:1</span><button type="button" id="inside-upload" class="button secondary">Upload inside</button><button type="button" id="inside-remove" class="button quiet" disabled>Remove</button></div></div>
+            <div class="color-row"><label for="inside-color-btn">Inside color</label><div class="color-picker"><output data-color-value="insideColor"></output><button type="button" id="inside-color-btn" class="color-swatch-btn" data-color-for="inside-color" data-setting-key="insideColor" aria-label="Inside color"></button><input id="inside-color" type="color" value="#efe9df" data-setting="insideColor" class="color-input-hidden" tabindex="-1" aria-hidden="true"></div></div>
+          </div>
+          <label class="slider-field first-slider"><span>Gloss<output data-value="sleeveGloss">35%</output></span><input type="range" min="0" max="100" value="35" data-setting="sleeveGloss" aria-label="Sleeve gloss"></label>
+          <label class="slider-field"><span>Paper texture<output data-value="texture">20%</output></span><input type="range" min="0" max="100" value="20" data-setting="texture" aria-label="Paper texture"></label>
+          <label class="slider-field"><span>Wear<output data-value="wear">0%</output></span><input type="range" min="0" max="100" value="0" data-setting="wear" aria-label="Ring and edge wear"></label>
+        </section>
+      </div></details>
+      <details class="control-menu" id="record-menu" data-record-controls><summary>Record options</summary><div class="menu-controls">
+        <section class="control-section" aria-labelledby="vinyl-heading"><h2 id="vinyl-heading">Vinyl</h2>
+          <div class="mode-picker" role="group" aria-label="Number of records"><button type="button" data-choice="discs" data-option="single" aria-pressed="true">Single</button><button type="button" data-choice="discs" data-option="double" aria-pressed="false">Double</button></div>
+          <div class="field segment-field"><span>Side facing you</span><div class="mode-picker" role="group" aria-label="Record side shown"><button type="button" data-choice="recordSide" data-option="a" data-side-label="a" aria-pressed="true">Side A</button><button type="button" data-choice="recordSide" data-option="b" data-side-label="b" aria-pressed="false">Side B</button></div></div>
+          <div class="mode-picker four segment-gap" role="group" aria-label="Vinyl finish"><button type="button" data-choice="finish" data-option="solid" aria-pressed="true">Solid</button><button type="button" data-choice="finish" data-option="translucent" aria-pressed="false">Clear</button><button type="button" data-choice="finish" data-option="marble" aria-pressed="false">Marble</button><button type="button" data-choice="finish" data-option="splatter" aria-pressed="false">Splatter</button></div>
+          <div class="color-row"><label for="vinyl-color-btn">Vinyl color</label><div class="color-picker"><output data-color-value="vinylColor"></output><button type="button" id="vinyl-color-btn" class="color-swatch-btn" data-color-for="vinyl-color" data-setting-key="vinylColor" aria-label="Vinyl color"></button><input id="vinyl-color" type="color" value="#161616" data-setting="vinylColor" class="color-input-hidden" tabindex="-1" aria-hidden="true"></div></div>
+          <div class="color-row" data-show="accent"><label for="accent-color-btn">Effect color</label><div class="color-picker"><output data-color-value="vinylColor2"></output><button type="button" id="accent-color-btn" class="color-swatch-btn" data-color-for="accent-color" data-setting-key="vinylColor2" aria-label="Marble or splatter color"></button><input id="accent-color" type="color" value="#f2d7c9" data-setting="vinylColor2" class="color-input-hidden" tabindex="-1" aria-hidden="true"></div></div>
+          <div class="color-row" data-show="double"><label for="disc2-color-btn">Second record</label><div class="color-picker"><output data-color-value="disc2Color"></output><button type="button" id="disc2-color-btn" class="color-swatch-btn" data-color-for="disc2-color" data-setting-key="disc2Color" aria-label="Second record color"></button><input id="disc2-color" type="color" value="#b3342b" data-setting="disc2Color" class="color-input-hidden" tabindex="-1" aria-hidden="true"></div></div>
+          <button type="button" id="new-pattern" class="button secondary full pattern-button" data-show="pattern">New pattern</button>
+          <label class="slider-field first-slider" data-show="clarity"><span>Clarity<output data-value="clarity">70%</output></span><input type="range" min="0" max="100" value="70" data-setting="clarity" aria-label="Clarity"></label>
+          <label class="slider-field first-slider"><span>Grooves<output data-value="grooves">70%</output></span><input type="range" min="0" max="100" value="70" data-setting="grooves" aria-label="Grooves"></label>
+          <label class="slider-field"><span>Sheen<output data-value="sheen">60%</output></span><input type="range" min="0" max="100" value="60" data-setting="sheen" aria-label="Sheen"></label>
+        </section>
+        <section class="control-section" aria-labelledby="label-heading"><h2 id="label-heading">Center label</h2>
+          <div class="mode-picker three" role="group" aria-label="Label artwork"><button type="button" data-choice="labelMode" data-option="color" aria-pressed="true">Color</button><button type="button" id="label-art-btn" data-choice="labelMode" data-option="art" aria-pressed="false">Cover art</button><button type="button" data-choice="labelMode" data-option="upload" aria-pressed="false">Upload</button></div>
+          <div class="label-grid" data-show="labelUpload">
+            <div class="label-cell"><button type="button" id="label-a-thumb" class="art-thumb round" aria-label="Upload the side A label"><span>A</span></button><span class="sub-label">Side A</span><button type="button" id="label-a-remove" class="button quiet" disabled>Remove</button></div>
+            <div class="label-cell"><button type="button" id="label-b-thumb" class="art-thumb round" aria-label="Upload the side B label"><span>B</span></button><span class="sub-label">Side B</span><button type="button" id="label-b-remove" class="button quiet" disabled>Remove</button></div>
+            <div class="label-cell" data-show="double"><button type="button" id="label-c-thumb" class="art-thumb round" aria-label="Upload the side C label"><span>C</span></button><span class="sub-label">Side C · record 2</span><button type="button" id="label-c-remove" class="button quiet" disabled>Remove</button></div>
+            <div class="label-cell" data-show="double"><button type="button" id="label-d-thumb" class="art-thumb round" aria-label="Upload the side D label"><span>D</span></button><span class="sub-label">Side D · record 2</span><button type="button" id="label-d-remove" class="button quiet" disabled>Remove</button></div>
+          </div>
+          <p class="control-note label-note" data-show="labelUpload">Click a circle to upload. An empty side reuses side A's label<span data-show="double"> (D reuses C)</span>.</p>
+          <p class="control-note label-note" data-show="labelArtNote">Side B uses the back cover when there is one.</p>
+          <div class="color-row" data-show="labelColor"><label for="label-color-btn">Label color</label><div class="color-picker"><output data-color-value="labelColor"></output><button type="button" id="label-color-btn" class="color-swatch-btn" data-color-for="label-color" data-setting-key="labelColor" aria-label="Label color"></button><input id="label-color" type="color" value="#e8d9c5" data-setting="labelColor" class="color-input-hidden" tabindex="-1" aria-hidden="true"></div></div>
+          <label class="slider-field first-slider"><span>Label size<output data-value="labelSize">34%</output></span><input type="range" min="24" max="40" value="34" data-setting="labelSize" aria-label="Label size"></label>
+        </section>
+      </div></details>
+      <section class="control-section" aria-labelledby="backdrop-heading"><h2 id="backdrop-heading">Backdrop &amp; light</h2>
+        <div class="mode-picker three" role="group" aria-label="Backdrop"><button type="button" data-choice="backdrop" data-option="none" aria-pressed="false">Plain</button><button type="button" data-choice="backdrop" data-option="studio" aria-pressed="true">Studio</button><button type="button" data-choice="backdrop" data-option="wall" aria-pressed="false">Wall + floor</button></div>
+        <p class="control-note backdrop-note" data-show="noBackground">Pick a background color above the preview, or add a background image, to see the backdrop.</p>
+        <div class="art-row label-row"><div id="bg-thumb" class="art-thumb wide" role="img" aria-label="Background image preview"><span>No image</span></div><div class="art-actions"><span class="sub-label">Background image</span><button type="button" id="bg-upload" class="button secondary">Upload image</button><button type="button" id="bg-remove" class="button quiet" disabled>Remove</button></div></div>
+        <label class="slider-field first-slider" data-show="bgImage"><span>Background blur<output data-value="bgBlur">30%</output></span><input type="range" min="0" max="100" value="30" data-setting="bgBlur" aria-label="Background blur"></label>
+        <label class="slider-field" data-show="bgImage"><span>Zoom<output data-value="bgZoom">100%</output></span><input type="range" min="100" max="300" value="100" data-setting="bgZoom" aria-label="Background zoom"></label>
+        <label class="slider-field" data-show="bgImage"><span>Horizontal<output data-value="bgX">0%</output></span><input type="range" min="-100" max="100" value="0" data-setting="bgX" aria-label="Background horizontal position"></label>
+        <label class="slider-field" data-show="bgImage"><span>Vertical<output data-value="bgY">0%</output></span><input type="range" min="-100" max="100" value="0" data-setting="bgY" aria-label="Background vertical position"></label>
+        <p class="control-note bg-note" data-show="bgImage">Tip: drag the preview to move the background.</p>
+        <div class="field segment-field"><span>Light from</span><div class="mode-picker three" role="group" aria-label="Light direction"><button type="button" data-choice="light" data-option="left" aria-pressed="true">Left</button><button type="button" data-choice="light" data-option="top" aria-pressed="false">Top</button><button type="button" data-choice="light" data-option="right" aria-pressed="false">Right</button></div></div>
+        <label class="slider-field first-slider"><span>Depth<output data-value="depth">50%</output></span><input type="range" min="0" max="100" value="50" data-setting="depth" aria-label="Backdrop depth"></label>
+        <label class="slider-field"><span>Shadow<output data-value="shadow">60%</output></span><input type="range" min="0" max="100" value="60" data-setting="shadow" aria-label="Shadow"></label>
+      </section>
+      <section class="control-section save-section" aria-labelledby="versions-heading"><h2 id="versions-heading">Keep a version</h2>
+        <label class="field">Version name<input id="version-name" type="text" value="My record" maxlength="64" autocomplete="off"></label>
+        <button id="save-version" class="button secondary full">Save as new version</button>
+      </section>
+      <div class="project-tools"><span>Back up your edits, artwork and saved versions.</span><div><button id="save-project" type="button" class="button secondary">Save project</button><button id="load-project" type="button" class="button secondary">Load project</button><input id="project-file" type="file" accept="application/json,.json" hidden></div></div>
+      <input id="art-file" type="file" accept="image/*" hidden>
+      <p id="notice" class="notice" role="status" aria-live="polite">Upload a cover to get started.</p>
+    </aside>
+    <section class="preview-panel" aria-label="Record preview and downloads" tabindex="0">
+      <div class="preview-toolbar"><div class="history-actions"><button id="undo" class="button quiet" disabled aria-label="Undo last edit">Undo</button><button id="redo" class="button quiet" disabled aria-label="Redo last edit">Redo</button></div>
+        <div class="backdrops" role="group" aria-label="Preview background"><span class="background-label">Background color</span><button type="button" data-background="checker" class="swatch checker" aria-label="Transparent preview" aria-pressed="false"></button><button type="button" data-background="light" class="swatch light" aria-label="Light preview" aria-pressed="false"></button><button type="button" data-background="dark" class="swatch dark" aria-label="Dark preview" aria-pressed="false"></button><button type="button" data-background="custom" id="custom-bg-btn" class="swatch custom-bg" aria-label="Custom preview color" aria-pressed="true"></button><input id="custom-bg-color" type="color" value="#e6e2da" class="color-input-hidden" tabindex="-1" aria-hidden="true"></div>
+      </div>
+      <div id="stage" class="logo-stage" aria-label="Live record preview"></div>
+      <section class="download-panel" aria-label="Image downloads">
+        <div class="export-controls"><label class="field png-size">PNG size<select id="export-size" aria-label="PNG size"><option value="1024">1024 px</option><option value="2048">2048 px</option><option value="4096" selected>4096 px · HD</option></select></label><label class="export-bg" title="Includes the backdrop. Off gives a transparent image with shadows."><input id="export-bg" type="checkbox"> Include background</label><button id="download-png" class="button primary">Download PNG</button><button id="download-svg" class="button secondary">Download SVG</button></div>
+      </section>
+    </section>
+  </div>
+  <div id="color-sheet" class="color-sheet" hidden role="dialog" aria-modal="false" aria-labelledby="color-sheet-title">
+    <div class="color-sheet-bar"></div>
+    <div class="color-sheet-head"><span id="color-sheet-title">Color</span><span class="color-sheet-actions"><button type="button" id="color-eyedropper" class="button quiet" hidden title="Pick a color from anywhere on screen">Pick from screen</button><button type="button" id="color-sheet-close" class="button quiet">Done</button></span></div>
+    <div class="color-sv" id="color-sv"><div class="color-sv-thumb" id="color-sv-thumb"></div></div>
+    <div class="color-hue" id="color-hue"><div class="color-hue-thumb" id="color-hue-thumb"></div></div>
+    <div class="color-hex-row"><span class="color-hex-swatch" id="color-hex-swatch"></span><input id="color-hex-input" type="text" maxlength="7" aria-label="Hex color value" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
+    <p class="color-sheet-hint">Hover over the preview and click to pick a color from it.</p>
+  </div>
+  <div id="pick-loupe" class="pick-loupe" hidden aria-hidden="true"><span id="pick-loupe-swatch"></span><output id="pick-loupe-value"></output></div>
+</main>
+<style>
+#blob-app { --ink:#232321;--quiet:#797a75;--line:#e4e4de;--paper:#f6f6f1;--panel:#fff; font:14px/1.45 "Segoe UI",Arial,sans-serif;color:var(--ink);max-width:1440px;margin:0 auto;padding:8px 20px 0;color-scheme:light; }
+#blob-app * {box-sizing:border-box;}
+#blob-app button,#blob-app input,#blob-app select {font:inherit;color:inherit;}
+#blob-app button {cursor:pointer;}
+#blob-app button:disabled {cursor:default;opacity:.35;}
+#blob-app button:focus-visible,#blob-app input:focus-visible,#blob-app select:focus-visible {outline:3px solid #82896e;outline-offset:3px;}
+#blob-app .app-header {display:flex;align-items:center;justify-content:space-between;gap:20px;padding:20px 0 28px;}
+#blob-app .brand {display:flex;align-items:center;gap:18px;white-space:nowrap;font-weight:500;}
+#blob-app .brand svg {width:90px;height:30px;display:block;}
+#blob-app .brand-divider {height:24px;width:1px;background:var(--line);}
+#blob-app .header-right {display:flex;align-items:center;gap:14px;color:var(--quiet);font-size:12px;}
+#blob-app .offline-badge {border:1px solid var(--line);border-radius:5px;padding:4px 7px;letter-spacing:.08em;color:#55594d;font-size:10px;font-weight:600;}
+#blob-app .workspace {display:grid;grid-template-columns:290px minmax(0,1fr);gap:34px;align-items:start;}
+#blob-app .settings-panel {padding:23px;background:var(--panel);border:1px solid var(--line);border-radius:16px;}
+#blob-app [hidden] {display:none!important;}
+#blob-app .mode-picker {display:flex;gap:3px;padding:4px;border-radius:9px;background:#eeefe8;}
+#blob-app .mode-picker button {flex:1;border:0;background:none;border-radius:6px;padding:8px 4px;white-space:nowrap;font-size:12px;}
+#blob-app .mode-picker button[aria-pressed="true"] {background:#30342c;color:#fff;}
+#blob-app .mode-picker.four button {font-size:11px;padding:8px 2px;}
+#blob-app .app-mode {margin-top:20px;}
+#blob-app .segment-gap {margin-top:8px;}
+#blob-app .control-note {font-size:11px;color:var(--quiet);}
+#blob-app .backdrop-note {margin-top:8px;}
+#blob-app .bg-note {margin:-6px 0 16px;}
+#blob-app .logo-stage.has-bg:not(.picking) {cursor:grab;}
+#blob-app .logo-stage.panning {cursor:grabbing!important;}
+#blob-app .icon-choice {display:grid;gap:6px;margin-bottom:18px;}
+#blob-app .icon-choice.three {grid-template-columns:repeat(3,1fr);}
+#blob-app .icon-choice button {--btn-bg:#fff;display:flex;align-items:center;justify-content:center;height:44px;border:1px solid #d6d7d0;border-radius:8px;background:#fff;color:#111;padding:0;transition:border-color .12s,background .12s;}
+#blob-app .icon-choice button:hover:not([aria-pressed="true"]) {border-color:#111;}
+#blob-app .icon-choice button[aria-pressed="true"] {--btn-bg:#111;background:#111;border-color:#111;color:#fff;}
+#blob-app .icon-choice svg {width:40px;height:31px;}
+#blob-app .icon-choice .i-disc {fill:currentColor;}
+#blob-app .icon-choice .i-hole {fill:var(--btn-bg);}
+#blob-app .icon-choice .i-sleeve {fill:var(--btn-bg);stroke:currentColor;stroke-width:1.6;}
+#blob-app h2 {font-size:12px;line-height:1.4;letter-spacing:.06em;text-transform:uppercase;font-weight:600;margin:0 0 16px;color:#686b60;}
+#blob-app p {margin:0;}
+#blob-app .field {display:flex;flex-direction:column;gap:7px;font-size:12px;font-weight:500;min-width:0;}
+#blob-app select,#blob-app input[type="text"] {width:100%;height:39px;border:1px solid var(--line);border-radius:7px;padding:0 10px;background:var(--panel);font-size:13px;}
+#blob-app .control-section {border-top:1px solid var(--line);padding-top:20px;margin-top:23px;}
+#blob-app .segment-field {margin-top:14px;}
+#blob-app .layout-section .slider-field {margin-bottom:0;}
+#blob-app .art-row {display:flex;gap:14px;align-items:center;}
+#blob-app .label-row {margin-top:14px;}
+#blob-app .art-thumb {width:84px;height:84px;flex:none;display:flex;align-items:center;justify-content:center;text-align:center;border:1px dashed #cfd1c7;border-radius:8px;background:#f4f4ef center/cover no-repeat;color:var(--quiet);font-size:11px;}
+#blob-app .art-thumb.round {border-radius:50%;}
+#blob-app .art-thumb.wide {width:112px;height:56px;}
+#blob-app .label-grid {display:grid;grid-template-columns:1fr 1fr;gap:14px 10px;margin-top:16px;}
+#blob-app .label-cell {display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;text-align:center;}
+#blob-app .label-cell .art-thumb {width:72px;height:72px;padding:0;font-size:16px;font-weight:600;cursor:pointer;}
+#blob-app .label-cell .art-thumb:hover {border-color:#30342c;}
+#blob-app .label-cell .button.quiet {min-height:26px;padding:2px 8px;font-size:11px;}
+#blob-app .label-note {margin-top:10px;}
+#blob-app .art-thumb.has-art {border-style:solid;border-color:var(--line);}
+#blob-app .art-thumb.has-art span {display:none;}
+#blob-app .art-actions {display:flex;flex-direction:column;gap:4px;flex:1;min-width:0;}
+#blob-app .art-actions .button {width:100%;}
+#blob-app .sub-label {font-size:11px;color:var(--quiet);}
+#blob-app .art-row + .control-note {margin-top:10px;}
+#blob-app .logo-stage.dropping {outline:2px dashed #30342c;outline-offset:-8px;}
+#blob-app .color-row {display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;font-size:13px;}
+#blob-app .color-picker {display:flex;align-items:center;gap:10px;}
+#blob-app .color-picker output {font-size:11px;font-family:Consolas,monospace;color:var(--quiet);}
+#blob-app .color-swatch-btn {appearance:none;-webkit-appearance:none;width:33px;height:29px;padding:0;border:1px solid var(--line);border-radius:6px;cursor:pointer;}
+#blob-app .color-input-hidden {position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;opacity:0;overflow:hidden;pointer-events:none;}
+#blob-app .color-sheet {position:fixed;left:0;right:0;bottom:0;z-index:60;max-width:660px;margin:0 auto;background:#fff;border-radius:16px 16px 0 0;box-shadow:0 -10px 30px rgba(20,20,18,.25);padding:12px 18px 22px;max-height:calc(100vh - 16px);max-height:calc(100dvh - 16px);overflow-y:auto;}
+#blob-app .color-sheet.popover {right:auto;bottom:auto;width:290px;max-width:calc(100vw - 24px);margin:0;border-radius:14px;border:1px solid var(--line);box-shadow:0 12px 32px rgba(20,20,18,.22);padding:14px 16px 16px;}
+#blob-app .color-sheet.popover .color-sheet-bar {display:none;}
+#blob-app .color-sheet.popover .color-sheet-head {cursor:move;user-select:none;touch-action:none;}
+#blob-app .color-sheet-actions {display:flex;gap:2px;}
+#blob-app .color-sheet-hint {margin:10px 0 0;font-size:11px;color:var(--quiet);}
+#blob-app .logo-stage.picking {cursor:crosshair;touch-action:none;}
+#blob-app .pick-loupe {position:fixed;z-index:70;pointer-events:none;display:flex;align-items:center;gap:6px;padding:4px 9px 4px 4px;background:#fff;border:1px solid var(--line);border-radius:999px;box-shadow:0 4px 14px rgba(20,20,18,.2);font:11px/1 Consolas,monospace;color:var(--ink);}
+#blob-app .pick-loupe span {width:20px;height:20px;border-radius:50%;border:1px solid rgba(0,0,0,.2);}
+#blob-app .color-swatch-btn.is-editing,#blob-app .swatch.is-editing {outline:2px solid #30342c;outline-offset:2px;}
+#blob-app .color-sheet-bar {width:36px;height:4px;border-radius:2px;background:#dcded4;margin:0 auto 14px;}
+#blob-app .color-sheet-head {display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;font-weight:500;font-size:14px;}
+#blob-app .color-sv {position:relative;width:100%;height:150px;border-radius:10px;overflow:hidden;touch-action:none;margin-bottom:18px;background-image:linear-gradient(to top,#000,transparent),linear-gradient(to right,#fff,transparent);cursor:pointer;}
+#blob-app .color-sv-thumb {position:absolute;width:18px;height:18px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.35),0 1px 3px rgba(0,0,0,.4);transform:translate(-50%,-50%);pointer-events:none;}
+#blob-app .color-hue {position:relative;width:100%;height:22px;border-radius:11px;touch-action:none;margin-bottom:18px;background:linear-gradient(to right,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00);cursor:pointer;}
+#blob-app .color-hue-thumb {position:absolute;top:50%;width:24px;height:24px;border-radius:50%;background:#fff;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.35),0 1px 3px rgba(0,0,0,.4);transform:translate(-50%,-50%);pointer-events:none;}
+#blob-app .color-hex-row {display:flex;align-items:center;gap:10px;}
+#blob-app .color-hex-swatch {width:33px;height:29px;border-radius:6px;border:1px solid var(--line);flex:none;}
+#blob-app .color-hex-row input {flex:1;height:39px;border:1px solid var(--line);border-radius:7px;padding:0 10px;background:var(--panel);font-size:13px;text-transform:uppercase;font-family:Consolas,monospace;}
+#blob-app .slider-field {display:block;margin:0 0 16px;font-size:13px;}
+#blob-app .slider-field > span {display:flex;justify-content:space-between;margin-bottom:7px;}
+#blob-app .slider-field output {color:var(--quiet);font-size:12px;font-variant-numeric:tabular-nums;}
+#blob-app input[type="range"] {display:block;width:100%;height:14px;margin:0;accent-color:#30342c;cursor:pointer;}
+#blob-app input[type="checkbox"] {accent-color:#30342c;width:15px;height:15px;margin:0;}
+#blob-app .first-slider {margin-top:20px;}
+#blob-app .first-slider:not([hidden]) + .first-slider {margin-top:0;}
+#blob-app .pattern-button {margin-top:14px;}
+#blob-app .control-section > .slider-field:last-child {margin-bottom:0;}
+#blob-app .save-section .button {margin-top:11px;}
+#blob-app .button {border:1px solid transparent;border-radius:8px;padding:10px 15px;font-size:12px;font-weight:500;white-space:nowrap;min-height:39px;transition:background .12s;}
+#blob-app .button.full {width:100%;}
+#blob-app .button.primary {background:#252821;color:#fff;}
+#blob-app .button.primary:hover {background:#454c3b;}
+#blob-app .button.secondary {background:#fff;border-color:#dadbd3;}
+#blob-app .button.secondary:hover {background:#f2f3ed;}
+#blob-app .button.quiet {background:transparent;color:#606457;padding:6px 10px;min-height:32px;font-size:12px;}
+#blob-app .button.quiet:hover:not(:disabled) {background:#eceee5;}
+#blob-app .preview-panel {min-width:0;}
+#blob-app .history-actions {display:flex;gap:3px;}
+#blob-app .swatch {width:22px;height:22px;border-radius:50%;border:1px solid #d5d7cf;}
+#blob-app .swatch[aria-pressed="true"] {outline:1px solid #414637;outline-offset:3px;}
+#blob-app .checker {background-color:#f8f8f5;background-image:conic-gradient(#eeefe9 25%,transparent 0 50%,#eeefe9 0 75%,transparent 0);background-size:22px 22px;}
+#blob-app .light {background:#fff;}
+#blob-app .dark {background:#292c28;}
+#blob-app .swatch.custom-bg {border:2px solid transparent;background:linear-gradient(var(--custom-bg,#e8d9c5),var(--custom-bg,#e8d9c5)) padding-box,conic-gradient(#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00) border-box;}
+#blob-app .logo-stage {width:100%;display:flex;align-items:center;justify-content:center;border:1px solid #e6e7df;border-radius:14px;overflow:hidden;}
+#blob-app .logo-stage > svg {display:block;width:100%;height:100%;overflow:visible;}
+#blob-app .download-panel {background:#eeefe8;border-radius:13px;}
+#blob-app .export-controls {display:flex;align-items:end;gap:9px;flex-wrap:wrap;}
+#blob-app .png-size {width:138px;}
+#blob-app .export-bg {display:flex;align-items:center;gap:7px;min-height:39px;margin-right:auto;font-size:12px;color:#565950;cursor:pointer;}
+#blob-app .project-tools {display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:20px;color:var(--quiet);font-size:11px;flex-wrap:wrap;}
+#blob-app .project-tools > div {display:flex;gap:8px;width:100%;}
+#blob-app .project-tools .button {flex:1;}
+#blob-app .version-picker {position:relative;}
+#blob-app .version-button {display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;height:39px;border:1px solid var(--line);border-radius:7px;padding:0 10px;background:var(--panel);font-size:13px;font-weight:500;text-align:left;}
+#blob-app .version-button > span {min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+#blob-app .version-button::after {content:"";flex:none;width:6px;height:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:translateY(-2px) rotate(45deg);margin-right:3px;}
+#blob-app .version-button[aria-expanded="true"]::after {transform:translateY(2px) rotate(-135deg);}
+#blob-app .version-list {position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:40;list-style:none;margin:0;padding:4px;max-height:280px;overflow-y:auto;background:#fff;border:1px solid var(--line);border-radius:9px;box-shadow:0 10px 26px rgba(20,20,18,.16);}
+#blob-app .version-list [role="option"] {display:flex;align-items:center;justify-content:space-between;gap:6px;min-height:34px;padding:0 4px 0 10px;border-radius:6px;font-size:13px;cursor:pointer;outline:none;}
+#blob-app .version-list [role="option"]:hover,#blob-app .version-list [role="option"]:focus {background:#f2f3ed;}
+#blob-app .version-list [role="option"][aria-selected="true"] {font-weight:600;}
+#blob-app .version-list [role="option"]:focus-visible {box-shadow:inset 0 0 0 2px #82896e;}
+#blob-app .version-name {min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+#blob-app .version-group {padding:10px 10px 4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#686b60;border-top:1px solid var(--line);margin-top:4px;}
+#blob-app .version-delete {flex:none;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:0;border-radius:6px;background:none;color:#8b8e82;padding:0;}
+#blob-app .version-delete svg {width:16px;height:16px;}
+#blob-app .version-delete:hover {background:#f3e3df;color:#a43c31;}
+#blob-app .version-delete.armed {background:#a43c31;color:#fff;}
+#blob-app .notice {min-height:20px;margin:18px 0 0;font-size:12px;color:#6c735d;}
+#blob-app .notice.error {color:#a43c31;}
+/* Cover / Record / Cover + record, as in the logo studio: single modes show their options open,
+   the combined mode folds them into two menus. */
+#blob-app:not([data-mode="both"]) .control-menu > summary {display:none;}
+#blob-app[data-mode="both"] .control-menu {border-top:1px solid var(--line);margin-top:23px;padding-top:20px;}
+#blob-app[data-mode="both"] .control-menu > summary {list-style:none;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;font-size:12px;line-height:1.4;letter-spacing:.06em;text-transform:uppercase;font-weight:600;color:#686b60;}
+#blob-app[data-mode="both"] .control-menu > summary::-webkit-details-marker {display:none;}
+#blob-app[data-mode="both"] .control-menu > summary::after {content:"";width:7px;height:7px;margin-right:4px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:translateY(-2px) rotate(45deg);transition:transform .15s;}
+#blob-app[data-mode="both"] .control-menu[open] > summary::after {transform:translateY(2px) rotate(-135deg);}
+#blob-app[data-mode="both"] .control-menu > summary:hover {color:var(--ink);}
+#blob-app .control-menu > summary:focus-visible {outline:3px solid #82896e;outline-offset:3px;border-radius:3px;}
+#blob-app[data-mode="both"] .menu-controls {padding-top:20px;}
+#blob-app[data-mode="both"] .menu-controls > .control-section:first-child {border-top:0;margin-top:0;padding-top:0;}
+#blob-app .menu-controls .slider-field:last-child {margin-bottom:0;}
+@media(min-width:1500px) {#blob-app .workspace {grid-template-columns:310px minmax(0,1fr);gap:48px;}}
+@media(max-width:900px) {#blob-app{padding:0 4px;}#blob-app .workspace{grid-template-columns:250px minmax(0,1fr);gap:20px;}#blob-app .settings-panel{padding:18px;}#blob-app .export-controls>.png-size{width:100%;}#blob-app .export-controls>.button{flex:1;}#blob-app .header-right{gap:7px;}#blob-app .brand{gap:12px;}}
+@media(max-width:660px) {#blob-app .workspace{display:flex;flex-direction:column;}#blob-app .settings-panel{width:100%;order:2;}#blob-app .preview-panel{width:100%;}#blob-app .app-header{flex-wrap:wrap;gap:12px;padding-bottom:16px;}#blob-app .header-right{margin-left:auto;}#blob-app .brand svg{width:72px;height:24px;}#blob-app .brand{font-size:12px;}#blob-app .export-controls>.button{padding:10px 12px;}}
+
+#blob-app .settings-panel {overflow-y:auto;overscroll-behavior-y:contain;scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:#b8bcb0 transparent;}
+#blob-app .settings-panel:focus-visible,#blob-app .preview-panel:focus-visible {outline:2px solid #82896e;outline-offset:2px;}
+#blob-app .preview-panel {display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:16px;overflow:hidden;padding:4px 0 0;}
+#blob-app .preview-toolbar {display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin:0;}
+#blob-app .backdrops {display:flex;align-items:center;gap:9px;}
+#blob-app .background-label {font-size:12px;color:#606457;margin-right:3px;}
+#blob-app .logo-stage {height:100%;min-height:0;padding:16px;}
+#blob-app .download-panel {margin:0;padding:16px;}
+#blob-app .settings-panel .project-tools {padding-top:18px;border-top:1px solid var(--line);}
+@media(min-width:661px) {
+  #blob-app {height:100vh;height:100dvh;display:grid;grid-template-rows:auto minmax(0,1fr);padding-bottom:20px;}
+  #blob-app .workspace {min-height:0;align-items:stretch;}
+  #blob-app .settings-panel,#blob-app .preview-panel {min-height:0;height:100%;}
+}
+@media(max-width:660px) {
+ #blob-app .preview-panel {display:contents;}
+ #blob-app .preview-toolbar {order:1;width:100%;gap:8px;margin-bottom:12px;}
+ #blob-app .logo-stage {order:2;position:sticky;top:0;z-index:5;width:100%;height:auto;aspect-ratio:4/3;padding:8px;box-shadow:0 10px 14px -10px rgba(35,35,33,.2);}
+ #blob-app .settings-panel {order:3;width:100%;max-height:none;overflow-y:visible;margin-top:16px;}
+ #blob-app .download-panel {order:4;width:100%;margin:16px 0 24px;padding:12px;}
+ #blob-app .background-label {font-size:11px;}
+ #blob-app .backdrops {gap:7px;}
+}
+</style>
+<script>
+(() => {
+  'use strict';
+  const $=id=>document.getElementById(id);
+  const root=$('blob-app');
+  const STORE='blob-record-studio-project-v1',APP='blob-record-studio',NS='http://www.w3.org/2000/svg';
+  // Sleeve side S; a 12" record is a little smaller than its 12⅜" sleeve.
+  const S=1200,D=S*.96,R=D/2;
+  const looks={
+    classic:{finish:'solid',vinylColor:'#141414',vinylColor2:'#f2d7c9',clarity:70,grooves:70,sheen:60,labelColor:'#e8d9c5'},
+    clear:{finish:'translucent',vinylColor:'#dfe7ef',vinylColor2:'#f2d7c9',clarity:80,grooves:55,sheen:70,labelColor:'#ffffff'},
+    marble:{finish:'marble',vinylColor:'#7a1f2b',vinylColor2:'#f3dccd',clarity:70,grooves:45,sheen:60,labelColor:'#f3dccd'},
+    splatter:{finish:'splatter',vinylColor:'#f1ece2',vinylColor2:'#1b1b1b',clarity:70,grooves:45,sheen:55,labelColor:'#1b1b1b'}
+  };
+  const defaults={mode:'both',scene:'slide',cover:'single',discs:'single',position:50,...looks.classic,disc2Color:'#b3342b',patternSeed:7,labelMode:'color',labelSize:34,sleeveColor:'#d8c4a4',sleeveGloss:35,texture:20,wear:0,backdrop:'studio',light:'left',depth:50,shadow:60,coverView:'front',gateOpen:'closed',insideColor:'#efe9df',recordSide:'a',bgBlur:30,bgZoom:100,bgX:0,bgY:0,artId:null,backArtId:null,insideArtId:null,bgArtId:null,labelAId:null,labelBId:null,labelCId:null,labelDId:null};
+  const artKeys=['artId','backArtId','insideArtId','bgArtId','labelAId','labelBId','labelCId','labelDId'];
+  const legacyArtKeys={labelAId:'labelArtId',labelCId:'label2ArtId'};
+  const resetValues={position:50,clarity:70,grooves:70,sheen:60,labelSize:34,sleeveGloss:35,texture:20,wear:0,depth:50,shadow:60,bgBlur:30,bgZoom:100,bgX:0,bgY:0};
+  let state={...defaults}, committed={...defaults}, undoStack=[], redoStack=[], savedVersions=[], saveTimer=null;
+  // Uploaded images live outside the settings so undo and versions only carry a short id.
+  let images={};
+  let preferences={background:'custom',customBackground:'#e6e2da',size:4096,name:'My record',selected:'classic',includeBackground:true};
+  let storageOK=true;
+  const inputList=[...root.querySelectorAll('[data-setting]')];
+  const img=(id,x,y,w,h=w)=>'<image id="'+id+'" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" preserveAspectRatio="xMidYMid slice"/>';
+  $('stage').innerHTML='<svg xmlns="'+NS+'" role="img" aria-labelledby="record-title record-desc"><title id="record-title">Vinyl record</title><desc id="record-desc">A vinyl record and its sleeve.</desc><defs>'+img('cover-art',-S/2,-S/2,S)+img('back-art',-S/2,-S/2,S)+img('inside-art',-S,-S/2,2*S,S)+img('bg-art',0,0,1,1)+img('disc-0',-R,-R,D)+img('disc-1',-R,-R,D)+'</defs><g id="scene"></g></svg>';
+  const svg=$('stage').querySelector('svg'),sceneEl=svg.querySelector('#scene');
+  const round=n=>String(Math.round(n*100)/100);
+  const hexParts=hex=>{let s=hex.slice(1);if(s.length===3)s=[...s].map(c=>c+c).join('');return [0,2,4].map(i=>parseInt(s.slice(i,i+2),16));};
+  const toHex=rgb=>'#'+rgb.map(n=>Math.round(Math.max(0,Math.min(255,n))).toString(16).padStart(2,'0')).join('');
+  const mix=(a,b,t)=>{const p=hexParts(a),q=hexParts(b);return toHex(p.map((v,i)=>v+(q[i]-v)*t));};
+  const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+  const luminance=hex=>{const [r,g,b]=hexParts(hex);return (.2126*r+.7152*g+.0722*b)/255;};
+  const hasArt=st=>!!(st.artId&&images[st.artId]);
+  function validImages(value){
+    const out={};
+    if(value&&typeof value==='object'&&!Array.isArray(value))for(const [id,data] of Object.entries(value))if(/^art-[a-z0-9-]{1,40}$/.test(id)&&typeof data==='string'&&/^data:image\/(png|jpeg|webp);base64,[a-z0-9+/=]+$/i.test(data))out[id]=data;
+    return out;
+  }
+  function validState(value) {
+    if(!value||typeof value!=='object'||Array.isArray(value))throw Error('This file does not contain record settings.');
+    const next={...defaults};
+    for(const name of ['vinylColor','vinylColor2','disc2Color','labelColor','sleeveColor','insideColor'])if(/^#[0-9a-f]{6}$/i.test(value[name]||''))next[name]=value[name].toLowerCase();
+    const ranges={position:[0,100],clarity:[0,100],grooves:[0,100],sheen:[0,100],labelSize:[24,40],sleeveGloss:[0,100],texture:[0,100],wear:[0,100],depth:[0,100],shadow:[0,100],bgBlur:[0,100],bgZoom:[100,300],bgX:[-100,100],bgY:[-100,100],patternSeed:[1,99999]};
+    for(const [name,[min,max]] of Object.entries(ranges))if(typeof value[name]==='number'&&Number.isFinite(value[name]))next[name]=Math.round(Math.max(min,Math.min(max,value[name])));
+    for(const [name,values] of Object.entries({mode:['cover','record','both'],scene:['slide','side','flat'],cover:['single','gatefold'],discs:['single','double'],finish:['solid','translucent','marble','splatter'],labelMode:['color','art','upload'],backdrop:['none','studio','wall'],light:['left','top','right'],coverView:['front','back','both'],gateOpen:['closed','open'],recordSide:['a','b']}))if(values.includes(value[name]))next[name]=value[name];
+    for(const key of artKeys){const id=value[key]??value[legacyArtKeys[key]];next[key]=typeof id==='string'&&images[id]?id:null;}
+    return next;
+  }
+  function notice(text,error=false){$('notice').textContent=text;$('notice').classList.toggle('error',error);}
+  function usedImages(){const ids=new Set([state,...savedVersions.map(v=>v.settings)].flatMap(s=>artKeys.map(k=>s[k])).filter(id=>id&&images[id]));return Object.fromEntries([...ids].map(id=>[id,images[id]]));}
+  function project(){return {app:APP,version:2,settings:{...state},preferences:{...preferences},versions:savedVersions.map(v=>({...v,settings:{...v.settings}})),images:usedImages()};}
+  function persist(){
+    clearTimeout(saveTimer);
+    try{localStorage.setItem(STORE,JSON.stringify(project()));storageOK=true;}
+    catch(e){
+      // Usually the artwork is too big for browser storage: keep at least the settings.
+      storageOK=false;
+      try{localStorage.setItem(STORE,JSON.stringify({...project(),images:{}}));}catch(e2){}
+    }
+  }
+  function rememberSoon(){clearTimeout(saveTimer);saveTimer=setTimeout(persist,180);}
+  function rebuildVersionMenu(){
+    $('version-select').querySelectorAll('optgroup').forEach(el=>el.remove());
+    if(savedVersions.length){const group=document.createElement('optgroup');group.label='Your saved versions';for(const version of savedVersions){const option=document.createElement('option');option.value='saved:'+version.id;option.textContent=version.name;group.appendChild(option);}$('version-select').appendChild(group);}
+    const exists=[...$('version-select').options].some(o=>o.value===preferences.selected);
+    if(!exists)preferences.selected='custom';
+    $('version-select').value=preferences.selected;
+    renderVersionList();
+  }
+
+  // ---- Record surface -------------------------------------------------------------------
+  // Each record is painted pixel by pixel on a canvas: anisotropic "bow-tie" sheen from the
+  // grooves, per-ring texture with smooth gaps between tracks, a smooth run-out band, a rounded
+  // rim, then a paper label and the spindle hole. The result is placed in the SVG as an image.
+  const PREVIEW_RES=512,FULL_RES=2048,LIGHT_ANGLE={left:-135,top:-100,right:-45};
+  function rng(seed){let t=seed>>>0;return ()=>{t+=0x6d2b79f5;let r=Math.imul(t^t>>>15,1|t);r^=r+Math.imul(r^r>>>7,61|r);return ((r^r>>>14)>>>0)/4294967296;};}
+  function hash2(x,y,s){let h=(Math.imul(x,374761393)+Math.imul(y,668265263)+Math.imul(s,982451653))|0;h=Math.imul(h^(h>>>13),1274126177);h^=h>>>16;return (h>>>0)/4294967296;}
+  function vnoise(x,y,s){const xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi,u=xf*xf*(3-2*xf),v=yf*yf*(3-2*yf),a=hash2(xi,yi,s),b=hash2(xi+1,yi,s),c=hash2(xi,yi+1,s),d=hash2(xi+1,yi+1,s);return a+(b-a)*u+(c-a)*v+(a-b-c+d)*u*v;}
+  function fbm(x,y,s){let t=0,a=.5,f=1;for(let o=0;o<5;o++){t+=a*vnoise(x*f,y*f,s+o*17);f*=2.03;a*=.5;}return t;}
+  const marbleFields=new Map(),grooveTables=new Map(),FIELD=256;
+  // Swirled, domain-warped noise: pressed marble vinyl smears its colors in a spiral.
+  function marbleField(seed){
+    if(marbleFields.has(seed))return marbleFields.get(seed);
+    const F=new Float32Array(FIELD*FIELD);let lo=Infinity,hi=-Infinity;
+    for(let j=0;j<FIELD;j++)for(let i=0;i<FIELD;i++){
+      const x=i/(FIELD-1)*2-1,y=j/(FIELD-1)*2-1,r=Math.hypot(x,y),a=Math.atan2(y,x)+3.2*r,px=r*Math.cos(a)*2.4,py=r*Math.sin(a)*2.4;
+      const qx=fbm(px+1.7,py+9.2,seed),qy=fbm(px+8.3,py+2.8,seed+5),v=fbm(px+2.4*qx,py+2.4*qy,seed+11);
+      F[j*FIELD+i]=v;if(v<lo)lo=v;if(v>hi)hi=v;
+    }
+    for(let k=0;k<F.length;k++)F[k]=(F[k]-lo)/(hi-lo||1);
+    if(marbleFields.size>6)marbleFields.delete(marbleFields.keys().next().value);
+    marbleFields.set(seed,F);return F;
+  }
+  function sampleField(F,u,v){const M=FIELD,x=Math.min(M-1.001,Math.max(0,u*(M-1))),y=Math.min(M-1.001,Math.max(0,v*(M-1))),xi=x|0,yi=y|0,fx=x-xi,fy=y-yi,i=yi*M+xi;return (F[i]*(1-fx)+F[i+1]*fx)*(1-fy)+(F[i+M]*(1-fx)+F[i+M+1]*fx)*fy;}
+  function grooveTable(N,lr){
+    const key=N+':'+lr;if(grooveTables.has(key))return grooveTables.get(key);
+    const Rp=N/2,rand=rng(4242),start=lr*1.3,end=.955,gaps=[];
+    for(let k=1;k<6;k++)gaps.push(start+(end-start)*(k/6+(rand()-.5)*.06));
+    const tex=new Float32Array(Math.ceil(Rp)+2),smooth=new Uint8Array(tex.length),runout=start-.012;
+    for(let ri=0;ri<tex.length;ri++){
+      const r=(ri+.5)/Rp;
+      tex[ri]=.55*rand()+.45*(.5+.5*Math.sin(r*97)*Math.sin(r*23+1.3));
+      smooth[ri]=r<start||r>end||gaps.some(g=>Math.abs(r-g)<.0035)?1:0;
+      if(Math.abs(r-runout)<Math.max(.0012,1/Rp)){tex[ri]=1;smooth[ri]=0;}
+    }
+    const t={tex,smooth};grooveTables.set(key,t);return t;
+  }
+  const imgEls={};
+  function imageReady(id){
+    if(!imgEls[id]){const el=new Image();el.onload=()=>{discShown.fill('');paint();};el.src=images[id];imgEls[id]=el;}
+    return imgEls[id].complete&&imgEls[id].naturalWidth>0;
+  }
+  // The colors of a marble or splatter record before lighting. Cached at preview size so dragging a
+  // lighting slider only redoes the lighting.
+  const albedoMaps=new Map();
+  function albedoMap(o,N){
+    // The other side of the same record shows its pattern mirrored.
+    const key=[o.finish,o.color,o.color2,o.seed,o.mirror,N].join();
+    if(albedoMaps.has(key))return albedoMaps.get(key);
+    const Rp=N/2;let data;
+    if(o.finish==='splatter'){
+      const canvas=document.createElement('canvas');canvas.width=canvas.height=N;const ctx=canvas.getContext('2d',{willReadFrequently:true});
+      if(o.mirror){ctx.translate(N,0);ctx.scale(-1,1);}
+      ctx.fillStyle=o.color;ctx.fillRect(0,0,N,N);ctx.fillStyle=o.color2;
+      const rand=rng(o.seed*7919+13),dot=(x,y,s)=>{ctx.beginPath();ctx.arc(x,y,s,0,Math.PI*2);ctx.fill();};
+      for(let k=0;k<150;k++){
+        const a=rand()*Math.PI*2,dist=Rp*Math.sqrt(rand()),x=Rp+dist*Math.cos(a),y=Rp+dist*Math.sin(a),s=N*(.0015+.02*Math.pow(rand(),3.2));dot(x,y,s);
+        for(let q=Math.floor(rand()*5);q>0;q--){const b=rand()*Math.PI*2,dd=s*(1.3+rand()*2.5);dot(x+dd*Math.cos(b),y+dd*Math.sin(b),s*(.12+rand()*.3));}
+      }
+      data=ctx.getImageData(0,0,N,N).data;
+    }else{
+      const F=marbleField(o.seed),c1=hexParts(o.color),c2=hexParts(o.color2);data=new Uint8ClampedArray(N*N*4);
+      for(let y=0;y<N;y++)for(let x=0;x<N;x++){
+        const m=sampleField(F,o.mirror?1-(x+.5)/N:(x+.5)/N,(y+.5)/N),t=m<.4?0:m>.6?1:(m-.4)/.2,s=t*t*(3-2*t),k=.92+.16*m,i=(y*N+x)*4;
+        data[i]=(c1[0]+(c2[0]-c1[0])*s)*k;data[i+1]=(c1[1]+(c2[1]-c1[1])*s)*k;data[i+2]=(c1[2]+(c2[2]-c1[2])*s)*k;
+      }
+    }
+    if(N<=PREVIEW_RES){albedoMaps.set(key,data);while(albedoMaps.size>4)albedoMaps.delete(albedoMaps.keys().next().value);}
+    return data;
+  }
+  function renderDisc(o,N){
+    const canvas=document.createElement('canvas');canvas.width=canvas.height=N;
+    const ctx=canvas.getContext('2d',{willReadFrequently:true}),Rp=N/2,lr=o.labelSize/100,lrp=lr*Rp;
+    const albedo=o.finish==='marble'||o.finish==='splatter'?albedoMap(o,N):null,{tex,smooth}=grooveTable(N,lr);
+    const out=ctx.createImageData(N,N),px=out.data;
+    const ang=LIGHT_ANGLE[o.light]*Math.PI/180,lx=Math.cos(ang),ly=Math.sin(ang);
+    const c1=hexParts(o.color),c2=hexParts(o.color2),clear=o.finish==='translucent',a0=clear?1-o.clarity/100*.85:1;
+    const hiAmt=(.35+.4*(1-luminance(o.color)))*o.sheen/100,gAmp=o.grooves/100,rim=.975,inner=lrp-2,outer2=(Rp+1)*(Rp+1);
+    for(let y=0;y<N;y++){const dy=y+.5-Rp;for(let x=0;x<N;x++){
+      const dx=x+.5-Rp,d2=dx*dx+dy*dy;if(d2>outer2)continue;
+      const d=Math.sqrt(d2);if(d<inner)continue;
+      const idx=(y*N+x)*4,r=d/Rp,ri=d|0;
+      let br,bg,bb;
+      if(albedo){br=albedo[idx];bg=albedo[idx+1];bb=albedo[idx+2];}
+      else{br=c1[0];bg=c1[1];bb=c1[2];}
+      // Grooves reflect light across their direction: two bright opposite wedges pointing at the light.
+      const ca=(dx*lx+dy*ly)/d,ac=ca<0?-ca:ca,a2=ac*ac,a4=a2*a2,a16=a4*a4*a4*a4,spec=(a16*.85+a4*.18)*(ca>0?1:.72);
+      let shade=1+.06*ca*r,h,a=a0;
+      if(r>rim){const t=(r-rim)/(1-rim),bump=Math.sin(t*Math.PI);h=spec*.25+(ca>0?ca:0)*bump*.6;shade*=1-(ca<0?-ca:0)*bump*.35-t*t*.2;if(clear)a+=.25;}
+      else if(smooth[ri])h=spec*.22;
+      else{const tx=tex[ri];h=spec*(1+(tx-.5)*1.6*gAmp);shade*=1-(.5-tx)*.1*gAmp;if(clear)a+=.04*gAmp;}
+      h*=hiAmt;if(h<0)h=0;
+      const alpha=Math.min(1,a+(clear?h:0)),w=255*h,base=shade*a0/alpha;
+      px[idx]=Math.min(255,br*base+w/alpha);px[idx+1]=Math.min(255,bg*base+w/alpha);px[idx+2]=Math.min(255,bb*base+w/alpha);
+      px[idx+3]=255*alpha*Math.min(1,Math.max(0,Rp+.5-d));
+    }}
+    ctx.putImageData(out,0,0);
+    // Paper label: artwork cropped to a circle, soft falloff, a faint semi-gloss sheen and a pressed edge.
+    ctx.save();ctx.beginPath();ctx.arc(Rp,Rp,lrp,0,Math.PI*2);ctx.clip();
+    ctx.fillStyle=o.labelColor;ctx.fillRect(0,0,N,N);
+    const art=o.labelImg&&imgEls[o.labelImg];
+    if(art&&art.naturalWidth){const k=Math.max(2*lrp/art.naturalWidth,2*lrp/art.naturalHeight),w=art.naturalWidth*k,h=art.naturalHeight*k;ctx.drawImage(art,Rp-w/2,Rp-h/2,w,h);}
+    let g=ctx.createRadialGradient(Rp,Rp,lrp*.2,Rp,Rp,lrp);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(.85,'rgba(0,0,0,.03)');g.addColorStop(1,'rgba(0,0,0,.14)');ctx.fillStyle=g;ctx.fillRect(0,0,N,N);
+    g=ctx.createLinearGradient(Rp+lx*lrp,Rp+ly*lrp,Rp-lx*lrp,Rp-ly*lrp);g.addColorStop(0,'rgba(255,255,255,.08)');g.addColorStop(1,'rgba(0,0,0,.07)');ctx.fillStyle=g;ctx.fillRect(0,0,N,N);
+    if(ctx.createConicGradient){const s=o.sheen/100;g=ctx.createConicGradient(ang,Rp,Rp);[[0,.13],[.07,0],[.43,0],[.5,.08],[.57,0],[.93,0],[1,.13]].forEach(([t,v])=>g.addColorStop(t,'rgba(255,255,255,'+v*s+')'));ctx.fillStyle=g;ctx.fillRect(0,0,N,N);}
+    ctx.restore();
+    ctx.lineWidth=N*.0025;ctx.strokeStyle='rgba(0,0,0,.3)';ctx.beginPath();ctx.arc(Rp,Rp,lrp-ctx.lineWidth/2,0,Math.PI*2);ctx.stroke();
+    ctx.lineWidth=N*.0015;ctx.strokeStyle='rgba(0,0,0,.1)';ctx.beginPath();ctx.arc(Rp,Rp,lrp*.3,0,Math.PI*2);ctx.stroke();
+    const hole=N*.012;
+    ctx.globalCompositeOperation='destination-out';ctx.beginPath();ctx.arc(Rp,Rp,hole,0,Math.PI*2);ctx.fill();
+    ctx.globalCompositeOperation='source-over';ctx.lineWidth=N*.002;ctx.strokeStyle='rgba(0,0,0,.35)';ctx.beginPath();ctx.arc(Rp,Rp,hole+N*.001,0,Math.PI*2);ctx.stroke();
+    return canvas;
+  }
+  // Record 1 carries sides A/B, record 2 sides C/D. A missing label borrows the nearest one:
+  // B and C fall back to A, D to C (then A).
+  const LABEL_FALLBACK={A:[],B:['A'],C:['A'],D:['C','A']};
+  function sideLetter(st,i){return (i===0?'AB':'CD')[st.recordSide==='b'?1:0];}
+  function labelFor(st,i){
+    const letter=sideLetter(st,i),has=id=>id&&images[id];
+    if(st.labelMode==='art'){const back=st.recordSide==='b'&&has(st.backArtId)?st.backArtId:null;return back||(has(st.artId)?st.artId:null);}
+    if(st.labelMode!=='upload')return null;
+    for(const l of [letter,...LABEL_FALLBACK[letter]])if(has(st['label'+l+'Id']))return st['label'+l+'Id'];
+    return null;
+  }
+  function discSpec(st,i){
+    return {color:i===1?st.disc2Color:st.vinylColor,color2:st.vinylColor2,finish:st.finish,clarity:st.clarity,grooves:st.grooves,sheen:st.sheen,seed:st.patternSeed+i*97,mirror:st.recordSide==='b',labelSize:st.labelSize,labelColor:st.labelColor,labelImg:labelFor(st,i),light:st.light};
+  }
+  const discCache=new Map(),fullJobs=new Map(),discShown=['',''],shownHref={};
+  let discTimer=null;
+  function cacheDisc(key,entry){discCache.delete(key);discCache.set(key,entry);while(discCache.size>10)discCache.delete(discCache.keys().next().value);}
+  function setImageHref(id,url){
+    if(shownHref[id]===url)return;shownHref[id]=url;
+    // A fresh <image> each time: Chrome keeps <use> copies stale when an image's href is removed and restored.
+    const el=svg.querySelector('#'+id),fresh=el.cloneNode(false);fresh.removeAttribute('href');if(url)fresh.setAttribute('href',url);el.replaceWith(fresh);
+    // The same goes for <use> elements already pointing at it (e.g. when a full-resolution record arrives).
+    sceneEl.querySelectorAll('use[href="#'+id+'"]').forEach(use=>use.replaceWith(use.cloneNode(false)));
+  }
+  // The background photo fills everything the preview shows, not just the artwork frame, and is a
+  // little oversized so its blurred edges stay out of sight.
+  // Zoom scales the photo up from "just covers"; Horizontal/Vertical slide it across however much
+  // of it sticks out past the view, so it can never uncover an edge.
+  let bgPan=null,lastFrame=null;
+  function placeBackground(frame){
+    const id=state.bgArtId;if(!images[id])return;
+    const stage=$('stage'),cs=getComputedStyle(stage),w=stage.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight),h=stage.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);
+    let [x,y,fw,fh]=frame;const r=w>0&&h>0?w/h:fw/fh;
+    if(r>fw/fh){const nw=fh*r;x-=(nw-fw)/2;fw=nw;}else{const nh=fw/r;y-=(nh-fh)/2;fh=nh;}
+    const m=.06,vx=x-fw*m,vy=y-fh*m,vw=fw*(1+2*m),vh=fh*(1+2*m);
+    const pic=imageReady(id)?imgEls[id]:null,iw=pic?pic.naturalWidth:vw,ih=pic?pic.naturalHeight:vh;
+    const k=Math.max(vw/iw,vh/ih)*state.bgZoom/100,iw2=iw*k,ih2=ih*k,maxX=(iw2-vw)/2,maxY=(ih2-vh)/2;
+    const cx=vx+vw/2+state.bgX/100*maxX,cy=vy+vh/2+state.bgY/100*maxY;
+    bgPan={maxX,maxY,unitsPerPx:w>0?fw/w:1};
+    const el=svg.querySelector('#bg-art');el.setAttribute('preserveAspectRatio','none');
+    [['x',cx-iw2/2],['y',cy-ih2/2],['width',iw2],['height',ih2]].forEach(([key,v])=>el.setAttribute(key,round(v)));
+  }
+  function discCount(st){return st.mode==='cover'?0:st.discs==='double'?2:1;}
+  // Quick low-resolution records while editing (PNG encodes fast); full resolution once the edits
+  // settle, encoded asynchronously as WebP so the page stays responsive.
+  function updateDiscs(st){
+    let pending=false;
+    for(let i=0;i<discCount(st);i++){
+      const spec=discSpec(st,i),key=JSON.stringify(spec);
+      if(spec.labelImg&&!imageReady(spec.labelImg))continue;
+      let entry=discCache.get(key);
+      if(!entry){entry={url:renderDisc(spec,PREVIEW_RES).toDataURL('image/png'),full:false};cacheDisc(key,entry);}
+      if(!entry.full)pending=true;
+      discShown[i]=key;setImageHref('disc-'+i,entry.url);
+    }
+    clearTimeout(discTimer);if(pending)discTimer=setTimeout(finishDiscs,400);
+  }
+  function fullDisc(spec,key){
+    if(!fullJobs.has(key))fullJobs.set(key,new Promise(resolve=>{
+      renderDisc(spec,FULL_RES).toBlob(blob=>{
+        if(!blob){resolve(null);return;}
+        const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>resolve(null);reader.readAsDataURL(blob);
+      },'image/webp',.92);
+    }).then(url=>{fullJobs.delete(key);if(url)cacheDisc(key,{url,full:true});return url;}));
+    return fullJobs.get(key);
+  }
+  async function finishDiscs(){
+    const jobs=[];
+    for(let i=0;i<discCount(state);i++){
+      const spec=discSpec(state,i),key=JSON.stringify(spec);
+      if(spec.labelImg&&!imageReady(spec.labelImg))continue;
+      if(!discCache.get(key)?.full)jobs.push(fullDisc(spec,key).then(url=>{if(url&&discShown[i]===key){setImageHref('disc-'+i,url);pickDirty=true;}}));
+    }
+    await Promise.all(jobs);
+  }
+
+  // ---- Scene ----------------------------------------------------------------------------
+  // Where the sleeve and records sit. `pos` is the layout slider (0-100). floorY is where things stand.
+  function layout(st,pos=st.position){
+    const p=pos/100,double=st.discs==='double',gatefold=st.cover==='gatefold',open=gatefold&&st.gateOpen==='open';
+    // An opened gatefold is a 2:1 spread. Pockets open on the edge opposite the spine: the right
+    // edge seen from the front, the left edge seen from the back, and both outer edges when open.
+    const face=open?'inside':st.coverView==='back'?'back':'front',w=open?2*S:S,flip=face==='back'?-1:1;
+    const sleeve={type:'sleeve',cx:0,cy:0,rot:0,w,face,gatefold,openings:[]},sleeves=[sleeve];
+    const discs=[];let onTop=false,floorY=S/2,showSleeve=true;
+    if(st.mode==='record'){
+      showSleeve=false;floorY=R;
+      if(double)discs.push({cx:-D*.21,cy:0,i:0},{cx:D*.21,cy:0,i:1});else discs.push({cx:0,cy:0,i:0});
+    }else if(st.mode==='cover'){
+      if(!open&&st.coverView==='both'){sleeve.cx=-S*.55;sleeve.face='front';sleeves.push({...sleeve,cx:S*.55,face:'back',openings:[]});}
+    }else if(st.scene==='slide'){
+      const off=p*D*.9,cy=S/2-R;
+      if(open){
+        discs.push({cx:S/2+off,cy,i:0});sleeve.openings.push(1);
+        if(double){discs.push({cx:-S/2-off,cy,i:1});sleeve.openings.push(-1);}
+      }else{
+        discs.push({cx:flip*off,cy,i:0});sleeve.openings.push(flip);
+        if(double)discs.push({cx:flip*(off*1.3+D*.06),cy,i:1});
+      }
+    }else if(st.scene==='side'){
+      const overlap=D*(.55-.63*p),cy=S/2-R,hw=w/2;
+      discs.push({cx:-hw-R+overlap,cy,i:0});
+      if(double&&gatefold)discs.push({cx:hw+R-overlap,cy,i:1});
+      else if(double)discs.push({cx:-hw-R+overlap-D*.3,cy,i:1});
+    }else{
+      sleeve.rot=(p-.5)*50;onTop=true;floorY=null;
+      if(open){discs.push({cx:S*.45,cy:S*.32,i:0});if(double)discs.push({cx:-S*.5,cy:S*.38,i:1});}
+      else{discs.push({cx:-S*.2,cy:S*.3,i:0});if(double)discs.push({cx:S*.28,cy:S*.4,i:1});}
+    }
+    const ordered=discs.map(d=>({type:'disc',...d})).sort((a,b)=>b.i-a.i);
+    let x0=Infinity,y0=Infinity,x1=-Infinity,y1=-Infinity;
+    if(showSleeve)for(const sl of sleeves){
+      const a=sl.rot*Math.PI/180,c=Math.abs(Math.cos(a)),s=Math.abs(Math.sin(a)),pad=S*.01,hx=sl.w/2*c+S/2*s+pad,hy=sl.w/2*s+S/2*c+pad;
+      x0=Math.min(x0,sl.cx-hx);x1=Math.max(x1,sl.cx+hx);y0=Math.min(y0,sl.cy-hy);y1=Math.max(y1,sl.cy+hy);
+    }
+    for(const d of discs){x0=Math.min(x0,d.cx-R);x1=Math.max(x1,d.cx+R);y0=Math.min(y0,d.cy-R);y1=Math.max(y1,d.cy+R);}
+    const m=S*.09,items=showSleeve?(onTop?[...sleeves,...ordered]:[...ordered,...sleeves]):ordered;
+    return {items,floorY,box:[x0-m,y0-m,x1-x0+2*m,y1-y0+2*m]};
+  }
+  const union=(...boxes)=>{const x0=Math.min(...boxes.map(b=>b[0])),y0=Math.min(...boxes.map(b=>b[1])),x1=Math.max(...boxes.map(b=>b[0]+b[2])),y1=Math.max(...boxes.map(b=>b[1]+b[3]));return [x0,y0,x1-x0,y1-y0];};
+  const lightDir=st=>({left:1,top:0,right:-1})[st.light];
+  function sleeveMarkup(sl,st){
+    const hw=sl.w/2,h=S/2,face=sl.face,inside=face==='inside';
+    const rect=(x,y,w,hh,extra)=>'<rect x="'+round(x)+'" y="'+round(y)+'" width="'+round(w)+'" height="'+round(hh)+'" '+extra+'/>',all=extra=>rect(-hw,-h,sl.w,S,extra);
+    const artId={front:st.artId,back:st.backArtId,inside:st.insideArtId}[face],art=artId&&images[artId]?'<use href="#'+{front:'cover-art',back:'back-art',inside:'inside-art'}[face]+'"/>':'';
+    const base=inside?st.insideColor:st.sleeveColor,spine=face==='back'?1:-1;
+    let g='<g transform="translate('+round(sl.cx)+' '+round(sl.cy)+') rotate('+round(sl.rot)+')" filter="url(#shadow)">';
+    // Closed gatefold: the second panel sits right behind this one, so a sliver of it shows along
+    // the top and the open edge, darker because it is in the first panel's shade.
+    if(sl.gatefold&&!inside){const t=S*.007;g+=rect(-hw-spine*t,-h-t,S,S,'fill="'+mix(base,'#000000',.35)+'"');}
+    g+=all('fill="'+base+'"')+art;
+    if(st.texture)g+='<g opacity="'+round(st.texture/100)+'">'+all('fill="#000" filter="url(#grain-dark)"')+all('fill="#000" filter="url(#grain-light)"')+'</g>';
+    if(st.wear&&!inside)g+='<g filter="url(#wear)" opacity="'+round(st.wear/100*.6)+'"><circle r="'+round(R*.96)+'" fill="none" stroke="#fff" stroke-width="'+round(S*.04)+'"/>'+rect(-h+S*.006,-h+S*.006,S*.988,S*.988,'fill="none" stroke="#fff" stroke-width="'+round(S*.012)+'"')+'</g>';
+    g+=all('fill="url(#sleeve-edge)"');
+    if(inside){
+      // Opened gatefold: the panels meet in a valley fold, with a score line either side of the
+      // spine. The panel angled away from the light is a touch darker.
+      if(st.light!=='top')g+=rect(st.light==='left'?-hw:0,-h,hw,S,'fill="#000" fill-opacity=".06"');
+      g+=rect(-S*.07,-h,S*.14,S,'fill="url(#fold)"');
+      g+=rect(-S*.005,-h,S*.01,S,'fill="#fff" fill-opacity=".12"')+rect(-S*.0075,-h,S*.0025,S,'fill="#000" fill-opacity=".24"')+rect(S*.005,-h,S*.0025,S,'fill="#000" fill-opacity=".24"');
+    }else{
+      // The spine is a rounded fold: wide on a gatefold, with the scored hinge line beside it.
+      const sw=sl.gatefold?S*.016:S*.007,grad='fill="url(#'+(spine<0?'spine':'spine-r')+')"';
+      g+=rect(spine<0?-hw:hw-sw,-h,sw,S,grad+(sl.gatefold?'':' opacity=".6"'));
+      if(sl.gatefold){const x=spine<0?-hw+S*.024:hw-S*.026;g+=rect(x,-h,S*.002,S,'fill="#000" fill-opacity=".2"')+rect(x-spine*S*.002,-h,S*.002,S,'fill="#fff" fill-opacity=".3"');}
+    }
+    for(const side of sl.openings)g+=rect(side>0?hw-S*.005:-hw,-h,S*.005,S,'fill="#000" fill-opacity=".22"');
+    g+=all('fill="url(#sleeve-gloss)" opacity="'+round(st.sleeveGloss/100)+'"');
+    // Card thickness: a lit edge towards the light, a shaded edge away from it.
+    const bw=S*.003,edges={top:[-hw,-h,sl.w,bw],bottom:[-hw,h-bw,sl.w,bw],left:[-hw,-h,bw,S],right:[hw-bw,-h,bw,S]};
+    for(const e of {left:['top','left'],top:['top'],right:['top','right']}[st.light])g+=rect(...edges[e],'fill="#fff" fill-opacity=".4"');
+    for(const e of {left:['bottom','right'],top:['bottom'],right:['bottom','left']}[st.light])g+=rect(...edges[e],'fill="#000" fill-opacity=".18"');
+    return g+all('fill="none" stroke="#000" stroke-opacity=".16" stroke-width="'+round(S*.0015)+'"')+'</g>';
+  }
+  function sceneMarkup(st,frame,L){
+    const bg=previewBackground(),dir=lightDir(st),sh=st.shadow/100,dp=st.depth/100,flat=L.floorY===null,wall=st.backdrop==='wall'&&!flat&&bg;
+    const shadowColor=bg?mix(bg,'#000000',.82):'#000000';
+    // Two shadows: a tight contact one and a wide soft one, offset away from the light.
+    const [c,s]=flat?[[dir*.004,.006,.004,.55],[dir*.03,.035,.035,.35]]:wall?[[dir*.003,.003,.004,.45],[dir*.035,.012,.03,.32]]:[[0,.006,.006,.4],[dir*.02,.03,.035,.3]];
+    const layer=(p,n)=>'<feGaussianBlur in="SourceAlpha" stdDeviation="'+round(S*p[2])+'"/><feOffset dx="'+round(S*p[0])+'" dy="'+round(S*p[1])+'" result="o'+n+'"/><feFlood flood-color="'+shadowColor+'" flood-opacity="'+round(Math.min(1,p[3]*sh))+'"/><feComposite in2="o'+n+'" operator="in" result="s'+n+'"/>';
+    const glossDir={left:'x1="0" y1="0" x2="1" y2="1"',top:'x1=".5" y1="0" x2=".5" y2="1"',right:'x1="1" y1="0" x2="0" y2="1"'}[st.light];
+    let defs='<filter id="shadow" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">'+layer(s,1)+layer(c,2)+'<feMerge><feMergeNode in="s1"/><feMergeNode in="s2"/><feMergeNode in="SourceGraphic"/></feMerge></filter>'+
+      '<filter id="soft-blur" x="-50%" y="-200%" width="200%" height="500%"><feGaussianBlur stdDeviation="'+round(S*.02)+'"/></filter><filter id="tight-blur" x="-50%" y="-300%" width="200%" height="700%"><feGaussianBlur stdDeviation="'+round(S*.006)+'"/></filter>'+
+      '<filter id="grain-dark" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="5"/><feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.3 0 0 0 .58"/></filter>'+
+      '<filter id="grain-light" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="9"/><feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 1.3 0 0 0 -.72"/></filter>'+
+      '<filter id="wear" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceGraphic" stdDeviation="'+round(S*.01)+'" result="b"/><feTurbulence type="fractalNoise" baseFrequency="0.012 0.02" numOctaves="4" seed="3" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 2.6 0 0 0 -.95" result="m"/><feComposite in="b" in2="m" operator="in"/></filter>'+
+      '<linearGradient id="sleeve-edge"><stop offset="0" stop-color="#000" stop-opacity=".1"/><stop offset=".03" stop-color="#000" stop-opacity="0"/><stop offset=".97" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".12"/></linearGradient>'+
+      '<linearGradient id="spine"><stop offset="0" stop-color="#000" stop-opacity=".35"/><stop offset=".35" stop-color="#fff" stop-opacity=".22"/><stop offset=".7" stop-color="#000" stop-opacity=".08"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient>'+
+      '<linearGradient id="spine-r" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".35"/><stop offset=".35" stop-color="#fff" stop-opacity=".22"/><stop offset=".7" stop-color="#000" stop-opacity=".08"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient>'+
+      '<linearGradient id="fold"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".38" stop-color="#000" stop-opacity=".08"/><stop offset=".5" stop-color="#000" stop-opacity=".26"/><stop offset=".62" stop-color="#000" stop-opacity=".08"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient>'+
+      '<linearGradient id="sleeve-gloss" '+glossDir+'><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset=".3" stop-color="#fff" stop-opacity=".12"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset=".85" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity=".1"/></linearGradient>';
+    let body='';
+    const photo=!!images[st.bgArtId];
+    if(photo){
+      // A background photo, softened like a shallow depth of field, with the studio light on top.
+      defs+='<filter id="bg-blur" x="0" y="0" width="1" height="1"><feGaussianBlur stdDeviation="'+round(st.bgBlur/100*S*.025)+'"/></filter>';
+      const [fx,fy,fw,fh]=frame,rect=fill=>'<rect x="'+round(fx-fw*2)+'" y="'+round(fy-fh*2)+'" width="'+round(fw*5)+'" height="'+round(fh*5)+'" fill="'+fill+'"/>';
+      defs+='<radialGradient id="bd-light" gradientUnits="userSpaceOnUse" cx="'+round(fx+fw/2-dir*fw*.22)+'" cy="'+round(fy+fh*.3)+'" r="'+round(Math.max(fw,fh)*.95)+'"><stop offset="0" stop-color="#fff" stop-opacity="'+round(.22*dp)+'"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/></radialGradient>'+
+        '<radialGradient id="bd-vignette" gradientUnits="userSpaceOnUse" cx="'+round(fx+fw/2)+'" cy="'+round(fy+fh/2)+'" r="'+round(Math.hypot(fw,fh)*.62)+'"><stop offset=".45" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="'+round(.38*dp)+'"/></radialGradient>';
+      body+='<g id="backdrop">'+rect(bg||'#000000')+'<use href="#bg-art"'+(st.bgBlur?' filter="url(#bg-blur)"':'')+'/>'+(st.backdrop!=='none'?rect('url(#bd-light)')+rect('url(#bd-vignette)'):'')+'</g>';
+    }else if(bg){
+      // Backdrop: a big sheet in the background color, lit like a small photo studio.
+      const [fx,fy,fw,fh]=frame,bx=fx-fw*2,by=fy-fh*2,bw=fw*5,bh=fh*5,rect=(fill,y=by,h=bh)=>'<rect x="'+round(bx)+'" y="'+round(y)+'" width="'+round(bw)+'" height="'+round(h)+'" fill="'+fill+'"/>';
+      defs+='<radialGradient id="bd-light" gradientUnits="userSpaceOnUse" cx="'+round(fx+fw/2-dir*fw*.22)+'" cy="'+round(fy+fh*.3)+'" r="'+round(Math.max(fw,fh)*.95)+'"><stop offset="0" stop-color="#fff" stop-opacity="'+round(.22*dp)+'"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/></radialGradient>'+
+        '<radialGradient id="bd-vignette" gradientUnits="userSpaceOnUse" cx="'+round(fx+fw/2)+'" cy="'+round(fy+fh/2)+'" r="'+round(Math.hypot(fw,fh)*.62)+'"><stop offset=".45" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="'+round(.38*dp)+'"/></radialGradient>';
+      body+='<g id="backdrop">'+rect(bg);
+      if(wall){
+        const fl=L.floorY;
+        defs+='<linearGradient id="bd-wall" gradientUnits="userSpaceOnUse" x1="0" y1="'+round(fy)+'" x2="0" y2="'+round(fl)+'"><stop offset="0" stop-color="#000" stop-opacity="'+round(.22*dp)+'"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient>'+
+          '<linearGradient id="bd-floor" gradientUnits="userSpaceOnUse" x1="0" y1="'+round(fl)+'" x2="0" y2="'+round(fl+fh*.45)+'"><stop offset="0" stop-color="#000" stop-opacity="'+round(.14*dp)+'"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient>';
+        body+=rect('url(#bd-wall)',by,fl-by)+rect(mix(bg,'#000000',.02+.06*dp),fl,by+bh-fl)+rect('url(#bd-floor)',fl,by+bh-fl)+rect('url(#bd-light)');
+      }else if(st.backdrop!=='none')body+=rect('url(#bd-light)')+rect('url(#bd-vignette)');
+      body+='</g>';
+    }
+    if(L.floorY!==null&&(wall||st.backdrop==='wall'&&photo||st.backdrop==='studio'&&(bg||photo))){
+      // Contact shadows where the sleeve and records meet the floor.
+      for(const item of L.items){const cx=item.cx,w=item.type==='sleeve'?item.w/2:R*.35;
+        body+='<ellipse cx="'+round(cx+dir*S*.02)+'" cy="'+round(L.floorY)+'" rx="'+round(w*1.02)+'" ry="'+round(S*.03)+'" fill="'+shadowColor+'" fill-opacity="'+round(.22*sh)+'" filter="url(#soft-blur)"/><ellipse cx="'+round(cx)+'" cy="'+round(L.floorY)+'" rx="'+round(w*.98)+'" ry="'+round(S*.008)+'" fill="'+shadowColor+'" fill-opacity="'+round(.5*sh)+'" filter="url(#tight-blur)"/>';}
+    }
+    for(const item of L.items)body+=item.type==='sleeve'?sleeveMarkup(item,st):'<g transform="translate('+round(item.cx)+' '+round(item.cy)+')" filter="url(#shadow)"><use href="#disc-'+item.i+'"/></g>';
+    return '<defs>'+defs+'</defs>'+body;
+  }
+  function fmt(key){const v=state[key];return key==='position'&&state.scene==='flat'?Math.round((v-50)/50*25)+'°':v+'%';}
+  const slots={artId:{thumb:'art-thumb',upload:'art-upload',remove:'art-remove',words:['Upload front','Replace front']},backArtId:{thumb:'back-thumb',upload:'back-upload',remove:'back-remove',words:['Upload back','Replace back']},insideArtId:{thumb:'inside-thumb',upload:'inside-upload',remove:'inside-remove',words:['Upload inside','Replace inside']},bgArtId:{thumb:'bg-thumb',upload:'bg-upload',remove:'bg-remove',words:['Upload image','Replace image']},...Object.fromEntries('ABCD'.split('').map(l=>['label'+l+'Id',{thumb:'label-'+l.toLowerCase()+'-thumb',upload:'label-'+l.toLowerCase()+'-thumb',remove:'label-'+l.toLowerCase()+'-remove'}]))};
+  const shownThumb={};
+  let exportBox=[0,0,S,S];
+  let pickDirty=true;
+  function paint(){
+    pickDirty=true;
+    const art=hasArt(state);
+    setImageHref('cover-art',art?images[state.artId]:null);
+    setImageHref('back-art',images[state.backArtId]||null);
+    setImageHref('inside-art',images[state.insideArtId]||null);
+    setImageHref('bg-art',images[state.bgArtId]||null);
+    for(const [key,slot] of Object.entries(slots)){
+      const id=state[key]&&images[state[key]]?state[key]:null;
+      if(shownThumb[key]!==id){$(slot.thumb).style.backgroundImage=id?'url("'+images[id]+'")':'';shownThumb[key]=id;}
+      $(slot.thumb).classList.toggle('has-art',!!id);$(slot.remove).disabled=!id;if(slot.words)$(slot.upload).textContent=slot.words[id?1:0];
+    }
+    updateDiscs(state);
+    const L=layout(state);exportBox=L.box;
+    // The preview frame covers the slider's whole range, so moving it moves the record instead of
+    // rescaling the view. On phones the frame hugs the artwork so it fills the small preview.
+    const frame=isMobileViewport()||state.mode!=='both'?L.box:union(L.box,layout(state,0).box,layout(state,100).box);
+    lastFrame=frame;placeBackground(frame);
+    sceneEl.innerHTML=sceneMarkup(state,frame,L);
+    svg.setAttribute('viewBox',frame.map(round).join(' '));
+    $('label-art-btn').disabled=!art;$('label-art-btn').title=art?'Use the cover art on the label':'Upload a cover first';
+    const shown={...state,labelMode:state.labelMode==='art'&&!art?'color':state.labelMode,coverView:state.coverView==='both'&&state.mode!=='cover'?'front':state.coverView};
+    root.querySelectorAll('[data-choice]').forEach(el=>el.setAttribute('aria-pressed',String(shown[el.dataset.choice]===el.dataset.option)));
+    root.querySelectorAll('[data-mode]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.mode===state.mode)));
+    root.dataset.mode=state.mode;
+    if(state.mode!=='both')root.querySelectorAll('.control-menu').forEach(el=>el.open=true);
+    root.querySelectorAll('[data-cover-controls]').forEach(el=>el.hidden=state.mode==='record');
+    root.querySelectorAll('[data-record-controls]').forEach(el=>el.hidden=state.mode==='cover');
+    root.querySelectorAll('[data-layout-controls]').forEach(el=>el.hidden=state.mode!=='both');
+    const effect=['marble','splatter'].includes(state.finish);
+    const show={accent:effect,pattern:effect,clarity:state.finish==='translucent',double:state.discs==='double',labelUpload:state.labelMode==='upload',gatefold:state.cover==='gatefold',closedView:!(state.cover==='gatefold'&&state.gateOpen==='open'),coverOnly:state.mode==='cover',labelColor:state.labelMode==='color'||state.labelMode==='art'&&!art,labelArtNote:state.labelMode==='art'&&art,noBackground:!previewBackground()&&!images[state.bgArtId],bgImage:!!images[state.bgArtId]};
+    const double=state.discs==='double';
+    root.querySelectorAll('[data-side-label]').forEach(el=>el.textContent=el.dataset.sideLabel==='a'?(double?'Sides A + C':'Side A'):(double?'Sides B + D':'Side B'));
+    root.querySelectorAll('[data-show]').forEach(el=>el.hidden=!show[el.dataset.show]);
+    const positionLabel={slide:'Slide out',side:'Spacing',flat:'Rotation'}[state.scene];
+    $('position-label').textContent=positionLabel;root.querySelector('[data-setting="position"]').setAttribute('aria-label',positionLabel);
+    for(const input of inputList)input.value=state[input.dataset.setting];
+    root.querySelectorAll('[data-value]').forEach(el=>el.textContent=fmt(el.dataset.value));
+    root.querySelectorAll('[data-color-value]').forEach(el=>el.textContent=state[el.dataset.colorValue].toUpperCase());
+    root.querySelectorAll('.color-swatch-btn').forEach(btn=>btn.style.background=state[btn.dataset.settingKey]);
+    $('undo').disabled=undoStack.length===0;$('redo').disabled=redoStack.length===0;
+    $('stage').className='logo-stage '+preferences.background;
+    $('stage').style.background=preferences.background==='custom'?preferences.customBackground:'';
+    $('stage').classList.toggle('has-bg',!!images[state.bgArtId]);
+    $('custom-bg-btn').style.setProperty('--custom-bg',preferences.customBackground);
+    $('custom-bg-color').value=preferences.customBackground;
+    root.querySelectorAll('[data-background]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.background===preferences.background)));
+    $('export-size').value=preferences.size;
+    $('export-bg').checked=preferences.includeBackground;
+    $('version-select').value=preferences.selected;
+    updateVersionButton();
+  }
+  function commit(){if(!same(state,committed)){undoStack.push({...committed});if(undoStack.length>80)undoStack.shift();redoStack=[];committed={...state};}paint();persist();}
+  function changeTo(next){state=validState(next);commit();}
+  for(const input of inputList){
+    input.addEventListener('input',()=>{state[input.dataset.setting]=input.type==='color'?input.value:Number(input.value);preferences.selected='custom';paint();rememberSoon();notice('Preview updated.');});
+    input.addEventListener('change',commit);
+  }
+  function rgb2hsv([r,g,b]){r/=255;g/=255;b/=255;const max=Math.max(r,g,b),min=Math.min(r,g,b),d=max-min;let h=0;if(d!==0){if(max===r)h=60*(((g-b)/d)%6);else if(max===g)h=60*((b-r)/d+2);else h=60*((r-g)/d+4);}if(h<0)h+=360;const s=max===0?0:d/max;return {h,s,v:max};}
+  function hsv2rgb({h,s,v}){const c=v*s,x=c*(1-Math.abs((h/60)%2-1)),m=v-c;let r=0,g=0,b=0;if(h<60){r=c;g=x;}else if(h<120){r=x;g=c;}else if(h<180){g=c;b=x;}else if(h<240){g=x;b=c;}else if(h<300){r=x;b=c;}else{r=c;b=x;}return [(r+m)*255,(g+m)*255,(b+m)*255];}
+  function isMobileViewport(){return matchMedia('(max-width:660px)').matches;}
+  let sheetTarget=null,sheetHue=0,sheetSat=0,sheetVal=0;
+  function sheetHex(){return toHex(hsv2rgb({h:sheetHue,s:sheetSat,v:sheetVal}));}
+  function updateSheetVisual(hex=sheetHex()){
+    $('color-sv').style.backgroundColor='hsl('+sheetHue+',100%,50%)';
+    $('color-sv-thumb').style.left=(sheetSat*100)+'%';
+    $('color-sv-thumb').style.top=((1-sheetVal)*100)+'%';
+    $('color-hue-thumb').style.left=(sheetHue/360*100)+'%';
+    $('color-hex-swatch').style.background=hex;
+  }
+  function applySheetColor(commitNow,hex=sheetHex()){
+    if(!sheetTarget)return;
+    sheetTarget.value=hex;
+    sheetTarget.dispatchEvent(new Event('input',{bubbles:true}));
+    if(commitNow)sheetTarget.dispatchEvent(new Event('change',{bubbles:true}));
+  }
+  let sheetAnchor=null;
+  let sheetMoved=false;
+  function clampSheet(left,top){
+    const el=$('color-sheet'),m=12,vw=document.documentElement.clientWidth,vh=window.innerHeight;
+    el.style.left=Math.round(Math.min(Math.max(m,left),vw-el.offsetWidth-m))+'px';
+    el.style.top=Math.round(Math.min(Math.max(m,top),vh-el.offsetHeight-m))+'px';
+  }
+  function placeColorSheet(){
+    const el=$('color-sheet');
+    if(el.hidden||!sheetAnchor)return;
+    if(isMobileViewport()){el.classList.remove('popover');el.style.left=el.style.top='';return;}
+    el.classList.add('popover');
+    if(sheetMoved){clampSheet(el.offsetLeft,el.offsetTop);return;}
+    // Try spots around the swatch and keep the one that stays on screen and covers the least of
+    // the preview (so it can be picked from) and never the swatch itself.
+    const r=sheetAnchor.getBoundingClientRect(),w=el.offsetWidth,h=el.offsetHeight,m=12,vw=document.documentElement.clientWidth,vh=window.innerHeight;
+    const clamp=(x,y)=>[Math.min(Math.max(m,x),vw-w-m),Math.min(Math.max(m,y),vh-h-m)];
+    const overlap=(x,y,b)=>Math.max(0,Math.min(x+w,b.right)-Math.max(x,b.left))*Math.max(0,Math.min(y+h,b.bottom)-Math.max(y,b.top));
+    const stage=$('stage').getBoundingClientRect(),midY=r.top+r.height/2-h/2;
+    const spots=[[r.right+m,midY],[r.left-w-m,midY],[r.right-w,r.bottom+m],[r.right-w,r.top-h-m],[r.left,r.bottom+m],[r.left,r.top-h-m]].map(([x,y])=>clamp(x,y));
+    let best=spots[0],score=Infinity;
+    for(const [x,y] of spots){const value=overlap(x,y,stage)+overlap(x,y,r)*1000;if(value<score-1){score=value;best=[x,y];}}
+    el.style.left=Math.round(best[0])+'px';el.style.top=Math.round(best[1])+'px';
+  }
+  // Drag the popup by its title row to move it anywhere.
+  $('color-sheet').querySelector('.color-sheet-head').addEventListener('pointerdown',event=>{
+    const el=$('color-sheet');
+    if(!el.classList.contains('popover')||event.target.closest('button'))return;
+    event.preventDefault();
+    const startX=event.clientX-el.offsetLeft,startY=event.clientY-el.offsetTop,head=event.currentTarget;
+    head.setPointerCapture(event.pointerId);
+    const move=e=>{sheetMoved=true;clampSheet(e.clientX-startX,e.clientY-startY);};
+    const up=()=>{head.removeEventListener('pointermove',move);head.removeEventListener('pointerup',up);head.removeEventListener('pointercancel',up);};
+    head.addEventListener('pointermove',move);head.addEventListener('pointerup',up);head.addEventListener('pointercancel',up);
+  });
+  function openColorSheet(input,label,anchor){
+    if(sheetTarget===input&&!$('color-sheet').hidden){closeColorSheet();return;}
+    if(sheetAnchor)sheetAnchor.classList.remove('is-editing');
+    sheetTarget=input;sheetAnchor=anchor||null;
+    if(sheetAnchor)sheetAnchor.classList.add('is-editing');
+    ({h:sheetHue,s:sheetSat,v:sheetVal}=rgb2hsv(hexParts(input.value)));
+    $('color-sheet-title').textContent=label;
+    updateSheetVisual(input.value);
+    $('color-hex-input').value=input.value.slice(1).toUpperCase();
+    $('color-sheet').hidden=false;
+    $('stage').classList.add('picking');
+    placeColorSheet();
+  }
+  function closeColorSheet(){
+    $('color-sheet').hidden=true;
+    $('stage').classList.remove('picking');$('pick-loupe').hidden=true;
+    if(sheetAnchor)sheetAnchor.classList.remove('is-editing');
+    sheetTarget=null;sheetAnchor=null;sheetMoved=false;
+  }
+  function setSheetColor(hex){
+    ({h:sheetHue,s:sheetSat,v:sheetVal}=rgb2hsv(hexParts(hex)));
+    updateSheetVisual(hex);$('color-hex-input').value=hex.slice(1).toUpperCase();applySheetColor(true,hex);
+  }
+  window.addEventListener('resize',placeColorSheet);
+  // The background photo is fitted to the preview's shape, so refit it when the window changes.
+  let resizeFrame=0;
+  window.addEventListener('resize',()=>{if(!images[state.bgArtId])return;cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(paint);});
+  matchMedia('(max-width:660px)').addEventListener('change',()=>paint());
+  // Preview colour picker: while the colour window is open, the preview is rendered to a canvas
+  // so the colour under the pointer can be read, shown in a small bubble and picked with a click.
+  let pickCanvas=null,pickLoading=false,pickAt=null;
+  function buildPickSnapshot(){
+    if(pickLoading)return;pickLoading=true;pickDirty=false;
+    const r=svg.getBoundingClientRect(),dpr=Math.min(2,window.devicePixelRatio||1),w=Math.max(1,Math.round(r.width*dpr)),h=Math.max(1,Math.round(r.height*dpr));
+    const copy=svg.cloneNode(true);copy.setAttribute('xmlns','http://www.w3.org/2000/svg');copy.setAttribute('width',w);copy.setAttribute('height',h);
+    const url=URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(copy)],{type:'image/svg+xml;charset=utf-8'}));
+    const image=new Image();
+    const done=()=>{URL.revokeObjectURL(url);pickLoading=false;if(pickDirty&&!$('color-sheet').hidden)buildPickSnapshot();else if(pickAt)showPick(pickAt);};
+    image.onload=()=>{const c=document.createElement('canvas');c.width=w;c.height=h;const ctx=c.getContext('2d',{willReadFrequently:true});ctx.drawImage(image,0,0,w,h);pickCanvas={ctx,w,h,dpr};done();};
+    image.onerror=done;image.src=url;
+  }
+  function previewBackground(){return {light:'#ffffff',dark:'#292c28',custom:preferences.customBackground}[preferences.background]||null;}
+  function colorAt(x,y){
+    const bg=previewBackground();if(!pickCanvas)return null;
+    const r=svg.getBoundingClientRect(),px=Math.floor((x-r.left)*pickCanvas.dpr),py=Math.floor((y-r.top)*pickCanvas.dpr);
+    if(px<0||py<0||px>=pickCanvas.w||py>=pickCanvas.h)return bg;
+    const [R,G,B,A]=pickCanvas.ctx.getImageData(px,py,1,1).data;
+    if(A<8)return bg;
+    const under=hexParts(bg||'#ffffff'),a=A/255;
+    return toHex([R,G,B].map((v,i)=>v*a+under[i]*(1-a)));
+  }
+  function showPick({x,y}){
+    const loupe=$('pick-loupe'),hex=colorAt(x,y);
+    loupe.hidden=false;
+    $('pick-loupe-swatch').style.background=hex||'transparent';
+    $('pick-loupe-value').textContent=hex?hex.toUpperCase():(pickCanvas?'Transparent':'…');
+    const w=loupe.offsetWidth,h=loupe.offsetHeight,vw=document.documentElement.clientWidth;
+    loupe.style.left=Math.min(x+16,vw-w-8)+'px';loupe.style.top=Math.max(8,y-h-12)+'px';
+  }
+  const stageEl=$('stage');
+  stageEl.addEventListener('pointermove',event=>{
+    if($('color-sheet').hidden)return;
+    pickAt={x:event.clientX,y:event.clientY};
+    if(pickDirty||!pickCanvas)buildPickSnapshot();
+    showPick(pickAt);
+  });
+  stageEl.addEventListener('pointerleave',()=>{pickAt=null;$('pick-loupe').hidden=true;});
+  // Drag the preview to move the background photo. While dragging only the photo moves; the
+  // full repaint and undo step happen on release.
+  stageEl.addEventListener('pointerdown',event=>{
+    if(!$('color-sheet').hidden||!images[state.bgArtId]||event.button!==0||!bgPan)return;
+    event.preventDefault();stageEl.setPointerCapture(event.pointerId);stageEl.classList.add('panning');
+    const start={x:event.clientX,y:event.clientY,bx:state.bgX,by:state.bgY};let moved=false;
+    const axis=(from,deltaPx,max)=>max>0?Math.max(-100,Math.min(100,Math.round(from+deltaPx*bgPan.unitsPerPx/max*100))):0;
+    const move=e=>{
+      const nx=axis(start.bx,e.clientX-start.x,bgPan.maxX),ny=axis(start.by,e.clientY-start.y,bgPan.maxY);
+      if(nx===state.bgX&&ny===state.bgY)return;
+      state.bgX=nx;state.bgY=ny;moved=true;placeBackground(lastFrame);
+      sceneEl.querySelectorAll('use[href="#bg-art"]').forEach(use=>use.replaceWith(use.cloneNode(false)));
+    };
+    const up=()=>{
+      stageEl.removeEventListener('pointermove',move);stageEl.removeEventListener('pointerup',up);stageEl.removeEventListener('pointercancel',up);
+      stageEl.classList.remove('panning');
+      if(moved){preferences.selected='custom';commit();notice(bgPan.maxX>0||bgPan.maxY>0?'Background moved.':'Zoom in to move the background further.');}
+    };
+    stageEl.addEventListener('pointermove',move);stageEl.addEventListener('pointerup',up);stageEl.addEventListener('pointercancel',up);
+  });
+  stageEl.addEventListener('pointerdown',event=>{
+    if($('color-sheet').hidden)return;
+    event.preventDefault();stageEl.setPointerCapture(event.pointerId);
+    pickAt={x:event.clientX,y:event.clientY};if(pickDirty||!pickCanvas)buildPickSnapshot();showPick(pickAt);
+  });
+  stageEl.addEventListener('pointerup',event=>{
+    if($('color-sheet').hidden||!sheetTarget)return;
+    const hex=colorAt(event.clientX,event.clientY);
+    if(event.pointerType!=='mouse'){pickAt=null;$('pick-loupe').hidden=true;}
+    if(!hex){notice('That spot is transparent. Pick a spot on the record or choose a solid preview background.');return;}
+    setSheetColor(hex);notice('Picked '+hex.toUpperCase()+' from the preview.');
+  });
+  document.addEventListener('scroll',placeColorSheet,true);
+  // The window stays open while other swatches are clicked; any other click outside it closes it.
+  document.addEventListener('pointerdown',event=>{
+    if($('color-sheet').hidden||$('color-sheet').contains(event.target)||event.target.closest('.color-swatch-btn,#custom-bg-btn,#stage'))return;
+    closeColorSheet();
+  });
+  if('EyeDropper' in window){
+    $('color-eyedropper').hidden=false;
+    $('color-eyedropper').addEventListener('click',async()=>{
+      try{const {sRGBHex}=await new EyeDropper().open();const m=sRGBHex.match(/\d+/g);const hex=sRGBHex.startsWith('#')?sRGBHex.toLowerCase():toHex(m.slice(0,3).map(Number));if(sheetTarget)setSheetColor(hex);}catch(e){}
+    });
+  }
+  function bindDrag(el,handler){
+    el.addEventListener('pointerdown',event=>{
+      event.preventDefault();
+      el.setPointerCapture(event.pointerId);
+      handler(event);
+      const move=e=>handler(e);
+      const up=()=>{
+        el.releasePointerCapture(event.pointerId);
+        el.removeEventListener('pointermove',move);
+        el.removeEventListener('pointerup',up);
+        el.removeEventListener('pointercancel',up);
+        applySheetColor(true);
+      };
+      el.addEventListener('pointermove',move);
+      el.addEventListener('pointerup',up);
+      el.addEventListener('pointercancel',up);
+    });
+  }
+  function dragged(){updateSheetVisual();$('color-hex-input').value=sheetHex().slice(1).toUpperCase();applySheetColor(false);}
+  bindDrag($('color-sv'),event=>{
+    const rect=$('color-sv').getBoundingClientRect();
+    sheetSat=Math.min(1,Math.max(0,(event.clientX-rect.left)/rect.width));
+    sheetVal=1-Math.min(1,Math.max(0,(event.clientY-rect.top)/rect.height));
+    dragged();
+  });
+  bindDrag($('color-hue'),event=>{
+    const rect=$('color-hue').getBoundingClientRect();
+    sheetHue=Math.min(1,Math.max(0,(event.clientX-rect.left)/rect.width))*360;
+    dragged();
+  });
+  $('color-hex-input').addEventListener('input',()=>{
+    const v=$('color-hex-input').value.trim().replace(/^#/,'');
+    if(/^[0-9a-f]{6}$/i.test(v)){const hex='#'+v.toLowerCase();({h:sheetHue,s:sheetSat,v:sheetVal}=rgb2hsv(hexParts(hex)));updateSheetVisual(hex);applySheetColor(false,hex);}
+  });
+  $('color-hex-input').addEventListener('change',()=>{if(sheetTarget)sheetTarget.dispatchEvent(new Event('change',{bubbles:true}));});
+  $('color-sheet-close').addEventListener('click',closeColorSheet);
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!$('color-sheet').hidden)closeColorSheet();});
+  root.querySelectorAll('.color-swatch-btn').forEach(btn=>{
+    const input=$(btn.dataset.colorFor);
+    btn.addEventListener('click',()=>openColorSheet(input,btn.getAttribute('aria-label'),btn));
+  });
+  root.querySelectorAll('.slider-field').forEach(line=>{
+    const input=line.querySelector('input[type="range"]');
+    if(!input)return;
+    const key=input.dataset.setting,value=resetValues[key];
+    line.title='Double-click to reset';
+    line.addEventListener('dblclick',event=>{
+      event.preventDefault();
+      preferences.selected='custom';changeTo({...state,[key]:value});
+      notice(input.getAttribute('aria-label')+' reset to '+fmt(key)+'.');
+    });
+  });
+  root.querySelectorAll('[data-choice]').forEach(button=>button.addEventListener('click',()=>{
+    preferences.selected='custom';
+    // Choosing a backdrop is a sign it should be part of the downloads too.
+    if(button.dataset.choice==='backdrop'&&button.dataset.option!=='none')preferences.includeBackground=true;
+    changeTo({...state,[button.dataset.choice]:button.dataset.option});notice('Preview updated.');
+  }));
+  root.querySelectorAll('[data-mode]').forEach(button=>button.addEventListener('click',()=>{if(button.dataset.mode==='both'&&state.mode!=='both')root.querySelectorAll('.control-menu').forEach(el=>el.open=false);preferences.selected='custom';changeTo({...state,mode:button.dataset.mode});notice({cover:'Edit the sleeve on its own.',record:'Edit the record on its own.',both:'Edit the sleeve and record together.'}[state.mode]);}));
+  $('new-pattern').addEventListener('click',()=>{preferences.selected='custom';changeTo({...state,patternSeed:1+Math.floor(Math.random()*99998)});notice('New '+state.finish+' pattern.');});
+  // Uploaded artwork is downscaled so it fits in browser storage and keeps the preview quick.
+  async function readArt(file,max=2000){
+    if(!/^image\//.test(file.type))throw Error('choose an image file (JPG, PNG or WebP).');
+    if(file.size>60*1024*1024)throw Error('the image is too large.');
+    const url=URL.createObjectURL(file);
+    try{
+      const pic=new Image();
+      await new Promise((resolve,reject)=>{pic.onload=resolve;pic.onerror=()=>reject(Error('the image could not be opened.'));pic.src=url;});
+      const scale=Math.min(1,max/Math.max(pic.naturalWidth,pic.naturalHeight)),w=Math.max(1,Math.round(pic.naturalWidth*scale)),h=Math.max(1,Math.round(pic.naturalHeight*scale));
+      const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;const ctx=canvas.getContext('2d');
+      const png=file.type==='image/png';
+      if(!png){ctx.fillStyle='#ffffff';ctx.fillRect(0,0,w,h);}
+      ctx.drawImage(pic,0,0,w,h);
+      let data=canvas.toDataURL(png?'image/png':'image/jpeg',.9);
+      if(png&&data.length>4e6){ctx.globalCompositeOperation='destination-over';ctx.fillStyle='#ffffff';ctx.fillRect(0,0,w,h);data=canvas.toDataURL('image/jpeg',.9);}
+      return data;
+    }finally{URL.revokeObjectURL(url);}
+  }
+  async function useArtFile(file,key){
+    if(!file)return;
+    try{
+      notice('Loading artwork…');
+      const data=await readArt(file,key==='bgArtId'?3000:2000),id='art-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);
+      images[id]=data;preferences.selected='custom';
+      // Show what was just added: the back, the opened inside spread, or the label.
+      if(key==='bgArtId')preferences.includeBackground=true;
+      const letter=key.startsWith('label')?key[5]:'';
+      const reveal={artId:{},backArtId:state.coverView==='both'?{}:{coverView:'back'},insideArtId:{cover:'gatefold',gateOpen:'open'},bgArtId:{}}[key]||{labelMode:'upload',recordSide:'BD'.includes(letter)?'b':'a',...('CD'.includes(letter)?{discs:'double'}:{})};
+      changeTo({...state,[key]:id,...reveal});
+      notice(storageOK?{artId:'Front cover added.',backArtId:'Back cover added.',insideArtId:'Inside spread added.',bgArtId:'Background image added.'}[key]||'Label art added.':'Artwork kept for this visit. Use Save project for a backup.',!storageOK);
+    }catch(e){notice('Could not use that image: '+e.message,true);}
+  }
+  let uploadKey='artId';
+  for(const [key,slot] of Object.entries(slots)){
+    $(slot.upload).addEventListener('click',()=>{uploadKey=key;$('art-file').click();});
+    $(slot.remove).addEventListener('click',()=>{preferences.selected='custom';changeTo({...state,[key]:null});notice('Artwork removed. Undo brings it back.');});
+  }
+  $('art-file').addEventListener('change',async()=>{await useArtFile($('art-file').files[0],uploadKey);$('art-file').value='';});
+  const dropTargets=[[$('stage'),()=>state.mode==='record'?'label'+sideLetter(state,0)+'Id':state.cover==='gatefold'&&state.gateOpen==='open'?'insideArtId':state.coverView==='back'?'backArtId':'artId'],...Object.entries(slots).map(([key,slot])=>[$(slot.thumb),()=>key])];
+  for(const [el,target] of dropTargets){
+    el.addEventListener('dragover',event=>{if(![...event.dataTransfer.types].includes('Files'))return;event.preventDefault();$('stage').classList.add('dropping');});
+    el.addEventListener('dragleave',()=>$('stage').classList.remove('dropping'));
+    el.addEventListener('drop',event=>{event.preventDefault();event.stopPropagation();$('stage').classList.remove('dropping');useArtFile(event.dataTransfer.files[0],target());});
+  }
+  $('version-select').addEventListener('change',()=>{
+    const key=$('version-select').value;preferences.selected=key;
+    if(key==='custom')return;
+    const saved=savedVersions.find(v=>'saved:'+v.id===key);
+    if(saved){preferences.name=saved.name;$('version-name').value=saved.name;changeTo(saved.settings);}else changeTo({...state,...looks[key]});
+    notice('Version loaded.');
+  });
+  $('undo').addEventListener('click',()=>{if(!undoStack.length)return;redoStack.push({...state});state=undoStack.pop();committed={...state};preferences.selected='custom';paint();persist();notice('Previous edit restored.');});
+  $('redo').addEventListener('click',()=>{if(!redoStack.length)return;undoStack.push({...state});state=redoStack.pop();committed={...state};preferences.selected='custom';paint();persist();notice('Edit restored.');});
+  document.addEventListener('keydown',event=>{if(!(event.ctrlKey||event.metaKey)||event.target.matches('input[type="text"],textarea'))return;if(event.key.toLowerCase()==='z'){event.preventDefault();$(event.shiftKey?'redo':'undo').click();}else if(event.key.toLowerCase()==='y'){event.preventDefault();$('redo').click();}});
+  root.querySelectorAll('[data-background]').forEach(button=>button.addEventListener('click',()=>{preferences.background=button.dataset.background;paint();persist();}));
+  $('custom-bg-btn').addEventListener('click',()=>openColorSheet($('custom-bg-color'),'Preview background',$('custom-bg-btn')));
+  $('custom-bg-color').addEventListener('input',()=>{preferences.customBackground=$('custom-bg-color').value.toLowerCase();preferences.background='custom';paint();rememberSoon();});
+  $('custom-bg-color').addEventListener('change',persist);
+  $('export-size').addEventListener('change',()=>{preferences.size=Number($('export-size').value);paint();persist();});
+  $('export-bg').addEventListener('change',()=>{preferences.includeBackground=$('export-bg').checked;persist();notice(preferences.includeBackground?(previewBackground()?'Downloads include the backdrop.':'Pick a light, dark or custom preview background to include it.'):'Downloads have a transparent background with shadows.');});
+  $('version-name').addEventListener('input',()=>{preferences.name=$('version-name').value.slice(0,64);rememberSoon();});
+  $('version-name').addEventListener('change',persist);
+  // Custom "Starting version" dropdown: mirrors the hidden <select> and adds a bin to saved versions.
+  const TRASH='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6.2 2.5h3.6M3 4.2h10M4.6 4.2l.6 8.6a1.2 1.2 0 0 0 1.2 1.1h3.2a1.2 1.2 0 0 0 1.2-1.1l.6-8.6M6.8 6.8v4.6M9.2 6.8v4.6" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  function updateVersionButton(){
+    const option=$('version-select').selectedOptions[0];
+    $('version-current').textContent=option?option.textContent:'Custom edits';
+    $('version-list').querySelectorAll('[role="option"]').forEach(el=>el.setAttribute('aria-selected',String(el.dataset.option===$('version-select').value)));
+  }
+  function renderVersionList(){
+    const items=[];
+    for(const child of $('version-select').children){
+      const options=child.tagName==='OPTGROUP'?[...child.children]:[child];
+      if(child.tagName==='OPTGROUP'){const label=document.createElement('li');label.className='version-group';label.setAttribute('role','presentation');label.textContent=child.label;items.push(label);}
+      for(const option of options){
+        const item=document.createElement('li');item.setAttribute('role','option');item.tabIndex=-1;item.dataset.option=option.value;
+        const name=document.createElement('span');name.className='version-name';name.textContent=option.textContent;item.appendChild(name);
+        if(option.value.startsWith('saved:')){
+          const bin=document.createElement('button');bin.type='button';bin.className='version-delete';bin.tabIndex=-1;bin.innerHTML=TRASH;
+          bin.dataset.deleteId=option.value.slice(6);bin.title='Delete “'+option.textContent+'”';bin.setAttribute('aria-label','Delete saved version “'+option.textContent+'”');
+          item.appendChild(bin);
+        }
+        items.push(item);
+      }
+    }
+    $('version-list').replaceChildren(...items);updateVersionButton();
+  }
+  function versionOptions(){return [...$('version-list').querySelectorAll('[role="option"]')];}
+  function openVersionList(focusCurrent){
+    $('version-list').hidden=false;$('version-button').setAttribute('aria-expanded','true');
+    if(focusCurrent)(versionOptions().find(el=>el.getAttribute('aria-selected')==='true')||versionOptions()[0])?.focus();
+  }
+  function closeVersionList(refocus){
+    if($('version-list').hidden)return;
+    $('version-list').hidden=true;$('version-button').setAttribute('aria-expanded','false');
+    if(refocus)$('version-button').focus();
+  }
+  function chooseVersion(value){
+    closeVersionList(true);
+    if(value===$('version-select').value&&!looks[value]&&!value.startsWith('saved:'))return;
+    $('version-select').value=value;$('version-select').dispatchEvent(new Event('change'));
+  }
+  function deleteVersion(id,bin){
+    // First click arms the bin, a second click within a few seconds throws the version away.
+    if(!bin.classList.contains('armed')){
+      $('version-list').querySelectorAll('.version-delete.armed').forEach(el=>el.classList.remove('armed'));
+      bin.classList.add('armed');bin.title='Click again to delete';
+      setTimeout(()=>{if(bin.isConnected){bin.classList.remove('armed');bin.title='Delete';}},3500);return;
+    }
+    const version=savedVersions.find(v=>v.id===id);if(!version)return;
+    savedVersions=savedVersions.filter(v=>v!==version);
+    if(preferences.selected==='saved:'+version.id)preferences.selected='custom';
+    rebuildVersionMenu();paint();persist();notice('“'+version.name+'” deleted.');
+    if(!versionOptions().length)closeVersionList(true);else versionOptions()[0].focus();
+  }
+  $('version-button').addEventListener('click',()=>$('version-list').hidden?openVersionList(false):closeVersionList(false));
+  $('version-button').addEventListener('keydown',event=>{if(['ArrowDown','ArrowUp','Enter',' '].includes(event.key)){event.preventDefault();openVersionList(true);}});
+  $('version-list').addEventListener('click',event=>{
+    const bin=event.target.closest('.version-delete');
+    if(bin){event.stopPropagation();deleteVersion(bin.dataset.deleteId,bin);return;}
+    const item=event.target.closest('[role="option"]');if(item)chooseVersion(item.dataset.option);
+  });
+  $('version-list').addEventListener('keydown',event=>{
+    const list=versionOptions(),index=list.indexOf(document.activeElement);
+    if(event.key==='ArrowDown'||event.key==='ArrowUp'){event.preventDefault();list[(index+(event.key==='ArrowDown'?1:-1)+list.length)%list.length]?.focus();}
+    else if(event.key==='Enter'||event.key===' '){event.preventDefault();if(index>=0)chooseVersion(list[index].dataset.option);}
+    else if(event.key==='Escape'){event.preventDefault();closeVersionList(true);}
+    else if((event.key==='Delete'||event.key==='Backspace')&&index>=0){const bin=list[index].querySelector('.version-delete');if(bin){event.preventDefault();deleteVersion(bin.dataset.deleteId,bin);}}
+    else if(event.key==='Tab')closeVersionList(false);
+  });
+  document.addEventListener('pointerdown',event=>{if(!event.target.closest('#version-picker'))closeVersionList(false);});
+  $('save-version').addEventListener('click',()=>{
+    const name=$('version-name').value.trim();if(!name){notice('Give your version a name first.',true);$('version-name').focus();return;}
+    let unique=name;let number=2;while(savedVersions.some(v=>v.name===unique))unique=name+' ('+(number++)+')';
+    const version={id:Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7),name:unique,settings:{...state}};
+    savedVersions.push(version);preferences.selected='saved:'+version.id;preferences.name=unique;$('version-name').value=unique;rebuildVersionMenu();persist();notice(storageOK?'“'+unique+'” saved. Find it under Starting version.':'Version kept for this visit. Use Save project for a backup.',!storageOK);
+  });
+  function filename(){return (preferences.name.trim().replace(/[^a-z0-9_-]+/gi,'-').replace(/^-+|-+$/g,'').slice(0,64)||'blob-record').toLowerCase()+{cover:'-cover',record:'-record',both:''}[state.mode];}
+  function download(blob,name){
+    const url=URL.createObjectURL(blob);const anchor=document.createElement('a');anchor.href=url;anchor.download=name;document.body.appendChild(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
+  }
+  async function svgExport(){
+    await finishDiscs();
+    const copy=svg.cloneNode(true);
+    copy.setAttribute('xmlns',NS);copy.setAttribute('viewBox',exportBox.map(round).join(' '));copy.setAttribute('width',round(exportBox[2]));copy.setAttribute('height',round(exportBox[3]));
+    copy.removeAttribute('style');copy.querySelector('title').textContent=preferences.name.trim()||'Vinyl record';
+    const record=(state.discs==='double'?'double ':'')+{solid:'solid',translucent:'clear',marble:'marble',splatter:'splatter'}[state.finish]+' vinyl record',sleeve=(state.cover==='gatefold'?'gatefold':'standard')+' sleeve';
+    copy.querySelector('desc').textContent={cover:'A '+sleeve,record:'A '+record,both:'A '+record+' with a '+sleeve}[state.mode]+'. Exported from Blob Record Studio.';
+    for(const [key,id] of [['artId','cover-art'],['backArtId','back-art'],['insideArtId','inside-art'],['bgArtId','bg-art']])if(!images[state[key]])copy.querySelector('#'+id).remove();
+    for(let i=discCount(state);i<2;i++)copy.querySelector('#disc-'+i).remove();
+    if(!preferences.includeBackground){copy.querySelector('#backdrop')?.remove();copy.querySelector('#bg-art')?.remove();}
+    return '<?xml version="1.0" encoding="UTF-8"?>\n'+new XMLSerializer().serializeToString(copy);
+  }
+  $('download-svg').addEventListener('click',async()=>{try{commit();download(new Blob([await svgExport()],{type:'image/svg+xml;charset=utf-8'}),filename()+'.svg');notice('SVG download started.');}catch(e){notice('Could not export SVG: '+e.message,true);}});
+  $('download-png').addEventListener('click',async()=>{
+    const button=$('download-png');button.disabled=true;button.textContent='Preparing PNG…';
+    let url;
+    try{
+      commit();const width=preferences.size,height=Math.round(width*exportBox[3]/exportBox[2]);
+      const name=filename();url=URL.createObjectURL(new Blob([await svgExport()],{type:'image/svg+xml;charset=utf-8'}));
+      const image=new Image();await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=()=>reject(Error('The record could not be rendered.'));image.src=url;});
+      const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const context=canvas.getContext('2d');if(!context)throw Error('Canvas is unavailable.');
+      context.drawImage(image,0,0,width,height);
+      const png=await new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(Error('PNG creation failed.')),'image/png'));
+      download(png,name+'-'+width+'px.png');notice('PNG download started.');canvas.width=canvas.height=1;
+    }catch(e){notice('Could not export PNG: '+e.message,true);}finally{if(url)URL.revokeObjectURL(url);button.disabled=false;button.textContent='Download PNG';}
+  });
+  function applyPreferences(prefs){
+    if(['checker','light','dark','custom'].includes(prefs?.background))preferences.background=prefs.background;
+    if(/^#[0-9a-f]{6}$/i.test(prefs?.customBackground||''))preferences.customBackground=prefs.customBackground.toLowerCase();
+    if([1024,2048,4096].includes(prefs?.size))preferences.size=prefs.size;
+    if(typeof prefs?.includeBackground==='boolean')preferences.includeBackground=prefs.includeBackground;
+  }
+  $('save-project').addEventListener('click',()=>{commit();download(new Blob([JSON.stringify(project(),null,2)],{type:'application/json'}),'blob-record-project.json');notice('Project backup download started.');});
+  $('load-project').addEventListener('click',()=>$('project-file').click());
+  $('project-file').addEventListener('change',async()=>{
+    try{
+      const file=$('project-file').files[0];if(!file)return;if(file.size>80*1024*1024)throw Error('This project is too large.');
+      const data=JSON.parse(await file.text());if(data.app!==APP||![1,2].includes(data.version))throw Error('Choose a Blob Record Studio project file.');
+      Object.assign(images,validImages(data.images));
+      const imported=validState(data.settings);const versions=Array.isArray(data.versions)?data.versions.slice(0,1000):[];
+      const incoming=versions.map(v=>({id:String(v.id).slice(0,100),name:String(v.name||'Imported version').slice(0,64),settings:validState(v.settings)}));
+      for(const version of incoming)if(!savedVersions.some(v=>v.id===version.id))savedVersions.push(version);
+      preferences.selected='custom';if(typeof data.preferences?.name==='string'){preferences.name=data.preferences.name.slice(0,64);$('version-name').value=preferences.name;}
+      applyPreferences(data.preferences);
+      rebuildVersionMenu();changeTo(imported);notice(storageOK?'Project loaded. Existing saved versions were kept.':'Project loaded for this visit; it is too big to remember. Keep the project file.',!storageOK);
+    }catch(e){notice('Could not load project: '+e.message,true);}finally{$('project-file').value='';}
+  });
+  try{
+    const saved=JSON.parse(localStorage.getItem(STORE)||'null');
+    if(saved?.app===APP&&[1,2].includes(saved.version)){
+      images=validImages(saved.images);
+      state=validState(saved.settings);committed={...state};
+      savedVersions=(Array.isArray(saved.versions)?saved.versions:[]).slice(0,1000).map(v=>({id:String(v.id).slice(0,100),name:String(v.name||'Saved version').slice(0,64),settings:validState(v.settings)}));
+      applyPreferences(saved.preferences);
+      if(typeof saved.preferences?.name==='string')preferences.name=saved.preferences.name.slice(0,64);
+      if(typeof saved.preferences?.selected==='string')preferences.selected=saved.preferences.selected;
+      notice('Welcome back. Your last edits are loaded.');
+    }
+  }catch(e){storageOK=false;}
+  $('version-name').value=preferences.name;rebuildVersionMenu();paint();persist();
+  window.addEventListener('pagehide',persist);
+})();
+</script>
+
+</body>
+</html>
