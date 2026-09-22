@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blob Studio</title>
+<style>
+:root {
+  color-scheme: light dark;
+  --background: light-dark(rgb(255 255 255), rgb(24 24 24));
+  --foreground: light-dark(rgb(26 28 31), rgb(255 255 255));
+  --card: color-mix(in oklab, var(--foreground) 5%, var(--background));
+  --muted-foreground: light-dark(rgb(26 28 31 / 49.4%), rgb(255 255 255 / 49.8%));
+  --primary: light-dark(rgb(51 156 255), rgb(131 195 255));
+  --primary-foreground: light-dark(rgb(255 255 255), rgb(13 13 13));
+  --border: light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%));
+  --radius: 10px;
+  --font-sans: -apple-system, system-ui, "Segoe UI", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  padding: 48px 20px;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+header {
+  text-align: center;
+  max-width: 560px;
+}
+
+h1 {
+  margin: 0 0 8px;
+  font-size: 32px;
+  font-weight: 600;
+}
+
+p.subtitle {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: 15px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 18px;
+  width: 100%;
+  max-width: 720px;
+}
+
+@media (max-width: 620px) {
+  .grid { grid-template-columns: 1fr; }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+
+.card h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.card p {
+  margin: 0;
+  flex: 1;
+  color: var(--muted-foreground);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity .12s;
+}
+
+.btn:hover { opacity: 0.85; }
+
+footer {
+  color: var(--muted-foreground);
+  font-size: 12px;
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Blob Studio</h1>
+  <p class="subtitle">Pick an editor to open. Each app runs entirely in your browser.</p>
+</header>
+
+<main class="grid">
+  <div class="card">
+    <h2>Blob Logo Studio</h2>
+    <p>Design and export the blob-shaped logo mark.</p>
+    <a class="btn" href="blob-logo-studio.html">Open editor</a>
+  </div>
+
+  <div class="card">
+    <h2>Blob Logo Studio 3D</h2>
+    <p>Explore and render the logo in an interactive 3D scene.</p>
+    <a class="btn" href="blob-logo-studio-3d.html">Open editor</a>
+  </div>
+
+  <div class="card">
+    <h2>Blob Record Studio</h2>
+    <p>Build cover art and layouts for the record series.</p>
+    <a class="btn" href="blob-record-studio.html">Open editor</a>
+  </div>
+
+  <div class="card">
+    <h2>Asteroid Bandit Logo Editor</h2>
+    <p>Craft the Asteroid Bandit logo variant.</p>
+    <a class="btn" href="asteroid-bandit-logo-editor.html">Open editor</a>
+  </div>
+</main>
+
+<footer>boemiurgo/BLOB-STUDIO</footer>
+</body>
+</html>
