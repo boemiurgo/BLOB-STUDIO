@@ -1124,7 +1124,7 @@ html>body{padding:0}</style>
       </div>
       <div id="stage" class="logo-stage checker" aria-label="Live logo preview"><div class="view3d-bar" id="view3d-bar" hidden><span>Drag to rotate · two fingers to move · pinch to zoom</span><button type="button" id="reset-view" class="button quiet">Reset view</button></div></div>
       <section class="download-panel" aria-label="Image downloads">
-        <div class="export-controls"><label class="field png-size">PNG size<select id="export-size" aria-label="PNG size"><option value="1024">1024 px</option><option value="2048">2048 px</option><option value="4096" selected>4096 px · HD</option></select></label><button id="download-png" class="button primary">Download PNG</button><button id="download-svg" class="button secondary">Download SVG</button></div>
+        <div class="export-controls"><label class="field png-size">PNG size<select id="export-size" aria-label="PNG size"><option value="1024">1024 px</option><option value="2048">2048 px</option><option value="4096" selected>4096 px · HD</option></select></label><button id="download-png" class="button primary">Download PNG</button><button id="download-svg" class="button secondary">Download SVG</button><button type="button" id="add-bulk" class="button secondary">Add to Bulk</button><button type="button" id="download-bulk" class="button secondary" disabled>Download Bulk (0)</button></div>
       </section>
     </section>
   </div>
@@ -1503,7 +1503,7 @@ html>body{padding:0}</style>
   const logoKeys=['surface','body','reflection','reflectionColor','shadowColor','glossColor','reflectionShadows','gloss','bevel','width','height','rightGlints','logoTilt','logoFat'];
   const presets={latest:defaults,polished:{...defaults,reflection:100,gloss:100,bevel:0,height:100,rightGlints:false}};
   const resetValues={reflection:100,reflectionShadows:100,gloss:100,width:100,height:100,textWidth:100,textHeight:100,textSpacing:0,textBorderWidth:20,textBorderDepth:20,textTilt:0,logoTilt:0,logoFat:0,gap:100,sizeRatio:0};
-  let state={...defaults}, committed={...defaults}, undoStack=[], redoStack=[], savedVersions=[], saveTimer=null;
+  let state={...defaults}, committed={...defaults}, undoStack=[], redoStack=[], savedVersions=[], bulkImages=[], saveTimer=null;
   let preferences={background:'checker',customBackground:'#e8d9c5',size:4096,name:'My blob',selected:'latest',view3d:false,camera:{yaw:-14,pitch:10,zoom:1,fov:20,panX:0,panY:0}};
   let storageOK=true;
   const inputList=[...root.querySelectorAll('[data-setting]')];
@@ -1554,7 +1554,7 @@ html>body{padding:0}</style>
     return next;
   }
   function notice(text,error=false){$('notice').textContent=text;$('notice').classList.toggle('error',error);}
-  function project(){return {app:'blob-logo-studio',version:2,settings:{...state},preferences:{...preferences},versions:savedVersions.map(v=>({...v,settings:{...v.settings}}))};}
+  function project(){return {app:'blob-logo-studio',version:2,settings:{...state},preferences:{...preferences},versions:savedVersions.map(v=>({...v,settings:{...v.settings}})),bulk:bulkImages.map(b=>({...b}))};}
   function persist(){
     clearTimeout(saveTimer);
     try{localStorage.setItem(STORE,JSON.stringify(project()));storageOK=true;}
@@ -2306,20 +2306,45 @@ html>body{padding:0}</style>
     return '<?xml version="1.0" encoding="UTF-8"?>\n'+new XMLSerializer().serializeToString(copy);
   }
   $('download-svg').addEventListener('click',()=>{try{commit();download(new Blob([svgExport()],{type:'image/svg+xml;charset=utf-8'}),filename()+'.svg');notice(is3d()?'SVG download started. SVG is the flat vector version of the logo.':'SVG download started.');}catch(e){notice('Could not export SVG: '+e.message,true);}});
-  $('download-png').addEventListener('click',async()=>{
-    const button=$('download-png');button.disabled=true;button.textContent='Preparing PNG…';
-    let url;
+  async function renderPNGBlob(width){
+    if(is3d())return png3d(width);
+    const height=Math.round(width*exportBox[3]/exportBox[2]);
+    const url=URL.createObjectURL(new Blob([svgExport()],{type:'image/svg+xml;charset=utf-8'}));
     try{
-      commit();
-      if(is3d()){const png=await png3d(preferences.size);download(png,filename()+'-3d-'+preferences.size+'px.png');notice('Transparent 3D PNG download started.');return;}
-      const width=preferences.size,height=Math.round(width*exportBox[3]/exportBox[2]);
-      const name=filename();url=URL.createObjectURL(new Blob([svgExport()],{type:'image/svg+xml;charset=utf-8'}));
       const image=new Image();await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=()=>reject(Error('The logo could not be rendered.'));image.src=url;});
       const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const context=canvas.getContext('2d');if(!context)throw Error('Canvas is unavailable.');
       context.drawImage(image,0,0,width,height);
       const png=await new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(Error('PNG creation failed.')),'image/png'));
-      download(png,name+'-'+width+'px.png');notice('Transparent PNG download started.');canvas.width=canvas.height=1;
-    }catch(e){notice('Could not export PNG: '+e.message,true);}finally{if(url)URL.revokeObjectURL(url);button.disabled=false;button.textContent='Download PNG';}
+      canvas.width=canvas.height=1;return png;
+    }finally{URL.revokeObjectURL(url);}
+  }
+  $('download-png').addEventListener('click',async()=>{
+    const button=$('download-png');button.disabled=true;button.textContent='Preparing PNG…';
+    try{
+      commit();
+      if(is3d()){const png=await png3d(preferences.size);download(png,filename()+'-3d-'+preferences.size+'px.png');notice('Transparent 3D PNG download started.');return;}
+      const width=preferences.size,name=filename();
+      const png=await renderPNGBlob(width);
+      download(png,name+'-'+width+'px.png');notice('Transparent PNG download started.');
+    }catch(e){notice('Could not export PNG: '+e.message,true);}finally{button.disabled=false;button.textContent='Download PNG';}
+  });
+  function blobToDataURL(blob){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(Error('Could not read image.'));reader.readAsDataURL(blob);});}
+  function dataURLToBlob(dataUrl){const [head,body]=dataUrl.split(',');const type=/data:(.*?);base64/.exec(head)[1];const bytes=atob(body);const array=new Uint8Array(bytes.length);for(let i=0;i<bytes.length;i++)array[i]=bytes.charCodeAt(i);return new Blob([array],{type});}
+  function updateBulkButton(){$('download-bulk').textContent='Download Bulk ('+bulkImages.length+')';$('download-bulk').disabled=!bulkImages.length;}
+  $('add-bulk').addEventListener('click',async()=>{
+    const button=$('add-bulk');button.disabled=true;button.textContent='Adding…';
+    try{
+      commit();const width=preferences.size;const png=await renderPNGBlob(width);const dataUrl=await blobToDataURL(png);
+      bulkImages.push({id:Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7),name:filename()+(is3d()?'-3d-':'-')+width+'px.png',dataUrl});
+      persist();
+      if(!storageOK){bulkImages.pop();updateBulkButton();notice('Not added: not enough browser storage for this image. Try a smaller PNG size.',true);return;}
+      updateBulkButton();notice('Added to bulk ('+bulkImages.length+' image'+(bulkImages.length===1?'':'s')+').');
+    }catch(e){notice('Could not add to bulk: '+e.message,true);}finally{button.disabled=false;button.textContent='Add to Bulk';}
+  });
+  $('download-bulk').addEventListener('click',()=>{
+    if(!bulkImages.length)return;
+    bulkImages.forEach((item,index)=>setTimeout(()=>download(dataURLToBlob(item.dataUrl),item.name),index*350));
+    notice('Downloading '+bulkImages.length+' image'+(bulkImages.length===1?'':'s')+' from bulk.');
   });
   $('save-project').addEventListener('click',()=>{commit();download(new Blob([JSON.stringify(project(),null,2)],{type:'application/json'}),'blob-studio-project.json');notice('Project backup download started.');});
   $('load-project').addEventListener('click',()=>$('project-file').click());
@@ -2330,6 +2355,9 @@ html>body{padding:0}</style>
       const imported=validState(data.settings);const versions=Array.isArray(data.versions)?data.versions.slice(0,1000):[];
       const incoming=versions.map(v=>({id:String(v.id).slice(0,100),name:String(v.name||'Imported version').slice(0,64),settings:validState(v.settings)}));
       for(const version of incoming)if(!savedVersions.some(v=>v.id===version.id))savedVersions.push(version);
+      const incomingBulk=(Array.isArray(data.bulk)?data.bulk:[]).slice(0,200).filter(b=>typeof b?.dataUrl==='string'&&b.dataUrl.startsWith('data:image/'));
+      for(const b of incomingBulk)if(bulkImages.length<200)bulkImages.push({id:String(b.id||Date.now()+'-'+Math.random()).slice(0,100),name:String(b.name||'bulk-image.png').slice(0,120),dataUrl:b.dataUrl});
+      updateBulkButton();
       preferences.selected='custom';if(typeof data.preferences?.name==='string'){preferences.name=data.preferences.name.slice(0,64);$('version-name').value=preferences.name;}
       if(['checker','light','dark','custom'].includes(data.preferences?.background))preferences.background=data.preferences.background;
       if(/^#[0-9a-f]{6}$/i.test(data.preferences?.customBackground||''))preferences.customBackground=data.preferences.customBackground.toLowerCase();
@@ -2343,6 +2371,7 @@ html>body{padding:0}</style>
     const saved=JSON.parse(localStorage.getItem(STORE)||localStorage.getItem(LEGACY_STORE)||'null');
     if(saved?.app==='blob-logo-studio'&&[1,2].includes(saved.version)){state=validState(saved.settings);committed={...state};
       savedVersions=(Array.isArray(saved.versions)?saved.versions:[]).slice(0,1000).map(v=>({id:String(v.id).slice(0,100),name:String(v.name||'Saved version').slice(0,64),settings:validState(v.settings)}));
+      bulkImages=(Array.isArray(saved.bulk)?saved.bulk:[]).slice(0,200).filter(b=>typeof b?.dataUrl==='string'&&b.dataUrl.startsWith('data:image/')).map(b=>({id:String(b.id||Date.now()+'-'+Math.random()).slice(0,100),name:String(b.name||'bulk-image.png').slice(0,120),dataUrl:b.dataUrl}));
       if(['checker','light','dark','custom'].includes(saved.preferences?.background))preferences.background=saved.preferences.background;
       if(/^#[0-9a-f]{6}$/i.test(saved.preferences?.customBackground||''))preferences.customBackground=saved.preferences.customBackground.toLowerCase();
       if([1024,2048,4096].includes(saved.preferences?.size))preferences.size=saved.preferences.size;
@@ -2353,7 +2382,7 @@ html>body{padding:0}</style>
       notice('Welcome back. Your last edits are loaded.');
     }
   }catch(e){storageOK=false;}
-  $('version-name').value=preferences.name;rebuildVersionMenu();paint();persist();
+  $('version-name').value=preferences.name;rebuildVersionMenu();updateBulkButton();paint();persist();
   window.addEventListener('pagehide',persist);
 })();
 </script>
