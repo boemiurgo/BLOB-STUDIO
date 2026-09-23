@@ -222,7 +222,7 @@ html>body{padding:0}</style>
     <section class="preview-panel" aria-label="Logo preview and downloads" tabindex="0">
       <div id="stage" class="logo-stage" aria-label="Live logo preview"></div>
       <section class="download-panel" aria-label="Image downloads">
-        <div class="export-controls"><label class="field png-size">PNG size<select id="export-size" aria-label="PNG size"><option value="1024">1024 px</option><option value="2048">2048 px</option><option value="4096" selected>4096 px · HD</option></select></label><button id="download-png" class="button primary">Download PNG</button><button id="download-svg" class="button secondary">Download SVG</button></div>
+        <div class="export-controls"><label class="field png-size">PNG size<select id="export-size" aria-label="PNG size"><option value="1024">1024 px</option><option value="2048">2048 px</option><option value="4096" selected>4096 px · HD</option></select></label><button id="download-png" class="button primary">Download PNG</button><button id="download-svg" class="button secondary">Download SVG</button><button type="button" id="add-bulk" class="button secondary">Add to Bulk</button><button type="button" id="download-bulk" class="button secondary" disabled>Download Bulk (0)</button></div>
       </section>
     </section>
   </div>
@@ -354,7 +354,7 @@ html>body{padding:0}</style>
     {id:'cosmic-purple',name:'Cosmic Purple',bg:'#8338a9',text:'#d0893c',shadow:true,shadowColor:'#2e2720'}
   ];
   const resetValues={shadowOffset:10,stretch:100};
-  let state={...defaults}, committed={...defaults}, undoStack=[], redoStack=[];
+  let state={...defaults}, committed={...defaults}, undoStack=[], redoStack=[], bulkImages=[];
   let preferences={size:4096,selected:'preset:arcade-blue'};
   const inputList=[...root.querySelectorAll('[data-setting]')];
   $('stage').appendChild($('logo-source').content.cloneNode(true));
@@ -538,18 +538,68 @@ html>body{padding:0}</style>
     return '<?xml version="1.0" encoding="UTF-8"?>\n'+new XMLSerializer().serializeToString(copy);
   }
   $('download-svg').addEventListener('click',()=>{try{commit();download(new Blob([svgExport()],{type:'image/svg+xml;charset=utf-8'}),filename()+'.svg');notice('SVG download started.');}catch(e){notice('Could not export SVG: '+e.message,true);}});
-  $('download-png').addEventListener('click',async()=>{
-    const button=$('download-png');button.disabled=true;button.textContent='Preparing PNG…';
-    let url;
+  async function renderPNGBlob(width){
+    const box=svg.viewBox.baseVal,height=Math.round(width*box.height/box.width);
+    const url=URL.createObjectURL(new Blob([svgExport()],{type:'image/svg+xml;charset=utf-8'}));
     try{
-      commit();const box=svg.viewBox.baseVal;const width=preferences.size,height=Math.round(width*box.height/box.width);
-      const name=filename();url=URL.createObjectURL(new Blob([svgExport()],{type:'image/svg+xml;charset=utf-8'}));
       const image=new Image();await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=()=>reject(Error('The logo could not be rendered.'));image.src=url;});
       const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const context=canvas.getContext('2d');if(!context)throw Error('Canvas is unavailable.');
       context.drawImage(image,0,0,width,height);
       const png=await new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(Error('PNG creation failed.')),'image/png'));
-      download(png,name+'-'+width+'px.png');notice((state.transparentBg?'Transparent':'Solid background')+' PNG download started.');canvas.width=canvas.height=1;
-    }catch(e){notice('Could not export PNG: '+e.message,true);}finally{if(url)URL.revokeObjectURL(url);button.disabled=false;button.textContent='Download PNG';}
+      canvas.width=canvas.height=1;return png;
+    }finally{URL.revokeObjectURL(url);}
+  }
+  $('download-png').addEventListener('click',async()=>{
+    const button=$('download-png');button.disabled=true;button.textContent='Preparing PNG…';
+    try{
+      commit();const width=preferences.size,name=filename();
+      const png=await renderPNGBlob(width);
+      download(png,name+'-'+width+'px.png');notice((state.transparentBg?'Transparent':'Solid background')+' PNG download started.');
+    }catch(e){notice('Could not export PNG: '+e.message,true);}finally{button.disabled=false;button.textContent='Download PNG';}
+  });
+  function blobToDataURL(blob){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(Error('Could not read image.'));reader.readAsDataURL(blob);});}
+  function dataURLToBlob(dataUrl){const [head,body]=dataUrl.split(',');const type=/data:(.*?);base64/.exec(head)[1];const bytes=atob(body);const array=new Uint8Array(bytes.length);for(let i=0;i<bytes.length;i++)array[i]=bytes.charCodeAt(i);return new Blob([array],{type});}
+  function crc32(bytes){
+    const table=crc32.table||(crc32.table=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?(0xEDB88320^(c>>>1)):(c>>>1);t[n]=c>>>0;}return t;})());
+    let crc=0xFFFFFFFF;for(let i=0;i<bytes.length;i++)crc=table[(crc^bytes[i])&0xFF]^(crc>>>8);return (crc^0xFFFFFFFF)>>>0;
+  }
+  function u16(n){return new Uint8Array([n&255,(n>>8)&255]);}
+  function u32(n){return new Uint8Array([n&255,(n>>8)&255,(n>>16)&255,(n>>24)&255]);}
+  async function buildZip(files){
+    const encoder=new TextEncoder(),now=new Date();
+    const time=((now.getHours()&31)<<11)|((now.getMinutes()&63)<<5)|((now.getSeconds()>>1)&31);
+    const date=(((now.getFullYear()-1980)&127)<<9)|(((now.getMonth()+1)&15)<<5)|(now.getDate()&31);
+    const localParts=[],centralParts=[];let offset=0;
+    for(const file of files){
+      const nameBytes=encoder.encode(file.name),data=new Uint8Array(await file.blob.arrayBuffer()),crc=crc32(data);
+      const local=[u32(0x04034b50),u16(20),u16(0),u16(0),u16(time),u16(date),u32(crc),u32(data.length),u32(data.length),u16(nameBytes.length),u16(0),nameBytes];
+      const localSize=local.reduce((n,p)=>n+p.length,0);
+      localParts.push(...local,data);
+      centralParts.push(u32(0x02014b50),u16(20),u16(20),u16(0),u16(0),u16(time),u16(date),u32(crc),u32(data.length),u32(data.length),u16(nameBytes.length),u16(0),u16(0),u16(0),u32(0),u32(offset),nameBytes);
+      offset+=localSize+data.length;
+    }
+    const centralSize=centralParts.reduce((n,p)=>n+p.length,0);
+    const end=[u32(0x06054b50),u16(0),u16(0),u16(files.length),u16(files.length),u32(centralSize),u32(offset),u16(0)];
+    return new Blob([...localParts,...centralParts,...end],{type:'application/zip'});
+  }
+  function updateBulkButton(){$('download-bulk').textContent='Download Bulk ('+bulkImages.length+')';$('download-bulk').disabled=!bulkImages.length;}
+  $('add-bulk').addEventListener('click',async()=>{
+    const button=$('add-bulk');button.disabled=true;button.textContent='Adding…';
+    try{
+      commit();const width=preferences.size;const png=await renderPNGBlob(width);const dataUrl=await blobToDataURL(png);
+      bulkImages.push({id:Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7),name:filename()+'-'+width+'px.png',dataUrl});
+      updateBulkButton();notice('Added to bulk ('+bulkImages.length+' image'+(bulkImages.length===1?'':'s')+').');
+    }catch(e){notice('Could not add to bulk: '+e.message,true);}finally{button.disabled=false;button.textContent='Add to Bulk';}
+  });
+  $('download-bulk').addEventListener('click',async()=>{
+    if(!bulkImages.length)return;
+    const button=$('download-bulk');button.disabled=true;button.textContent='Zipping…';
+    try{
+      const pad=String(bulkImages.length).length;
+      const files=bulkImages.map((item,index)=>({name:'image-'+String(index+1).padStart(pad,'0')+'.png',blob:dataURLToBlob(item.dataUrl)}));
+      download(await buildZip(files),'asteroid-bandit-bulk.zip');
+      notice('Downloading a zip of '+bulkImages.length+' image'+(bulkImages.length===1?'':'s')+'.');
+    }catch(e){notice('Could not build the zip: '+e.message,true);}finally{updateBulkButton();}
   });
   rebuildVersionMenu();paint();
 })();
