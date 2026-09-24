@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src blob: data:; font-src 'none'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src blob: data:; font-src 'none'; connect-src https://api.github.com; object-src 'none'; base-uri 'none'; form-action 'none'">
 <title>Blob Logo Studio</title>
 <style>:root {
   color-scheme: light dark;
@@ -1053,11 +1053,11 @@ html>body{padding:0}</style>
   </g>
 </svg>
 <span class="brand-divider"></span><span>logo studio</span></div>
-    <div class="header-right"><span class="offline-badge">OFFLINE</span></div>
+    <div class="header-right"><span class="offline-badge" id="mode-badge">OFFLINE</span></div>
   </header>
   <div class="workspace">
     <aside class="settings-panel" aria-label="Logo settings" tabindex="0">
-      <div class="field version-field"><span id="version-label">Starting version</span><div class="version-picker" id="version-picker"><button type="button" id="version-button" class="version-button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="version-label version-current"><span id="version-current">Original flat</span></button><ul id="version-list" class="version-list" role="listbox" aria-labelledby="version-label" hidden></ul><select id="version-select" hidden aria-hidden="true" tabindex="-1"><option value="polished">Original polished</option><option value="latest">Original flat</option><option value="custom">Custom edits</option></select></div></div>
+      <div class="field preset-field"><span id="preset-label">Preset</span><div class="preset-picker" id="preset-picker"><button type="button" id="preset-button" class="preset-button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="preset-label preset-current"><span id="preset-current">Original flat</span></button><ul id="preset-list" class="preset-list" role="listbox" aria-labelledby="preset-label" hidden></ul><select id="preset-select" hidden aria-hidden="true" tabindex="-1"><option value="custom">Custom edits</option><optgroup label="Built-in"><option value="polished">Original polished</option><option value="latest">Original flat</option></optgroup></select></div></div>
       <div class="mode-picker" role="group" aria-label="Artwork mode"><button type="button" data-mode="logo" aria-pressed="true">Logo</button><button type="button" data-mode="text" aria-pressed="false">Text</button><button type="button" data-mode="both" aria-pressed="false">Logo + text</button></div>
       <section class="control-section layout-section" data-layout-controls hidden aria-labelledby="layout-heading"><h2 id="layout-heading">Logo + text layout</h2>
         <div class="field"><span>Text position</span><div class="icon-choice four" role="group" aria-label="Text position"><button type="button" data-choice="position" data-option="above" aria-label="Above the logo" title="Above the logo" aria-pressed="false"><svg viewBox="0 0 36 28" aria-hidden="true"><use class="i-text" href="#mini-text" x="9" y="4.5" width="18" height="5.8"/><use class="i-logo" href="#mini-blob" x="7" y="13.5" width="22" height="10.2"/></svg></button><button type="button" data-choice="position" data-option="below" aria-label="Below the logo" title="Below the logo" aria-pressed="false"><svg viewBox="0 0 36 28" aria-hidden="true"><use class="i-logo" href="#mini-blob" x="7" y="4" width="22" height="10.2"/><use class="i-text" href="#mini-text" x="9" y="18.2" width="18" height="5.8"/></svg></button><button type="button" data-choice="position" data-option="left" aria-label="Left of the logo" title="Left of the logo" aria-pressed="false"><svg viewBox="0 0 36 28" aria-hidden="true"><use class="i-text" href="#mini-text" x="2" y="11.75" width="14" height="4.5"/><use class="i-logo" href="#mini-blob" x="18" y="10.3" width="16" height="7.4"/></svg></button><button type="button" data-choice="position" data-option="right" aria-label="Right of the logo" title="Right of the logo" aria-pressed="false"><svg viewBox="0 0 36 28" aria-hidden="true"><use class="i-logo" href="#mini-blob" x="2" y="10.3" width="16" height="7.4"/><use class="i-text" href="#mini-text" x="20" y="11.75" width="14" height="4.5"/></svg></button></div></div>
@@ -1077,8 +1077,8 @@ html>body{padding:0}</style>
           <div class="reflection-group"><div class="color-row"><label for="gloss-color-btn">Gloss</label><div class="color-picker"><output id="glossColor-value">#FFFFFF</output><button type="button" id="gloss-color-btn" class="color-swatch-btn" data-color-for="gloss-color" data-setting-key="glossColor" aria-label="Gloss color"></button><input id="gloss-color" type="color" value="#ffffff" data-setting="glossColor" class="color-input-hidden" tabindex="-1" aria-hidden="true"></div></div><label class="slider-field"><span>Amount<output data-value="gloss">97%</output></span><input type="range" min="0" max="100" value="97" data-setting="gloss" aria-label="Gloss"></label></div>
         </section>
         <section class="control-section" aria-labelledby="shape-heading"><h2 id="shape-heading">Shape</h2>
-          <label class="slider-field"><span>Horizontal stretch<output data-value="width">100%</output></span><input type="range" min="70" max="130" value="100" data-setting="width" aria-label="Logo horizontal stretch"></label>
-          <label class="slider-field"><span>Vertical stretch<output data-value="height">80%</output></span><input type="range" min="70" max="130" value="80" data-setting="height" aria-label="Logo vertical stretch"></label>
+          <label class="slider-field"><span>Stretch<output data-value="width">100%</output></span><input type="range" min="70" max="130" value="100" data-setting="width" aria-label="Logo stretch"></label>
+          <label class="slider-field"><span>Thickness<output data-value="height">80%</output></span><input type="range" min="70" max="130" value="80" data-setting="height" aria-label="Logo thickness"></label>
         </section>
       </div></details>
       <details class="control-menu" id="text-menu" data-text-controls hidden><summary>Text options</summary><div class="menu-controls">
@@ -1094,27 +1094,65 @@ html>body{padding:0}</style>
           <label class="slider-field border-size"><span>Border size<output data-value="textBorderWidth">20%</output></span><input type="range" min="2" max="100" value="20" data-setting="textBorderWidth" aria-label="Text border size"></label>
         </section>
         <section class="control-section" aria-labelledby="text-shape-heading"><h2 id="text-shape-heading">Shape</h2>
-            <label class="slider-field"><span>Horizontal stretch<output data-value="textWidth">100%</output></span><input type="range" min="60" max="160" value="100" data-setting="textWidth" aria-label="Text horizontal stretch"></label>
-            <label class="slider-field"><span>Vertical stretch<output data-value="textHeight">100%</output></span><input type="range" min="60" max="160" value="100" data-setting="textHeight" aria-label="Text vertical stretch"></label>
+            <label class="slider-field"><span>Stretch<output data-value="textWidth">100%</output></span><input type="range" min="60" max="160" value="100" data-setting="textWidth" aria-label="Text stretch"></label>
+            <label class="slider-field"><span>Thickness<output data-value="textHeight">100%</output></span><input type="range" min="60" max="160" value="100" data-setting="textHeight" aria-label="Text thickness"></label>
         </section>
       </div></details>
-      <section class="control-section save-section" aria-labelledby="versions-heading"><h2 id="versions-heading">Keep a version</h2>
-        <label class="field">Version name<input id="version-name" type="text" value="My blob" maxlength="64" autocomplete="off"></label>
-        <button id="save-version" class="button secondary full">Save as new version</button>
+      <details class="camera-menu" id="camera-section"><summary>Camera options</summary><div class="menu-controls camera-options">
+        <div class="camera-presets" role="group" aria-label="Camera view"><button type="button" data-camera-preset="angle" aria-pressed="false" title="Three-quarter view">3/4 view</button><button type="button" data-camera-preset="front" aria-pressed="false" title="Straight on, like the flat artwork">Front</button><button type="button" data-camera-preset="top" aria-pressed="false" title="Looking down onto the logo">Top</button><button type="button" data-camera-preset="left" aria-pressed="false" title="Seen from the left">Left</button><button type="button" data-camera-preset="right" aria-pressed="false" title="Seen from the right">Right</button><button type="button" data-camera-preset="low" aria-pressed="false" title="Seen from below">Low</button></div>
+        <label class="slider-field"><span>Orbit<output data-camera-value="yaw">0°</output></span><input type="range" min="-85" max="85" value="0" data-camera="yaw" aria-label="Camera orbit, left to right"></label>
+        <label class="slider-field"><span>Height<output data-camera-value="pitch">0°</output></span><input type="range" min="-80" max="85" value="0" data-camera="pitch" aria-label="Camera height angle"></label>
+        <label class="slider-field" data-flat-only><span>Roll<output data-camera-value="roll">0°</output></span><input type="range" min="-180" max="180" value="0" data-camera="roll" aria-label="Camera roll"></label>
+        <label class="slider-field"><span>Zoom<output data-camera-value="zoom">100%</output></span><input type="range" min="40" max="400" value="100" data-camera="zoom" aria-label="Camera zoom"></label>
+        <label class="slider-field"><span>Field of view<output data-camera-value="fov">20°</output></span><input type="range" min="5" max="60" value="20" data-camera="fov" aria-label="Camera field of view"></label>
+        <label class="slider-field"><span>Move sideways<output data-camera-value="panX">0%</output></span><input type="range" min="-100" max="100" value="0" data-camera="panX" aria-label="Move the camera left or right"></label>
+        <label class="slider-field"><span>Move up/down<output data-camera-value="panY">0%</output></span><input type="range" min="-100" max="100" value="0" data-camera="panY" aria-label="Move the camera up or down"></label>
+        <p class="control-note" id="camera-note"></p>
+        <button type="button" id="reset-camera" class="button secondary full">Reset camera</button>
+      </div></details>
+      <section class="control-section save-section" aria-labelledby="presets-heading"><h2 id="presets-heading">Presets</h2>
+        <label class="field">Preset name<input id="preset-name" type="text" value="My blob" maxlength="64" autocomplete="off"></label>
+        <div class="button-row"><button type="button" id="add-preset" class="button secondary" title="Keep the current settings as a new preset">Add preset</button><button type="button" id="save-preset" class="button secondary" disabled>Save preset</button></div>
       </section>
-      <div class="project-tools"><span>Back up your edits and saved versions.</span><div><button id="save-project" type="button" class="button secondary">Save project</button><button id="load-project" type="button" class="button secondary">Load project</button><input id="project-file" type="file" accept="application/json,.json" hidden></div></div>
+      <div class="project-tools" role="group" aria-labelledby="projects-heading"><h2 id="projects-heading">Project</h2>
+        <div class="storage-row" id="storage-row"><span id="storage-status">Checking project storage…</span><button type="button" id="storage-connect" class="text-button" hidden>Connect</button></div>
+        <label class="field">Project name<input id="project-name" type="text" value="My project" maxlength="64" autocomplete="off"></label>
+        <div><button id="save-project" type="button" class="button secondary">Save project</button><button id="load-project" type="button" class="button secondary">Load project</button><input id="project-file" type="file" accept="application/json,.json" hidden></div>
+      </div>
       <p id="notice" class="notice" role="status" aria-live="polite">The logo is loaded. Start editing.</p>
     </aside>
     <section class="preview-panel" aria-label="Logo preview and downloads" tabindex="0">
       <div class="preview-toolbar"><div class="history-actions"><button id="undo" class="button quiet" disabled aria-label="Undo last edit">Undo</button><button id="redo" class="button quiet" disabled aria-label="Redo last edit">Redo</button></div>
         <div class="backdrops" role="group" aria-label="Preview background"><span class="background-label">Background color</span><button type="button" data-background="checker" class="swatch checker" aria-label="Transparent preview" aria-pressed="true"></button><button type="button" data-background="light" class="swatch light" aria-label="Light preview" aria-pressed="false"></button><button type="button" data-background="dark" class="swatch dark" aria-label="Dark preview" aria-pressed="false"></button><button type="button" data-background="custom" id="custom-bg-btn" class="swatch custom-bg" aria-label="Custom preview color" aria-pressed="false"></button><input id="custom-bg-color" type="color" value="#e8d9c5" class="color-input-hidden" tabindex="-1" aria-hidden="true"></div>
       </div>
-      <div id="stage" class="logo-stage checker" aria-label="Live logo preview"></div>
+      <div id="stage" class="logo-stage checker" aria-label="Live logo preview"><div class="photo-frame" id="photo-frame" hidden></div><div class="view3d-bar" id="view3d-bar"><span id="view-hint">Drag to tilt · two fingers to move · scroll to zoom</span><button type="button" id="reset-view" class="button quiet">Reset view</button></div></div>
       <section class="download-panel" aria-label="Image downloads">
-        <div class="export-controls"><label class="field png-size">PNG size<select id="export-size" aria-label="PNG size"><option value="1024">1024 px</option><option value="2048">2048 px</option><option value="4096" selected>4096 px · HD</option></select></label><button id="download-png" class="button primary">Download PNG</button><button id="download-svg" class="button secondary">Download SVG</button><button type="button" id="add-bulk" class="button secondary">Add to Bulk</button><button type="button" id="download-bulk" class="button secondary" disabled>Download Bulk (0)</button></div>
+        <div class="export-controls"><label class="field png-size">PNG size<select id="export-size" aria-label="PNG size"><option value="1024">1024 px</option><option value="2048">2048 px</option><option value="4096" selected>4096 px · HD</option></select></label><button id="download-png" class="button primary">Download PNG</button><button id="download-svg" class="button secondary">Download SVG</button><button type="button" id="take-photo" class="button secondary">Take photo</button><button type="button" id="download-zip" class="button secondary" disabled>Download zip (0)</button></div>
+        <div class="photos" id="photos" hidden><div class="photos-head"><span>Photos <b id="photo-count">0</b></span><span>PNG + SVG each · cleared after download</span></div><div class="photo-strip" id="photo-strip"></div></div>
       </section>
     </section>
   </div>
+  <dialog class="app-dialog" id="github-dialog" aria-labelledby="github-title"><form method="dialog" id="github-form">
+    <h3 id="github-title">Connect GitHub</h3>
+    <p>Online, projects and presets are saved to your private projects repository. Paste a fine-grained personal access token that has <b>Contents: Read and write</b> access to that repository only. The token stays in this browser.</p>
+    <label class="field">Repository<input id="github-repo" type="text" value="boemiurgo/BLOB-STUDIO-projects" autocomplete="off" spellcheck="false"></label>
+    <label class="field">Branch<input id="github-branch" type="text" value="main" autocomplete="off" spellcheck="false"></label>
+    <label class="field">Access token<input id="github-token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…"></label>
+    <p id="github-error" class="notice error" role="alert" hidden></p>
+    <div class="dialog-actions"><button type="button" id="github-disconnect" class="button quiet spacer" hidden>Disconnect</button><button type="button" id="github-cancel" class="button secondary">Cancel</button><button type="submit" id="github-save" class="button primary">Connect</button></div>
+  </form></dialog>
+  <dialog class="app-dialog" id="project-dialog" aria-labelledby="project-dialog-title">
+    <h3 id="project-dialog-title">Load project</h3>
+    <p id="project-dialog-where"></p>
+    <ul class="project-list" id="project-list"></ul>
+    <div class="dialog-actions"><button type="button" id="project-import" class="button quiet spacer">Import file…</button><button type="button" id="project-cancel" class="button secondary">Cancel</button></div>
+  </dialog>
+  <dialog class="app-dialog" id="zip-dialog" aria-labelledby="zip-title"><form method="dialog" id="zip-form">
+    <h3 id="zip-title">Download photos</h3>
+    <p id="zip-summary"></p>
+    <label class="field">Name<input id="zip-name" type="text" maxlength="64" autocomplete="off" spellcheck="false"></label>
+    <div class="dialog-actions"><button type="button" id="zip-cancel" class="button secondary">Cancel</button><button type="submit" class="button primary">Download zip</button></div>
+  </form></dialog>
   <div id="color-sheet" class="color-sheet" hidden role="dialog" aria-modal="false" aria-labelledby="color-sheet-title">
     <div class="color-sheet-bar"></div>
     <div class="color-sheet-head"><span id="color-sheet-title">Color</span><span class="color-sheet-actions"><button type="button" id="color-eyedropper" class="button quiet" hidden title="Pick a color from anywhere on screen">Pick from screen</button><button type="button" id="color-sheet-close" class="button quiet">Done</button></span></div>
@@ -1373,22 +1411,22 @@ html>body{padding:0}</style>
 #blob-app .project-tools > div {display:flex;gap:8px;width:100%;}
 #blob-app .project-tools .button {flex:1;}
 #blob-app .text-button {border:0;border-bottom:1px solid #c9ccbF;padding:3px 0;background:none;font-size:11px;}
-#blob-app .version-picker {position:relative;}
-#blob-app .version-button {display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;height:39px;border:1px solid var(--line);border-radius:7px;padding:0 10px;background:var(--panel);font-size:13px;font-weight:500;text-align:left;}
-#blob-app .version-button > span {min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-#blob-app .version-button::after {content:"";flex:none;width:6px;height:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:translateY(-2px) rotate(45deg);margin-right:3px;}
-#blob-app .version-button[aria-expanded="true"]::after {transform:translateY(2px) rotate(-135deg);}
-#blob-app .version-list {position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:40;list-style:none;margin:0;padding:4px;max-height:280px;overflow-y:auto;background:#fff;border:1px solid var(--line);border-radius:9px;box-shadow:0 10px 26px rgba(20,20,18,.16);}
-#blob-app .version-list [role="option"] {display:flex;align-items:center;justify-content:space-between;gap:6px;min-height:34px;padding:0 4px 0 10px;border-radius:6px;font-size:13px;cursor:pointer;outline:none;}
-#blob-app .version-list [role="option"]:hover,#blob-app .version-list [role="option"]:focus {background:#f2f3ed;}
-#blob-app .version-list [role="option"][aria-selected="true"] {font-weight:600;}
-#blob-app .version-list [role="option"]:focus-visible {box-shadow:inset 0 0 0 2px #82896e;}
-#blob-app .version-name {min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-#blob-app .version-group {padding:10px 10px 4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#686b60;border-top:1px solid var(--line);margin-top:4px;}
-#blob-app .version-delete {flex:none;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:0;border-radius:6px;background:none;color:#8b8e82;padding:0;}
-#blob-app .version-delete svg {width:16px;height:16px;}
-#blob-app .version-delete:hover {background:#f3e3df;color:#a43c31;}
-#blob-app .version-delete.armed {background:#a43c31;color:#fff;}
+#blob-app .preset-picker {position:relative;}
+#blob-app .preset-button {display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;height:39px;border:1px solid var(--line);border-radius:7px;padding:0 10px;background:var(--panel);font-size:13px;font-weight:500;text-align:left;}
+#blob-app .preset-button > span {min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+#blob-app .preset-button::after {content:"";flex:none;width:6px;height:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:translateY(-2px) rotate(45deg);margin-right:3px;}
+#blob-app .preset-button[aria-expanded="true"]::after {transform:translateY(2px) rotate(-135deg);}
+#blob-app .preset-list {position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:40;list-style:none;margin:0;padding:4px;max-height:280px;overflow-y:auto;background:#fff;border:1px solid var(--line);border-radius:9px;box-shadow:0 10px 26px rgba(20,20,18,.16);}
+#blob-app .preset-list [role="option"] {display:flex;align-items:center;justify-content:space-between;gap:6px;min-height:34px;padding:0 4px 0 10px;border-radius:6px;font-size:13px;cursor:pointer;outline:none;}
+#blob-app .preset-list [role="option"]:hover,#blob-app .preset-list [role="option"]:focus {background:#f2f3ed;}
+#blob-app .preset-list [role="option"][aria-selected="true"] {font-weight:600;}
+#blob-app .preset-list [role="option"]:focus-visible {box-shadow:inset 0 0 0 2px #82896e;}
+#blob-app .preset-name {min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+#blob-app .preset-group {padding:10px 10px 4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#686b60;border-top:1px solid var(--line);margin-top:4px;}
+#blob-app .preset-delete {flex:none;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:0;border-radius:6px;background:none;color:#8b8e82;padding:0;}
+#blob-app .preset-delete svg {width:16px;height:16px;}
+#blob-app .preset-delete:hover {background:#f3e3df;color:#a43c31;}
+#blob-app .preset-delete.armed {background:#a43c31;color:#fff;}
 #blob-app .notice {min-height:20px;margin:18px 0 0;font-size:12px;color:#6c735d;}
 #blob-app .notice.error {color:#a43c31;}
 #blob-app .app-footer {display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:26px 0 20px;color:#929489;font-size:11px;}
@@ -1418,7 +1456,7 @@ html>body{padding:0}</style>
 #blob-app .text-border-controls .border-size {margin:14px 0 0;}
 #blob-app .layout-section {border-top:0;padding-top:0;margin:0 0 20px;}
 #blob-app:not([data-mode="both"]) .control-menu > summary {display:none;}
-#blob-app .version-field {margin-bottom:20px;}
+#blob-app .preset-field {margin-bottom:20px;}
 #blob-app[data-mode="both"] .control-menu {border-top:1px solid var(--line);margin-top:23px;padding-top:20px;}
 #blob-app[data-mode="both"] .control-menu > summary {list-style:none;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;font-size:12px;line-height:1.4;letter-spacing:.06em;text-transform:uppercase;font-weight:600;color:#686b60;}
 #blob-app[data-mode="both"] .control-menu > summary::-webkit-details-marker {display:none;}
@@ -1438,6 +1476,62 @@ html>body{padding:0}</style>
 #blob-app .download-panel {margin:0;padding:16px;}
 #blob-app .export-controls {margin:0;}
 #blob-app .settings-panel .project-tools {padding-top:18px;border-top:1px solid var(--line);}
+#blob-app .logo-stage {position:relative;}
+#blob-app .camera-menu {border-top:1px solid var(--line);margin-top:23px;padding-top:20px;}
+#blob-app .camera-menu > summary {list-style:none;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;font-size:12px;line-height:1.4;letter-spacing:.06em;text-transform:uppercase;font-weight:600;color:#686b60;}
+#blob-app .camera-menu > summary::-webkit-details-marker {display:none;}
+#blob-app .camera-menu > summary::after {content:"";width:7px;height:7px;margin-right:4px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:translateY(-2px) rotate(45deg);transition:transform .15s;}
+#blob-app .camera-menu[open] > summary::after {transform:translateY(2px) rotate(-135deg);}
+#blob-app .camera-menu > summary:hover {color:var(--ink);}
+#blob-app .camera-menu > summary:focus-visible {outline:3px solid #82896e;outline-offset:3px;border-radius:3px;}
+#blob-app .camera-menu .menu-controls {padding-top:20px;}
+#blob-app .camera-presets {display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:18px;}
+#blob-app .camera-presets button {height:34px;border:1px solid #d6d7d0;border-radius:8px;background:#fff;font-size:12px;padding:0 4px;transition:border-color .12s,background .12s;}
+#blob-app .camera-presets button:hover:not([aria-pressed="true"]) {border-color:#111;}
+#blob-app .camera-presets button[aria-pressed="true"] {background:#111;border-color:#111;color:#fff;}
+#blob-app .view3d-bar {position:absolute;right:10px;bottom:10px;z-index:2;display:flex;align-items:center;gap:6px;padding:3px 3px 3px 12px;border-radius:9px;background:rgba(255,255,255,.82);border:1px solid rgba(0,0,0,.06);font-size:11px;color:#606457;}
+#blob-app .view3d-bar .button.quiet {min-height:26px;padding:4px 9px;font-size:11px;}
+@media(max-width:660px) {#blob-app .view3d-bar > span {display:none;}#blob-app .view3d-bar {padding:3px;}}
+#blob-app .offline-badge.online {border-color:#b9d3ae;background:#eef6e9;color:#3f6b2f;}
+#blob-app .button-row {display:flex;gap:8px;margin-top:11px;}
+#blob-app .button-row .button {flex:1;margin-top:0!important;}
+#blob-app .project-tools h2 {width:100%;margin:0;}
+#blob-app .project-tools .field {width:100%;color:var(--ink);}
+#blob-app .storage-row {align-items:center;justify-content:space-between;min-height:22px;}
+#blob-app .storage-row > span {min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+#blob-app .storage-row.ready > span::before {content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#5b9a45;margin-right:6px;vertical-align:1px;}
+#blob-app .storage-row .text-button {flex:none;color:var(--ink);}
+#blob-app .camera-options .button {margin-top:14px;}
+#blob-app .photos {margin-top:14px;}
+#blob-app .photos-head {display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12px;color:#606457;margin-bottom:8px;}
+#blob-app .photos-head span:last-child {font-size:11px;color:#8a8d80;}
+#blob-app .photo-strip {display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;}
+#blob-app .photo-thumb {position:relative;flex:none;height:58px;min-width:40px;border-radius:8px;border:1px solid #d9dad2;overflow:hidden;background-color:#f8f8f5;background-image:conic-gradient(#eeefe9 25%,transparent 0 50%,#eeefe9 0 75%,transparent 0);background-size:12px 12px;}
+#blob-app .photo-thumb img {display:block;height:100%;width:auto;max-width:150px;object-fit:contain;}
+#blob-app .photo-thumb button {position:absolute;top:3px;right:3px;width:20px;height:20px;border:0;border-radius:50%;background:rgba(35,35,33,.72);color:#fff;font-size:13px;line-height:20px;padding:0;opacity:0;transition:opacity .12s;}
+#blob-app .photo-thumb:hover button,#blob-app .photo-thumb button:focus-visible {opacity:1;}
+@media(hover:none) {#blob-app .photo-thumb button {opacity:1;}}
+#blob-app .photo-frame {position:absolute;z-index:1;pointer-events:none;border:1.5px dashed rgba(65,70,55,.5);border-radius:2px;}
+#blob-app .logo-stage.dark .photo-frame {border-color:rgba(255,255,255,.45);}
+#blob-app .logo-stage.flat-camera:not(.picking) {cursor:grab;touch-action:none;}
+#blob-app .logo-stage.flat-camera.dragging:not(.picking) {cursor:grabbing;}
+#blob-app dialog.app-dialog {border:1px solid var(--line);border-radius:14px;padding:20px;width:min(390px,calc(100vw - 32px));box-shadow:0 18px 40px rgba(20,20,18,.25);color:var(--ink);background:#fff;font:14px/1.45 "Segoe UI",Arial,sans-serif;}
+#blob-app dialog.app-dialog::backdrop {background:rgba(30,30,28,.35);}
+#blob-app .app-dialog h3 {margin:0 0 6px;font-size:16px;font-weight:600;}
+#blob-app .app-dialog p {font-size:12px;color:var(--quiet);margin:0 0 14px;}
+#blob-app .app-dialog .field {margin-bottom:12px;}
+#blob-app .app-dialog input[type="password"] {width:100%;height:39px;border:1px solid var(--line);border-radius:7px;padding:0 10px;background:var(--panel);font-size:13px;}
+#blob-app .app-dialog .notice {margin:0 0 4px;}
+#blob-app .dialog-actions {display:flex;justify-content:flex-end;gap:8px;margin-top:16px;flex-wrap:wrap;}
+#blob-app .dialog-actions .spacer {margin-right:auto;}
+#blob-app .project-list {list-style:none;margin:0;padding:0;max-height:300px;overflow-y:auto;border:1px solid var(--line);border-radius:9px;}
+#blob-app .project-list li + li {border-top:1px solid var(--line);}
+#blob-app .project-list button {display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;border:0;background:none;padding:10px 12px;text-align:left;font-size:13px;}
+#blob-app .project-list button:hover,#blob-app .project-list button:focus-visible {background:#f2f3ed;}
+#blob-app .project-list button span {min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+#blob-app .project-list small {flex:none;color:var(--quiet);font-size:11px;}
+#blob-app .project-list .empty {padding:14px 12px;font-size:12px;color:var(--quiet);}
+#blob-app .logo-stage.dragging > canvas {cursor:grabbing;}
 @media(min-width:661px) {#blob-app {grid-template-rows:auto minmax(0,1fr);padding-bottom:20px;}}
 @media(max-width:660px) {
  #blob-app .preview-panel {display:contents;}
@@ -1455,13 +1549,15 @@ html>body{padding:0}</style>
   'use strict';
   const $=id=>document.getElementById(id);
   const root=$('blob-app');
-  const STORE='blob-logo-studio-project-v1';
+  const STORE='blob-logo-studio-project-v1',APP_FOLDER='blob-logo-studio';
+  const is3d=()=>false;
   const defaults={surface:'#ffffff',body:'#000000',reflection:0,reflectionColor:'#ffffff',shadowColor:'#000000',glossColor:'#ffffff',reflectionShadows:100,gloss:97,bevel:0,width:100,height:80,rightGlints:false,mode:'logo',textColor:'#000000',textSize:100,textWidth:100,textHeight:100,textSpacing:0,textBorder:false,textBorderColor:'#ff5a36',textBorderWidth:20,position:'above',alignment:'center',gap:100,logoSize:100};
   const logoKeys=['surface','body','reflection','reflectionColor','shadowColor','glossColor','reflectionShadows','gloss','bevel','width','height','rightGlints'];
-  const presets={latest:defaults,polished:{...defaults,reflection:100,gloss:100,bevel:0,height:100,rightGlints:false}};
+  const BUILTINS={latest:defaults,polished:{...defaults,reflection:100,gloss:100,bevel:0,height:100,rightGlints:false}};
+  const BUILTIN_KEYS=logoKeys;
   const resetValues={reflection:100,reflectionShadows:100,gloss:100,width:100,height:100,textSize:100,textWidth:100,textHeight:100,textSpacing:0,textBorderWidth:20,gap:100,logoSize:100};
-  let state={...defaults}, committed={...defaults}, undoStack=[], redoStack=[], savedVersions=[], bulkImages=[], saveTimer=null;
-  let preferences={background:'checker',customBackground:'#e8d9c5',size:4096,name:'My blob',selected:'latest'};
+  let state={...defaults}, committed={...defaults}, undoStack=[], redoStack=[], presets=[], photos=[], saveTimer=null, presetsUnsynced=false, legacyBulk=[];
+  let preferences={background:'checker',customBackground:'#e8d9c5',size:4096,name:'My blob',selected:'latest',project:'My project',camera2d:{yaw:0,pitch:0,roll:0,zoom:1,fov:20,panX:0,panY:0}};
   let storageOK=true;
   const inputList=[...root.querySelectorAll('[data-setting]')];
   $('stage').appendChild($('logo-source').content.cloneNode(true));
@@ -1503,20 +1599,20 @@ html>body{padding:0}</style>
     return next;
   }
   function notice(text,error=false){$('notice').textContent=text;$('notice').classList.toggle('error',error);}
-  function project(){return {app:'blob-logo-studio',version:2,settings:{...state},preferences:{...preferences},versions:savedVersions.map(v=>({...v,settings:{...v.settings}})),bulk:bulkImages.map(b=>({...b}))};}
+  function project(){return {app:'blob-logo-studio',version:3,settings:{...state},preferences:JSON.parse(JSON.stringify(preferences)),presets:presets.map(copyPreset)};}
   function persist(){
     clearTimeout(saveTimer);
-    try{localStorage.setItem(STORE,JSON.stringify(project()));storageOK=true;}
+    try{localStorage.setItem(STORE,JSON.stringify({...project(),presetsUnsynced,...(legacyBulk.length?{bulk:legacyBulk}:{})}));storageOK=true;}
     catch(e){storageOK=false;}
   }
   function rememberSoon(){clearTimeout(saveTimer);saveTimer=setTimeout(persist,180);}
-  function rebuildVersionMenu(){
-    $('version-select').querySelectorAll('optgroup').forEach(el=>el.remove());
-    if(savedVersions.length){const group=document.createElement('optgroup');group.label='Your saved versions';for(const version of savedVersions){const option=document.createElement('option');option.value='saved:'+version.id;option.textContent=version.name;group.appendChild(option);}$('version-select').appendChild(group);}
-    const exists=[...$('version-select').options].some(o=>o.value===preferences.selected);
+  function rebuildPresetMenu(){
+    $('preset-select').querySelectorAll('optgroup[data-user]').forEach(el=>el.remove());
+    if(presets.length){const group=document.createElement('optgroup');group.label='Your presets';group.dataset.user='';for(const preset of presets){const option=document.createElement('option');option.value='saved:'+preset.id;option.textContent=preset.name;group.appendChild(option);}$('preset-select').appendChild(group);}
+    const exists=[...$('preset-select').options].some(o=>o.value===preferences.selected);
     if(!exists)preferences.selected='custom';
-    $('version-select').value=preferences.selected;
-    renderVersionList();
+    $('preset-select').value=preferences.selected;
+    renderPresetList();
   }
   let exportBox=[0,0,1774,887];
   function geometry(lw,lh,tw,th){
@@ -1537,6 +1633,68 @@ html>body{padding:0}</style>
     if(vertical){lx=(width-logo.w)*alignment;tx=(width-boxW)*alignment;ly=state.position==='above'?boxH+state.gap:0;ty=state.position==='above'?0:logo.h+state.gap;}
     else{ly=(height-logo.h)*alignment;ty=(height-boxH)*alignment;lx=state.position==='left'?boxW+state.gap:0;tx=state.position==='left'?0:logo.w+state.gap;}
     out.logoT=[lx+72-logo.x,ly+72-logo.y];out.textT=[tx+72+border,ty+72+border];out.box=[0,0,width+144,height+144];return out;
+  }
+  // ---- Flat camera ----
+  // The flat artwork is photographed by a pinhole camera, like the 3D view: Orbit and Height tilt the artwork's
+  // plane, Roll turns the picture, Zoom and the Move sliders frame it. One 3×3 homography maps frame pixels to
+  // picture pixels: the preview applies it as a CSS matrix3d, photos and PNGs draw through WebGL. The picture
+  // frame is the artwork's own box (what Download PNG crops to), so the untouched camera changes nothing.
+  const FLAT_DEFAULT={yaw:0,pitch:0,roll:0,zoom:1,fov:20,panX:0,panY:0};
+  const FLAT_LIMITS={yaw:[-80,80],pitch:[-80,80],roll:[-180,180],zoom:[.4,4],fov:[5,60],panX:[-100,100],panY:[-100,100]};
+  const FLAT_PRESETS={angle:{yaw:-24,pitch:14,roll:0},front:{yaw:0,pitch:0,roll:0},top:{yaw:0,pitch:55,roll:0},left:{yaw:35,pitch:0,roll:0},right:{yaw:-35,pitch:0,roll:0},low:{yaw:-14,pitch:-30,roll:0}};
+  function validCamera2d(value){
+    const next={...FLAT_DEFAULT};
+    for(const [name,[min,max]] of Object.entries(FLAT_LIMITS))if(typeof value?.[name]==='number'&&Number.isFinite(value[name]))next[name]=Math.max(min,Math.min(max,value[name]));
+    return next;
+  }
+  // Tiny leftovers of a drag don't count, so a camera put back by hand exports like the untouched one.
+  function flatMoved(c=preferences.camera2d){return ['yaw','pitch','roll','panX','panY'].some(k=>Math.abs(c[k])>=.05)||Math.abs(c.zoom-1)>=.0005;}
+  const mul3=(a,b)=>{const o=new Array(9);for(let r=0;r<3;r++)for(let c=0;c<3;c++)o[r*3+c]=a[r*3]*b[c]+a[r*3+1]*b[3+c]+a[r*3+2]*b[6+c];return o;};
+  function inv3(m){
+    const [a,b,c,d,e,f,g,h,i]=m,A=e*i-f*h,B=f*g-d*i,C=d*h-e*g,det=a*A+b*B+c*C;
+    if(!det)return null;
+    return [A,c*h-b*i,b*f-c*e,B,a*i-c*g,c*d-a*f,C,b*g-a*h,a*e-b*d].map(v=>v/det);
+  }
+  // The camera on the artwork's plane, in units of half the artwork box's height (y up): plane point → picture point.
+  // aspect: the artwork box's width / height.
+  function flatProjection(cam,aspect){
+    const rad=Math.PI/180,cp=Math.cos(cam.pitch*rad),sp=Math.sin(cam.pitch*rad),cyaw=Math.cos(cam.yaw*rad),syaw=Math.sin(cam.yaw*rad);
+    // Orbit (yaw), then height (pitch), turn the plane: the first two columns of rotX·rotY.
+    const R=[cyaw,0,sp*syaw,cp,-cp*syaw,sp],t=Math.tan(cam.fov*rad/2);
+    // Never closer than the plane's nearest point around the artwork, so nothing ends up behind the camera.
+    let near=0;for(const [u,v] of [[-2*aspect,-2],[2*aspect,-2],[-2*aspect,2],[2*aspect,2]])near=Math.max(near,R[4]*u+R[5]*v);
+    const dist=Math.max(1/(cam.zoom*t),near*1.1+.05);
+    const M=[R[0]/t,R[1]/t,-cam.panX/100/t,R[2]/t,R[3]/t,-cam.panY/100/t,-R[4],-R[5],dist];
+    const cr=Math.cos(cam.roll*rad),sr=Math.sin(cam.roll*rad);
+    return mul3([cr,-sr,0,sr,cr,0,0,0,1],M);
+  }
+  // Frame pixels → picture pixels. k: pixels per artwork unit, (cx,cy): frame centre (the artwork's centre),
+  // hh: half the artwork box's height in artwork units (the unit of zoom and moves), aspect: box width / height.
+  function flatHomography(cam,k,cx,cy,hh,aspect){
+    // At 100% zoom the turned artwork is fitted into the frame (perspective makes its near side bigger);
+    // zooming in past that crops it, like a camera would.
+    const F=flatProjection({...cam,zoom:1,panX:0,panY:0},aspect);let ex=1e-9,ey=1e-9;
+    for(const [u,v] of [[-aspect,-1],[aspect,-1],[-aspect,1],[aspect,1]]){const W=F[6]*u+F[7]*v+F[8];ex=Math.max(ex,Math.abs((F[0]*u+F[1]*v+F[2])/W));ey=Math.max(ey,Math.abs((F[3]*u+F[4]*v+F[5])/W));}
+    const unit=k*hh,fit=Math.min(1,aspect/ex,1/ey);
+    const N=[1/unit,0,-cx/unit,0,-1/unit,cy/unit,0,0,1],D=[unit*fit,0,cx,0,-unit*fit,cy,0,0,1];
+    const H=mul3(D,mul3(flatProjection(cam,aspect),N));return H.map(v=>v/H[8]);
+  }
+  // Where the flat SVG sits (untransformed): it fills the stage's content box.
+  function stageBox(){
+    const stage=$('stage'),r=stage.getBoundingClientRect(),cs=getComputedStyle(stage),pl=parseFloat(cs.paddingLeft)||0,pt=parseFloat(cs.paddingTop)||0;
+    return {left:r.left+stage.clientLeft+pl,top:r.top+stage.clientTop+pt,padLeft:pl,padTop:pt,width:Math.max(0,stage.clientWidth-pl-(parseFloat(cs.paddingRight)||0)),height:Math.max(0,stage.clientHeight-pt-(parseFloat(cs.paddingBottom)||0))};
+  }
+  function previewScale(box=stageBox()){const vb=svg.viewBox.baseVal;return vb&&vb.width&&vb.height?Math.min(box.width/vb.width,box.height/vb.height):0;}
+  let flatH=null;
+  function applyFlatCamera(){
+    const flat=!is3d(),box=stageBox(),scale=previewScale(box),frame=$('photo-frame');
+    $('stage').classList.toggle('flat-camera',flat);
+    flatH=flat&&flatMoved()&&scale>0?flatHomography(preferences.camera2d,scale,box.width/2,box.height/2,exportBox[3]/2,exportBox[2]/exportBox[3]):null;
+    svg.style.transformOrigin=flatH?'0 0':'';
+    svg.style.transform=flatH?'matrix3d('+[flatH[0],flatH[3],0,flatH[6],flatH[1],flatH[4],0,flatH[7],0,0,1,0,flatH[2],flatH[5],0,flatH[8]].join(',')+')':'';
+    // The dashed frame shows what a photo or PNG will contain.
+    frame.hidden=!flatH;
+    if(flatH){const w=exportBox[2]*scale,h=exportBox[3]*scale;Object.assign(frame.style,{left:box.padLeft+box.width/2-w/2+'px',top:box.padTop+box.height/2-h/2+'px',width:w+'px',height:h+'px'});}
   }
   let pickDirty=true;
   function paint(){
@@ -1594,13 +1752,14 @@ html>body{padding:0}</style>
     $('custom-bg-color').value=preferences.customBackground;
     root.querySelectorAll('[data-background]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.background===preferences.background)));
     $('export-size').value=preferences.size;
-    $('version-select').value=preferences.selected;
-    updateVersionButton();
+    $('preset-select').value=preferences.selected;
+    updatePresetButton();
+    applyFlatCamera();syncCameraControls();syncViewBar();
   }
   function commit(){if(!same(state,committed)){undoStack.push({...committed});if(undoStack.length>80)undoStack.shift();redoStack=[];committed={...state};}paint();persist();}
   function changeTo(next){state=validState(next);commit();}
   for(const input of inputList){
-    input.addEventListener('input',()=>{state[input.dataset.setting]=input.type==='checkbox'?input.checked:input.type==='color'||input.tagName==='SELECT'?input.value:Number(input.value);preferences.selected='custom';paint();rememberSoon();notice('Preview updated.');});
+    input.addEventListener('input',()=>{state[input.dataset.setting]=input.type==='checkbox'?input.checked:input.type==='color'||input.tagName==='SELECT'?input.value:Number(input.value);paint();rememberSoon();notice('Preview updated.');});
     input.addEventListener('change',commit);
   }
   function rgb2hsv([r,g,b]){r/=255;g/=255;b/=255;const max=Math.max(r,g,b),min=Math.min(r,g,b),d=max-min;let h=0;if(d!==0){if(max===r)h=60*(((g-b)/d)%6);else if(max===g)h=60*((b-r)/d+2);else h=60*((r-g)/d+4);}if(h<0)h+=360;const s=max===0?0:d/max;return {h,s,v:max};}
@@ -1686,7 +1845,7 @@ html>body{padding:0}</style>
   let pickCanvas=null,pickLoading=false,pickAt=null;
   function buildPickSnapshot(){
     if(pickLoading)return;pickLoading=true;pickDirty=false;
-    const r=svg.getBoundingClientRect(),dpr=Math.min(2,window.devicePixelRatio||1),w=Math.max(1,Math.round(r.width*dpr)),h=Math.max(1,Math.round(r.height*dpr));
+    const r=stageBox(),dpr=Math.min(2,window.devicePixelRatio||1),w=Math.max(1,Math.round(r.width*dpr)),h=Math.max(1,Math.round(r.height*dpr));
     const copy=svg.cloneNode(true);copy.setAttribute('xmlns','http://www.w3.org/2000/svg');copy.setAttribute('width',w);copy.setAttribute('height',h);
     const url=URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(copy)],{type:'image/svg+xml;charset=utf-8'}));
     const image=new Image();
@@ -1697,7 +1856,10 @@ html>body{padding:0}</style>
   function previewBackground(){return {light:'#ffffff',dark:'#292c28',custom:preferences.customBackground}[preferences.background]||null;}
   function colorAt(x,y){
     const bg=previewBackground();if(!pickCanvas)return null;
-    const r=svg.getBoundingClientRect(),px=Math.floor((x-r.left)*pickCanvas.dpr),py=Math.floor((y-r.top)*pickCanvas.dpr);
+    const flatView=!is3d(),r=flatView?stageBox():canvas3d.getBoundingClientRect();let lx=x-r.left,ly=y-r.top;
+    // With the flat camera moved, the pointer is traced back through the camera onto the straight-on snapshot.
+    const back=flatView&&flatH?inv3(flatH):null;if(back){const X=back[0]*lx+back[1]*ly+back[2],Y=back[3]*lx+back[4]*ly+back[5],W=back[6]*lx+back[7]*ly+back[8];lx=X/W;ly=Y/W;}
+    const px=Math.floor(lx*pickCanvas.dpr),py=Math.floor(ly*pickCanvas.dpr);
     if(px<0||py<0||px>=pickCanvas.w||py>=pickCanvas.h)return bg;
     const [R,G,B,A]=pickCanvas.ctx.getImageData(px,py,1,1).data;
     if(A<8)return bg;
@@ -1733,6 +1895,84 @@ html>body{padding:0}</style>
     setSheetColor(hex);notice('Picked '+hex.toUpperCase()+' from the preview.');
   });
   document.addEventListener('scroll',placeColorSheet,true);
+  // Every camera change goes through here: clamp, update the Camera controls, redraw and remember.
+  // The panel drives the 3D camera in the 3D view and the flat camera otherwise.
+  const activeCamera=()=>is3d()?preferences.camera:preferences.camera2d;
+  function setCamera(changes){
+    if(is3d()){preferences.camera=validCamera({...preferences.camera,...changes});request3d();}
+    else{preferences.camera2d=validCamera2d({...preferences.camera2d,...changes});applyFlatCamera();}
+    syncCameraControls();syncViewBar();rememberSoon();
+  }
+  function syncCameraControls(){
+    const flat=!is3d(),c=activeCamera(),limits=flat?FLAT_LIMITS:CAMERA_LIMITS,views=flat?FLAT_PRESETS:CAMERA_PRESETS;
+    const shown={yaw:Math.round(c.yaw),pitch:Math.round(c.pitch),roll:Math.round(c.roll||0),zoom:Math.round(c.zoom*100),fov:Math.round(c.fov),panX:Math.round(c.panX),panY:Math.round(c.panY)};
+    root.querySelectorAll('[data-camera]').forEach(el=>{const key=el.dataset.camera,[min,max]=limits[key]||[0,0],f=key==='zoom'?100:1;el.min=min*f;el.max=max*f;el.value=shown[key];});
+    root.querySelectorAll('[data-camera-value]').forEach(el=>el.textContent=shown[el.dataset.cameraValue]+(['zoom','panX','panY'].includes(el.dataset.cameraValue)?'%':'°'));
+    root.querySelectorAll('[data-camera-preset]').forEach(el=>{const p=views[el.dataset.cameraPreset];el.setAttribute('aria-pressed',String(shown.yaw===p.yaw&&shown.pitch===p.pitch&&shown.roll===(p.roll||0)&&!shown.panX&&!shown.panY));});
+    root.querySelectorAll('[data-flat-only]').forEach(el=>el.hidden=!flat);
+  }
+  function syncViewBar(){
+    const on3d=is3d();
+    $('view-hint').textContent=on3d?'Drag to rotate · two fingers to move · pinch to zoom':'Drag to tilt · two fingers to move · scroll to zoom';
+    $('reset-view').disabled=!on3d&&!flatMoved();
+    $('camera-note').textContent=on3d?'A wide field of view gives strong perspective; a narrow one looks flatter. In the preview: drag to rotate, move with two fingers, pinch or scroll the mouse wheel to zoom.':'Photos and PNGs show what the camera sees inside the dashed frame; SVG downloads stay the flat vector artwork. In the preview: drag to tilt, move with two fingers, pinch or scroll to zoom.';
+  }
+  // Screen pixels → move percent: 100% is half the frame's height at 100% zoom.
+  function pixelsToPan(px){
+    if(is3d())return px/Math.max(1,canvas3d.getBoundingClientRect().height/2)*100/preferences.camera.zoom;
+    return px/Math.max(1e-6,exportBox[3]/2*previewScale())*100/preferences.camera2d.zoom;
+  }
+  function resetView(){setCamera(is3d()?{...DEFAULT_VIEW}:{...FLAT_DEFAULT});notice('Camera reset.');}
+  root.querySelectorAll('[data-camera]').forEach(input=>{
+    const key=input.dataset.camera,line=input.closest('.slider-field');
+    input.addEventListener('input',()=>setCamera({[key]:Number(input.value)/(key==='zoom'?100:1)}));
+    line.title='Double-click to reset';
+    line.addEventListener('dblclick',event=>{event.preventDefault();setCamera({[key]:(is3d()?DEFAULT_VIEW:FLAT_DEFAULT)[key]});});
+  });
+  root.querySelectorAll('[data-camera-preset]').forEach(button=>button.addEventListener('click',()=>{const name=button.dataset.cameraPreset;setCamera(is3d()?CAMERA_PRESETS[name]:{...FLAT_PRESETS[name],panX:0,panY:0});notice(button.title+'.');}));
+  $('reset-view').addEventListener('click',resetView);
+  $('reset-camera').addEventListener('click',resetView);
+  new ResizeObserver(()=>applyFlatCamera()).observe($('stage'));
+  // Camera: drag to tilt, two fingers to move, pinch or mouse wheel to zoom, double-click to reset.
+  // The colour picker takes the stage while it is open.
+  let orbit=null,pinch=null;const touches=new Map();
+  const twoFingers=()=>{const [a,b]=[...touches.values()];return {x:(a.x+b.x)/2,y:(a.y+b.y)/2,d:Math.hypot(a.x-b.x,a.y-b.y)};};
+  stageEl.addEventListener('pointerdown',event=>{
+    if(!$('color-sheet').hidden||event.button>0||event.target.closest('.view3d-bar'))return;
+    event.preventDefault();try{stageEl.setPointerCapture(event.pointerId);}catch(e){}
+    touches.set(event.pointerId,{x:event.clientX,y:event.clientY});
+    const c=activeCamera();
+    if(touches.size===2){orbit=null;const f=twoFingers();pinch={...f,panX:c.panX,panY:c.panY,zoom:c.zoom};}
+    else if(touches.size===1)orbit={id:event.pointerId,x:event.clientX,y:event.clientY,yaw:c.yaw,pitch:c.pitch};
+    stageEl.classList.add('dragging');
+  });
+  stageEl.addEventListener('pointermove',event=>{
+    if(!touches.has(event.pointerId))return;
+    touches.set(event.pointerId,{x:event.clientX,y:event.clientY});
+    if(pinch&&touches.size===2){
+      // The artwork follows the fingers; spreading or closing them zooms.
+      const f=twoFingers(),zoom=pinch.zoom*(pinch.d>0?f.d/pinch.d:1);
+      setCamera({zoom,panX:pinch.panX-pixelsToPan(f.x-pinch.x),panY:pinch.panY+pixelsToPan(f.y-pinch.y)});
+    }else if(orbit&&event.pointerId===orbit.id)setCamera({yaw:orbit.yaw+(event.clientX-orbit.x)*.4,pitch:orbit.pitch+(event.clientY-orbit.y)*.35});
+  });
+  const endGesture=event=>{
+    if(!touches.delete(event.pointerId))return;
+    pinch=null;orbit=null;
+    // Lifting one of two fingers carries on tilting with the other, from where it is now.
+    if(touches.size===1){const [[id,p]]=[...touches],c=activeCamera();orbit={id,x:p.x,y:p.y,yaw:c.yaw,pitch:c.pitch};}
+    if(!touches.size)stageEl.classList.remove('dragging');
+  };
+  stageEl.addEventListener('pointerup',endGesture);stageEl.addEventListener('pointercancel',endGesture);
+  stageEl.addEventListener('wheel',event=>{
+    if(!$('color-sheet').hidden)return;
+    event.preventDefault();
+    const lines=event.deltaMode===1?40:event.deltaMode===2?400:1,dx=event.deltaX*lines,dy=event.deltaY*lines,c=activeCamera();
+    // Trackpad pinches arrive as ctrl+wheel; a mouse wheel scrolls in whole notches with no sideways part.
+    const mouseWheel=event.deltaMode!==0||(dx===0&&Math.abs(dy)>=50&&Number.isInteger(dy));
+    if(event.ctrlKey||mouseWheel)setCamera({zoom:c.zoom*Math.exp(-dy*(event.ctrlKey?.01:.0015))});
+    else setCamera({panX:c.panX+pixelsToPan(dx),panY:c.panY-pixelsToPan(dy)});
+  },{passive:false});
+  stageEl.addEventListener('dblclick',event=>{if($('color-sheet').hidden&&!event.target.closest('.view3d-bar'))resetView();});
   // The window stays open while other swatches are clicked; any other click outside it closes it.
   document.addEventListener('pointerdown',event=>{
     if($('color-sheet').hidden||$('color-sheet').contains(event.target)||event.target.closest('.color-swatch-btn,#custom-bg-btn,#stage'))return;
@@ -1786,109 +2026,149 @@ html>body{padding:0}</style>
     btn.addEventListener('click',()=>openColorSheet(input,btn.getAttribute('aria-label'),btn));
   });
   root.querySelectorAll('.slider-field').forEach(line=>{
-    const input=line.querySelector('input[type="range"]');
+    const input=line.querySelector('input[type="range"][data-setting]');
     if(!input)return;
     const key=input.dataset.setting,value=resetValues[key],unit=['textSpacing','gap'].includes(key)?' px':'%';
     line.title='Double-click to reset to '+value+unit;
     line.addEventListener('dblclick',event=>{
       event.preventDefault();
-      preferences.selected='custom';changeTo({...state,[key]:value});
+      changeTo({...state,[key]:value});
       notice(input.getAttribute('aria-label')+' reset to '+value+unit+'.');
     });
   });
-  root.querySelectorAll('[data-choice]').forEach(button=>button.addEventListener('click',()=>{preferences.selected='custom';changeTo({...state,[button.dataset.choice]:button.dataset.option});notice('Layout updated.');}));
-  root.querySelectorAll('[data-mode]').forEach(button=>button.addEventListener('click',()=>{if(button.dataset.mode==='both'&&state.mode!=='both')root.querySelectorAll('.control-menu').forEach(el=>el.open=false);preferences.selected='custom';changeTo({...state,mode:button.dataset.mode});notice({logo:'Edit the logo on its own.',text:'Edit the original pixel lettering.',both:'Edit the logo and text together.'}[state.mode]);}));
-  $('version-select').addEventListener('change',()=>{
-    const key=$('version-select').value;preferences.selected=key;
-    if(key==='custom')return;
-    const saved=savedVersions.find(v=>'saved:'+v.id===key);
-    if(saved){preferences.name=saved.name;$('version-name').value=saved.name;changeTo(saved.settings);}else changeTo({...state,...Object.fromEntries(logoKeys.map(name=>[name,presets[key][name]]))});
-    notice('Version loaded.');
+  root.querySelectorAll('[data-choice]').forEach(button=>button.addEventListener('click',()=>{changeTo({...state,[button.dataset.choice]:button.dataset.option});notice('Layout updated.');}));
+  root.querySelectorAll('[data-mode]').forEach(button=>button.addEventListener('click',()=>{if(button.dataset.mode==='both'&&state.mode!=='both')root.querySelectorAll('.control-menu').forEach(el=>el.open=false);changeTo({...state,mode:button.dataset.mode});notice({logo:'Edit the logo on its own.',text:'Edit the original pixel lettering.',both:'Edit the logo and text together.'}[state.mode]);}));
+  $('preset-select').addEventListener('change',()=>{
+    const key=$('preset-select').value;preferences.selected=key;
+    if(key==='custom'){paint();persist();return;}
+    const saved=presets.find(p=>'saved:'+p.id===key);
+    if(saved){preferences.name=saved.name;$('preset-name').value=saved.name;applyPresetCameras(saved);changeTo(saved.settings);}
+    else changeTo({...state,...Object.fromEntries(BUILTIN_KEYS.map(name=>[name,BUILTINS[key][name]]))});
+    notice('Preset “'+($('preset-select').selectedOptions[0]?.textContent||'')+'” loaded.');
   });
-  $('undo').addEventListener('click',()=>{if(!undoStack.length)return;redoStack.push({...state});state=undoStack.pop();committed={...state};preferences.selected='custom';paint();persist();notice('Previous edit restored.');});
-  $('redo').addEventListener('click',()=>{if(!redoStack.length)return;undoStack.push({...state});state=redoStack.pop();committed={...state};preferences.selected='custom';paint();persist();notice('Edit restored.');});
-  document.addEventListener('keydown',event=>{if(!(event.ctrlKey||event.metaKey)||event.target.matches('input[type="text"],textarea'))return;if(event.key.toLowerCase()==='z'){event.preventDefault();$(event.shiftKey?'redo':'undo').click();}else if(event.key.toLowerCase()==='y'){event.preventDefault();$('redo').click();}});
+  $('undo').addEventListener('click',()=>{if(!undoStack.length)return;redoStack.push({...state});state=undoStack.pop();committed={...state};paint();persist();notice('Previous edit restored.');});
+  $('redo').addEventListener('click',()=>{if(!redoStack.length)return;undoStack.push({...state});state=redoStack.pop();committed={...state};paint();persist();notice('Edit restored.');});
+  document.addEventListener('keydown',event=>{if(!(event.ctrlKey||event.metaKey)||event.target.matches('input[type="text"],input[type="password"],textarea'))return;if(event.key.toLowerCase()==='z'){event.preventDefault();$(event.shiftKey?'redo':'undo').click();}else if(event.key.toLowerCase()==='y'){event.preventDefault();$('redo').click();}});
   root.querySelectorAll('[data-background]').forEach(button=>button.addEventListener('click',()=>{preferences.background=button.dataset.background;paint();persist();}));
   $('custom-bg-btn').addEventListener('click',()=>openColorSheet($('custom-bg-color'),'Preview background',$('custom-bg-btn')));
   $('custom-bg-color').addEventListener('input',()=>{preferences.customBackground=$('custom-bg-color').value.toLowerCase();preferences.background='custom';paint();rememberSoon();});
   $('custom-bg-color').addEventListener('change',persist);
   $('export-size').addEventListener('change',()=>{preferences.size=Number($('export-size').value);paint();persist();});
-  $('version-name').addEventListener('input',()=>{preferences.name=$('version-name').value.slice(0,64);rememberSoon();});
-  $('version-name').addEventListener('change',persist);
-  // Custom "Starting version" dropdown: mirrors the hidden <select> and adds a bin to saved versions.
+  $('preset-name').addEventListener('input',()=>{preferences.name=$('preset-name').value.slice(0,64);rememberSoon();});
+  $('preset-name').addEventListener('change',persist);
+  // Custom "Preset" dropdown: mirrors the hidden <select> and adds a bin to your presets.
   const TRASH='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6.2 2.5h3.6M3 4.2h10M4.6 4.2l.6 8.6a1.2 1.2 0 0 0 1.2 1.1h3.2a1.2 1.2 0 0 0 1.2-1.1l.6-8.6M6.8 6.8v4.6M9.2 6.8v4.6" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  function updateVersionButton(){
-    const option=$('version-select').selectedOptions[0];
-    $('version-current').textContent=option?option.textContent:'Custom edits';
-    $('version-list').querySelectorAll('[role="option"]').forEach(el=>el.setAttribute('aria-selected',String(el.dataset.option===$('version-select').value)));
+  function updatePresetButton(){
+    const option=$('preset-select').selectedOptions[0],active=activePreset();
+    $('preset-current').textContent=(option?option.textContent:'Custom edits')+(presetEdited()?' · edited':'');
+    $('preset-list').querySelectorAll('[role="option"]').forEach(el=>el.setAttribute('aria-selected',String(el.dataset.option===$('preset-select').value)));
+    $('save-preset').disabled=!active;
+    $('save-preset').title=active?'Save the current settings into “'+active.name+'”':'Choose one of your presets to save over it';
   }
-  function renderVersionList(){
+  function renderPresetList(){
     const items=[];
-    for(const child of $('version-select').children){
+    for(const child of $('preset-select').children){
       const options=child.tagName==='OPTGROUP'?[...child.children]:[child];
-      if(child.tagName==='OPTGROUP'){const label=document.createElement('li');label.className='version-group';label.setAttribute('role','presentation');label.textContent=child.label;items.push(label);}
+      if(child.tagName==='OPTGROUP'){const label=document.createElement('li');label.className='preset-group';label.setAttribute('role','presentation');label.textContent=child.label;items.push(label);}
       for(const option of options){
+        if(option.value==='custom')continue;
         const item=document.createElement('li');item.setAttribute('role','option');item.tabIndex=-1;item.dataset.option=option.value;
-        const name=document.createElement('span');name.className='version-name';name.textContent=option.textContent;item.appendChild(name);
+        const name=document.createElement('span');name.className='preset-name';name.textContent=option.textContent;item.appendChild(name);
         if(option.value.startsWith('saved:')){
-          const bin=document.createElement('button');bin.type='button';bin.className='version-delete';bin.tabIndex=-1;bin.innerHTML=TRASH;
-          bin.dataset.deleteId=option.value.slice(6);bin.title='Delete “'+option.textContent+'”';bin.setAttribute('aria-label','Delete saved version “'+option.textContent+'”');
+          const bin=document.createElement('button');bin.type='button';bin.className='preset-delete';bin.tabIndex=-1;bin.innerHTML=TRASH;
+          bin.dataset.deleteId=option.value.slice(6);bin.title='Delete “'+option.textContent+'”';bin.setAttribute('aria-label','Delete preset “'+option.textContent+'”');
           item.appendChild(bin);
         }
         items.push(item);
       }
     }
-    $('version-list').replaceChildren(...items);updateVersionButton();
+    $('preset-list').replaceChildren(...items);updatePresetButton();
   }
-  function versionOptions(){return [...$('version-list').querySelectorAll('[role="option"]')];}
-  function openVersionList(focusCurrent){
-    $('version-list').hidden=false;$('version-button').setAttribute('aria-expanded','true');
-    if(focusCurrent)(versionOptions().find(el=>el.getAttribute('aria-selected')==='true')||versionOptions()[0])?.focus();
+  function presetOptions(){return [...$('preset-list').querySelectorAll('[role="option"]')];}
+  function openPresetList(focusCurrent){
+    $('preset-list').hidden=false;$('preset-button').setAttribute('aria-expanded','true');
+    if(focusCurrent)(presetOptions().find(el=>el.getAttribute('aria-selected')==='true')||presetOptions()[0])?.focus();
   }
-  function closeVersionList(refocus){
-    if($('version-list').hidden)return;
-    $('version-list').hidden=true;$('version-button').setAttribute('aria-expanded','false');
-    if(refocus)$('version-button').focus();
+  function closePresetList(refocus){
+    if($('preset-list').hidden)return;
+    $('preset-list').hidden=true;$('preset-button').setAttribute('aria-expanded','false');
+    if(refocus)$('preset-button').focus();
   }
-  function chooseVersion(value){
-    closeVersionList(true);
-    if(value===$('version-select').value&&value!=='polished'&&value!=='latest'&&!value.startsWith('saved:'))return;
-    $('version-select').value=value;$('version-select').dispatchEvent(new Event('change'));
+  function choosePreset(value){
+    closePresetList(true);
+    if(value===$('preset-select').value&&value!=='polished'&&value!=='latest'&&!value.startsWith('saved:'))return;
+    $('preset-select').value=value;$('preset-select').dispatchEvent(new Event('change'));
   }
-  function deleteVersion(id,bin){
+  function deletePreset(id,bin){
     // First click arms the bin, a second click within a few seconds throws the version away.
     if(!bin.classList.contains('armed')){
-      $('version-list').querySelectorAll('.version-delete.armed').forEach(el=>el.classList.remove('armed'));
+      $('preset-list').querySelectorAll('.preset-delete.armed').forEach(el=>el.classList.remove('armed'));
       bin.classList.add('armed');bin.title='Click again to delete';
       setTimeout(()=>{if(bin.isConnected){bin.classList.remove('armed');bin.title='Delete';}},3500);return;
     }
-    const version=savedVersions.find(v=>v.id===id);if(!version)return;
-    savedVersions=savedVersions.filter(v=>v!==version);
+    const version=presets.find(v=>v.id===id);if(!version)return;
+    presets=presets.filter(v=>v!==version);
     if(preferences.selected==='saved:'+version.id)preferences.selected='custom';
-    rebuildVersionMenu();paint();persist();notice('“'+version.name+'” deleted.');
-    if(!versionOptions().length)closeVersionList(true);else versionOptions()[0].focus();
+    rebuildPresetMenu();paint();savePresetsSoon();notice('Preset “'+version.name+'” deleted.');
+    if(!presetOptions().length)closePresetList(true);else presetOptions()[0].focus();
   }
-  $('version-button').addEventListener('click',()=>$('version-list').hidden?openVersionList(false):closeVersionList(false));
-  $('version-button').addEventListener('keydown',event=>{if(['ArrowDown','ArrowUp','Enter',' '].includes(event.key)){event.preventDefault();openVersionList(true);}});
-  $('version-list').addEventListener('click',event=>{
-    const bin=event.target.closest('.version-delete');
-    if(bin){event.stopPropagation();deleteVersion(bin.dataset.deleteId,bin);return;}
-    const item=event.target.closest('[role="option"]');if(item)chooseVersion(item.dataset.option);
+  $('preset-button').addEventListener('click',()=>$('preset-list').hidden?openPresetList(false):closePresetList(false));
+  $('preset-button').addEventListener('keydown',event=>{if(['ArrowDown','ArrowUp','Enter',' '].includes(event.key)){event.preventDefault();openPresetList(true);}});
+  $('preset-list').addEventListener('click',event=>{
+    const bin=event.target.closest('.preset-delete');
+    if(bin){event.stopPropagation();deletePreset(bin.dataset.deleteId,bin);return;}
+    const item=event.target.closest('[role="option"]');if(item)choosePreset(item.dataset.option);
   });
-  $('version-list').addEventListener('keydown',event=>{
-    const list=versionOptions(),index=list.indexOf(document.activeElement);
+  $('preset-list').addEventListener('keydown',event=>{
+    const list=presetOptions(),index=list.indexOf(document.activeElement);
     if(event.key==='ArrowDown'||event.key==='ArrowUp'){event.preventDefault();list[(index+(event.key==='ArrowDown'?1:-1)+list.length)%list.length]?.focus();}
-    else if(event.key==='Enter'||event.key===' '){event.preventDefault();if(index>=0)chooseVersion(list[index].dataset.option);}
-    else if(event.key==='Escape'){event.preventDefault();closeVersionList(true);}
-    else if((event.key==='Delete'||event.key==='Backspace')&&index>=0){const bin=list[index].querySelector('.version-delete');if(bin){event.preventDefault();deleteVersion(bin.dataset.deleteId,bin);}}
-    else if(event.key==='Tab')closeVersionList(false);
+    else if(event.key==='Enter'||event.key===' '){event.preventDefault();if(index>=0)choosePreset(list[index].dataset.option);}
+    else if(event.key==='Escape'){event.preventDefault();closePresetList(true);}
+    else if((event.key==='Delete'||event.key==='Backspace')&&index>=0){const bin=list[index].querySelector('.preset-delete');if(bin){event.preventDefault();deletePreset(bin.dataset.deleteId,bin);}}
+    else if(event.key==='Tab')closePresetList(false);
   });
-  document.addEventListener('pointerdown',event=>{if(!event.target.closest('#version-picker'))closeVersionList(false);});
-  $('save-version').addEventListener('click',()=>{
-    const name=$('version-name').value.trim();if(!name){notice('Give your version a name first.',true);$('version-name').focus();return;}
-    let unique=name;let number=2;while(savedVersions.some(v=>v.name===unique))unique=name+' ('+(number++)+')';
-    const version={id:Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7),name:unique,settings:{...state}};
-    savedVersions.push(version);preferences.selected='saved:'+version.id;preferences.name=unique;$('version-name').value=unique;rebuildVersionMenu();persist();notice(storageOK?'“'+unique+'” saved. Find it under Starting version.':'Version kept for this visit. Use Save project for a backup.',!storageOK);
+  document.addEventListener('pointerdown',event=>{if(!event.target.closest('#preset-picker'))closePresetList(false);});
+  function newId(){return Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);}
+  // A preset is a named look: the settings plus the camera views it was saved with.
+  function presetCameras(){const out={camera2d:{...preferences.camera2d}};if(preferences.camera)out.camera={...preferences.camera};return out;}
+  function copyPreset(preset){return JSON.parse(JSON.stringify(preset));}
+  function readPresets(list){
+    const out=[];
+    for(const p of (Array.isArray(list)?list:[]).slice(0,1000)){
+      try{
+        const preset={id:String(p.id||newId()).slice(0,100),name:String(p.name||'Preset').slice(0,64),settings:validState(p.settings)};
+        if(p.camera2d)preset.camera2d=validCamera2d(p.camera2d);
+        if(p.camera&&preferences.camera)preset.camera=validCamera(p.camera);
+        if(!out.some(q=>q.id===preset.id))out.push(preset);
+      }catch(e){/* a damaged preset is skipped, the others still load */}
+    }
+    return out;
+  }
+  function activePreset(){return presets.find(p=>'saved:'+p.id===preferences.selected)||null;}
+  // Whether the settings have moved away from the chosen preset (shown as "edited" after its name).
+  function presetEdited(){
+    const preset=activePreset();if(preset)return !same(preset.settings,state);
+    const builtin=BUILTINS[preferences.selected];return !!builtin&&BUILTIN_KEYS.some(k=>builtin[k]!==state[k]);
+  }
+  function applyPresetCameras(preset){
+    if(preset.camera2d)preferences.camera2d=validCamera2d(preset.camera2d);
+    if(preset.camera&&preferences.camera)preferences.camera=validCamera(preset.camera);
+  }
+  function uniqueName(name,except){let unique=name,number=2;while(presets.some(p=>p!==except&&p.name===unique))unique=name+' ('+(number++)+')';return unique;}
+  $('add-preset').addEventListener('click',()=>{
+    const name=$('preset-name').value.trim();if(!name){notice('Give your preset a name first.',true);$('preset-name').focus();return;}
+    commit();
+    const unique=uniqueName(name),preset={id:newId(),name:unique,settings:{...state},...presetCameras()};
+    presets.push(preset);preferences.selected='saved:'+preset.id;preferences.name=unique;$('preset-name').value=unique;
+    rebuildPresetMenu();paint();savePresetsSoon();notice('Preset “'+unique+'” added. Find it under Preset.');
+  });
+  $('save-preset').addEventListener('click',()=>{
+    const preset=activePreset();if(!preset){notice('Choose one of your presets to save over it, or use Add preset.',true);return;}
+    commit();
+    const unique=uniqueName($('preset-name').value.trim()||preset.name,preset),renamed=unique!==preset.name?' (renamed from “'+preset.name+'”)':'';
+    Object.assign(preset,{name:unique,settings:{...state},...presetCameras()});
+    preferences.name=unique;$('preset-name').value=unique;
+    rebuildPresetMenu();paint();savePresetsSoon();notice('Preset “'+unique+'” saved'+renamed+'.');
   });
   function filename(){return (preferences.name.trim().replace(/[^a-z0-9_-]+/gi,'-').replace(/^-+|-+$/g,'').slice(0,64)||'blob-logo').toLowerCase()+({logo:'',text:'-text',both:'-logo-text'}[state.mode]);}
   function download(blob,name){
@@ -1908,17 +2188,64 @@ html>body{padding:0}</style>
     copy.querySelectorAll('[data-right-glint]').forEach(el=>{el.removeAttribute('data-right-glint');el.removeAttribute('style');});
     return '<?xml version="1.0" encoding="UTF-8"?>\n'+new XMLSerializer().serializeToString(copy);
   }
-  $('download-svg').addEventListener('click',()=>{try{commit();download(new Blob([svgExport()],{type:'image/svg+xml;charset=utf-8'}),filename()+'.svg');notice('SVG download started.');}catch(e){notice('Could not export SVG: '+e.message,true);}});
-  async function renderPNGBlob(width){
-    const height=Math.round(width*exportBox[3]/exportBox[2]);
+  $('download-svg').addEventListener('click',()=>{try{commit();download(new Blob([svgExport()],{type:'image/svg+xml;charset=utf-8'}),filename()+'.svg');notice(flatMoved()?'SVG download started. SVG is the flat vector artwork, without the camera view.':'SVG download started.');}catch(e){notice('Could not export SVG: '+e.message,true);}});
+  async function rasterSVG(width,height){
     const url=URL.createObjectURL(new Blob([svgExport()],{type:'image/svg+xml;charset=utf-8'}));
     try{
       const image=new Image();await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=()=>reject(Error('The logo could not be rendered.'));image.src=url;});
       const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const context=canvas.getContext('2d');if(!context)throw Error('Canvas is unavailable.');
-      context.drawImage(image,0,0,width,height);
-      const png=await new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(Error('PNG creation failed.')),'image/png'));
-      canvas.width=canvas.height=1;return png;
+      context.drawImage(image,0,0,width,height);return canvas;
     }finally{URL.revokeObjectURL(url);}
+  }
+  const canvasPNG=canvas=>new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(Error('PNG creation failed.')),'image/png'));
+  // Photographs the flat artwork through the flat camera: the artwork is one textured quad whose corners carry
+  // the homography's w, so the GPU maps it with true perspective.
+  let flatGL=null;
+  function flatRenderer(){
+    if(flatGL!==null)return flatGL;
+    try{
+      const canvas=document.createElement('canvas'),options={alpha:true,premultipliedAlpha:true,preserveDrawingBuffer:true,antialias:true};
+      const gl=canvas.getContext('webgl2',options)||canvas.getContext('webgl',options);
+      if(!gl)return flatGL=false;
+      const shader=(type,source)=>{const s=gl.createShader(type);gl.shaderSource(s,source);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw Error(gl.getShaderInfoLog(s));return s;};
+      const program=gl.createProgram();
+      gl.attachShader(program,shader(gl.VERTEX_SHADER,'attribute vec4 aPos;attribute vec2 aUV;varying vec2 vUV;void main(){vUV=aUV;gl_Position=aPos;}'));
+      gl.attachShader(program,shader(gl.FRAGMENT_SHADER,'precision highp float;varying vec2 vUV;uniform sampler2D uTex;void main(){gl_FragColor=texture2D(uTex,vUV);}'));
+      gl.linkProgram(program);if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(program));
+      return flatGL={canvas,gl,program,aPos:gl.getAttribLocation(program,'aPos'),aUV:gl.getAttribLocation(program,'aUV'),buffer:gl.createBuffer(),mipmaps:typeof WebGL2RenderingContext!=='undefined'&&gl instanceof WebGL2RenderingContext};
+    }catch(e){return flatGL=false;}
+  }
+  async function renderPNGBlob(width){
+    if(is3d())return png3d(width);
+    const height=Math.round(width*exportBox[3]/exportBox[2]),cam={...preferences.camera2d},moved=flatMoved(cam),r=moved?flatRenderer():null;
+    if(!r){
+      if(moved)notice('The camera view needs WebGL, which is unavailable here, so this is the straight-on artwork.',true);
+      const canvas=await rasterSVG(width,height);
+      try{return await canvasPNG(canvas);}finally{canvas.width=canvas.height=1;}
+    }
+    const {gl,canvas}=r,maxSize=Math.min(gl.getParameter(gl.MAX_TEXTURE_SIZE),gl.getParameter(gl.MAX_RENDERBUFFER_SIZE),...gl.getParameter(gl.MAX_VIEWPORT_DIMS));
+    let w=width,h=height;if(Math.max(w,h)>maxSize){const f=maxSize/Math.max(w,h);w=Math.round(w*f);h=Math.round(h*f);}
+    // Enough texture detail for the zoom, within the GPU's limits and a sane memory budget.
+    const detail=Math.max(1,cam.zoom)*1.25,fit=Math.min(1,maxSize/(Math.max(w,h)*detail),Math.sqrt(32e6/(w*h*detail*detail)));
+    const source=await rasterSVG(Math.max(1,Math.round(w*detail*fit)),Math.max(1,Math.round(h*detail*fit))),texture=gl.createTexture();
+    try{
+      canvas.width=w;canvas.height=h;
+      gl.viewport(0,0,w,h);gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.disable(gl.BLEND);
+      gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,texture);
+      gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,true);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,false);
+      gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,source);
+      gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+      if(r.mipmaps){gl.generateMipmap(gl.TEXTURE_2D);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR_MIPMAP_LINEAR);}else gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);
+      const H=flatHomography(cam,w/exportBox[2],w/2,h/2,exportBox[3]/2,exportBox[2]/exportBox[3]);
+      const quad=[[0,0,0,0],[w,0,1,0],[0,h,0,1],[w,h,1,1]].flatMap(([x,y,u,v])=>{const X=H[0]*x+H[1]*y+H[2],Y=H[3]*x+H[4]*y+H[5],W=H[6]*x+H[7]*y+H[8];return [2*X/w-W,W-2*Y/h,0,W,u,v];});
+      gl.useProgram(r.program);gl.bindBuffer(gl.ARRAY_BUFFER,r.buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(quad),gl.STREAM_DRAW);
+      gl.enableVertexAttribArray(r.aPos);gl.vertexAttribPointer(r.aPos,4,gl.FLOAT,false,24,0);
+      gl.enableVertexAttribArray(r.aUV);gl.vertexAttribPointer(r.aUV,2,gl.FLOAT,false,24,16);
+      gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+      if(gl.isContextLost())throw Error('The graphics context was lost.');
+      return await canvasPNG(canvas);
+    }finally{gl.deleteTexture(texture);source.width=source.height=1;canvas.width=canvas.height=1;}
   }
   $('download-png').addEventListener('click',async()=>{
     const button=$('download-png');button.disabled=true;button.textContent='Preparing PNG…';
@@ -1928,7 +2255,6 @@ html>body{padding:0}</style>
       download(png,name+'-'+width+'px.png');notice('Transparent PNG download started.');
     }catch(e){notice('Could not export PNG: '+e.message,true);}finally{button.disabled=false;button.textContent='Download PNG';}
   });
-  function blobToDataURL(blob){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(Error('Could not read image.'));reader.readAsDataURL(blob);});}
   function dataURLToBlob(dataUrl){const [head,body]=dataUrl.split(',');const type=/data:(.*?);base64/.exec(head)[1];const bytes=atob(body);const array=new Uint8Array(bytes.length);for(let i=0;i<bytes.length;i++)array[i]=bytes.charCodeAt(i);return new Blob([array],{type});}
   function crc32(bytes){
     const table=crc32.table||(crc32.table=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?(0xEDB88320^(c>>>1)):(c>>>1);t[n]=c>>>0;}return t;})());
@@ -1936,78 +2262,368 @@ html>body{padding:0}</style>
   }
   function u16(n){return new Uint8Array([n&255,(n>>8)&255]);}
   function u32(n){return new Uint8Array([n&255,(n>>8)&255,(n>>16)&255,(n>>24)&255]);}
+  async function deflateRaw(data){
+    if(typeof CompressionStream!=='function')return null;
+    try{return new Uint8Array(await new Response(new Blob([data]).stream().pipeThrough(new CompressionStream('deflate-raw'))).arrayBuffer());}catch(e){return null;}
+  }
+  // A standard zip: SVGs are deflated when the browser can, PNGs (already compressed) are stored as they are.
   async function buildZip(files){
     const encoder=new TextEncoder(),now=new Date();
     const time=((now.getHours()&31)<<11)|((now.getMinutes()&63)<<5)|((now.getSeconds()>>1)&31);
     const date=(((now.getFullYear()-1980)&127)<<9)|(((now.getMonth()+1)&15)<<5)|(now.getDate()&31);
-    const localParts=[],centralParts=[];let offset=0;
+    const localParts=[],centralParts=[],UTF8=0x0800;let offset=0;
     for(const file of files){
       const nameBytes=encoder.encode(file.name),data=new Uint8Array(await file.blob.arrayBuffer()),crc=crc32(data);
-      const local=[u32(0x04034b50),u16(20),u16(0),u16(0),u16(time),u16(date),u32(crc),u32(data.length),u32(data.length),u16(nameBytes.length),u16(0),nameBytes];
+      let method=0,body=data;
+      if(!/\.png$/i.test(file.name)){const packed=await deflateRaw(data);if(packed&&packed.length<data.length){method=8;body=packed;}}
+      const local=[u32(0x04034b50),u16(20),u16(UTF8),u16(method),u16(time),u16(date),u32(crc),u32(body.length),u32(data.length),u16(nameBytes.length),u16(0),nameBytes];
       const localSize=local.reduce((n,p)=>n+p.length,0);
-      localParts.push(...local,data);
-      centralParts.push(u32(0x02014b50),u16(20),u16(20),u16(0),u16(0),u16(time),u16(date),u32(crc),u32(data.length),u32(data.length),u16(nameBytes.length),u16(0),u16(0),u16(0),u32(0),u32(offset),nameBytes);
-      offset+=localSize+data.length;
+      localParts.push(...local,body);
+      centralParts.push(u32(0x02014b50),u16(20),u16(20),u16(UTF8),u16(method),u16(time),u16(date),u32(crc),u32(body.length),u32(data.length),u16(nameBytes.length),u16(0),u16(0),u16(0),u16(0),u32(0),u32(offset),nameBytes);
+      offset+=localSize+body.length;
     }
     const centralSize=centralParts.reduce((n,p)=>n+p.length,0);
     const end=[u32(0x06054b50),u16(0),u16(0),u16(files.length),u16(files.length),u32(centralSize),u32(offset),u16(0)];
     return new Blob([...localParts,...centralParts,...end],{type:'application/zip'});
   }
-  function updateBulkButton(){$('download-bulk').textContent='Download Bulk ('+bulkImages.length+')';$('download-bulk').disabled=!bulkImages.length;}
-  $('add-bulk').addEventListener('click',async()=>{
-    const button=$('add-bulk');button.disabled=true;button.textContent='Adding…';
+  // ---- Browser database: photos (and, offline, the chosen Projects folder) ----
+  let dbOpen=null;
+  function database(){
+    return dbOpen||(dbOpen=new Promise((resolve,reject)=>{
+      const request=indexedDB.open('blob-studio',1);
+      request.onupgradeneeded=()=>{const db=request.result;if(!db.objectStoreNames.contains('kv'))db.createObjectStore('kv');if(!db.objectStoreNames.contains('photos'))db.createObjectStore('photos',{keyPath:'id'});};
+      request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error||Error('Browser storage is unavailable.'));
+    }).catch(e=>{dbOpen=null;throw e;}));
+  }
+  function idb(store,mode,run){
+    return database().then(db=>new Promise((resolve,reject)=>{
+      const tx=db.transaction(store,mode),request=run(tx.objectStore(store));
+      tx.oncomplete=()=>resolve(request?request.result:undefined);tx.onerror=tx.onabort=()=>reject(tx.error||Error('Browser storage failed.'));
+    }));
+  }
+  // ---- Photos: each keeps a PNG (as the camera frames it) and the vector SVG, until they are downloaded ----
+  const photoStore={
+    all:()=>idb('photos','readonly',s=>s.getAll()).then(list=>(list||[]).filter(p=>p.app===APP_FOLDER).sort((a,b)=>a.takenAt-b.takenAt)),
+    put:photo=>idb('photos','readwrite',s=>s.put({id:photo.id,app:photo.app,takenAt:photo.takenAt,png:photo.png,svg:photo.svg,thumb:photo.thumb,view:photo.view})),
+    remove:ids=>idb('photos','readwrite',s=>{for(const id of ids)s.delete(id);})
+  };
+  async function thumbnail(png){
     try{
-      commit();const width=preferences.size;const png=await renderPNGBlob(width);const dataUrl=await blobToDataURL(png);
-      bulkImages.push({id:Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7),name:filename()+'-'+width+'px.png',dataUrl});
-      persist();
-      if(!storageOK){bulkImages.pop();updateBulkButton();notice('Not added: not enough browser storage for this image. Try a smaller PNG size.',true);return;}
-      updateBulkButton();notice('Added to bulk ('+bulkImages.length+' image'+(bulkImages.length===1?'':'s')+').');
-    }catch(e){notice('Could not add to bulk: '+e.message,true);}finally{button.disabled=false;button.textContent='Add to Bulk';}
+      const bitmap=await createImageBitmap(png),scale=Math.min(116/bitmap.height,300/bitmap.width,1),canvas=document.createElement('canvas');
+      canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));
+      canvas.getContext('2d').drawImage(bitmap,0,0,canvas.width,canvas.height);bitmap.close();
+      return await canvasPNG(canvas);
+    }catch(e){return null;}
+  }
+  function renderPhotos(){
+    const count=photos.length;
+    $('download-zip').textContent='Download zip ('+count+')';$('download-zip').disabled=!count;
+    $('photos').hidden=!count;$('photo-count').textContent=count;
+    $('photo-strip').replaceChildren(...photos.map((photo,i)=>{
+      const item=document.createElement('div');item.className='photo-thumb';
+      if(!photo.url)photo.url=URL.createObjectURL(photo.thumb||photo.png);
+      const image=document.createElement('img');image.src=photo.url;image.alt='Photo '+(i+1);
+      const bin=document.createElement('button');bin.type='button';bin.textContent='×';bin.title='Remove this photo';bin.setAttribute('aria-label','Remove photo '+(i+1));bin.dataset.photo=photo.id;
+      item.append(image,bin);return item;
+    }));
+  }
+  function dropPhotos(list){
+    const gone=new Set(list.map(p=>p.id));photos=photos.filter(p=>!gone.has(p.id));
+    for(const photo of list)if(photo.url)URL.revokeObjectURL(photo.url);
+    renderPhotos();return photoStore.remove([...gone]).catch(()=>{});
+  }
+  $('photo-strip').addEventListener('click',event=>{
+    const bin=event.target.closest('button[data-photo]'),photo=bin&&photos.find(p=>p.id===bin.dataset.photo);
+    if(!photo)return;dropPhotos([photo]);notice('Photo removed.');
   });
-  $('download-bulk').addEventListener('click',async()=>{
-    if(!bulkImages.length)return;
-    const button=$('download-bulk');button.disabled=true;button.textContent='Zipping…';
+  $('take-photo').addEventListener('click',async()=>{
+    const button=$('take-photo');button.disabled=true;button.textContent='Taking…';
     try{
-      const pad=String(bulkImages.length).length;
-      const files=bulkImages.map((item,index)=>({name:'image-'+String(index+1).padStart(pad,'0')+'.png',blob:dataURLToBlob(item.dataUrl)}));
-      download(await buildZip(files),'blob-logo-studio-bulk.zip');
-      notice('Downloading a zip of '+bulkImages.length+' image'+(bulkImages.length===1?'':'s')+'.');
-    }catch(e){notice('Could not build the zip: '+e.message,true);}finally{updateBulkButton();}
+      commit();
+      const view=is3d()?'3d':flatMoved()?'camera':'flat',png=await renderPNGBlob(preferences.size),svgText=svgExport();
+      const photo={id:newId(),app:APP_FOLDER,takenAt:Date.now(),png,svg:svgText,thumb:await thumbnail(png),view};
+      photos.push(photo);renderPhotos();
+      try{await photoStore.put(photo);}catch(e){notice('Photo '+photos.length+' taken, but it is kept only until this page closes: browser storage is unavailable.',true);return;}
+      notice('Photo '+photos.length+' taken'+({'3d':' in 3D',camera:' through the camera',flat:''}[view])+'. Download zip saves every photo as PNG + SVG.');
+    }catch(e){notice('Could not take the photo: '+e.message,true);}finally{button.disabled=false;button.textContent='Take photo';}
   });
-  $('save-project').addEventListener('click',()=>{commit();download(new Blob([JSON.stringify(project(),null,2)],{type:'application/json'}),'blob-studio-project.json');notice('Project backup download started.');});
-  $('load-project').addEventListener('click',()=>$('project-file').click());
+  // A name that is safe as a file name everywhere (Windows included); spaces are kept.
+  const safeName=(text,fallback)=>String(text).replace(/[<>:"/\\|?*\u0000-\u001f]+/g,'-').replace(/\s+/g,' ').replace(/^[\s.-]+|[\s.-]+$/g,'').slice(0,64)||fallback;
+  function photosName(){const d=new Date(),p=n=>String(n).padStart(2,'0');return 'blob-photos-'+d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate());}
+  $('download-zip').addEventListener('click',()=>{
+    const count=photos.length;if(!count)return;
+    $('zip-summary').textContent=count+' photo'+(count===1?'':'s')+', saved as '+(count+photos.filter(p=>p.svg).length)+' files (PNG + SVG). After the download the photos are cleared from the page, ready for new ones.';
+    $('zip-name').value=photosName();$('zip-dialog').showModal();$('zip-name').select();
+  });
+  $('zip-cancel').addEventListener('click',()=>$('zip-dialog').close());
+  $('zip-form').addEventListener('submit',async event=>{
+    event.preventDefault();
+    const name=safeName($('zip-name').value,photosName()),taken=[...photos];$('zip-dialog').close();
+    if(!taken.length)return;
+    const button=$('download-zip');button.disabled=true;button.textContent='Zipping…';
+    try{
+      const pad=Math.max(2,String(taken.length).length),files=[];
+      taken.forEach((photo,i)=>{const base=name+'-'+String(i+1).padStart(pad,'0');files.push({name:base+'.png',blob:photo.png});if(photo.svg)files.push({name:base+'.svg',blob:new Blob([photo.svg],{type:'image/svg+xml'})});});
+      download(await buildZip(files),name+'.zip');
+      await dropPhotos(taken);
+      if(legacyBulk.length){legacyBulk=[];persist();}
+      notice('Downloading '+name+'.zip with '+taken.length+' photo'+(taken.length===1?'':'s')+'. Photos cleared, ready for new ones.');
+    }catch(e){notice('Could not build the zip: '+e.message,true);}finally{renderPhotos();}
+  });
+  // ---- Project storage ----
+  // Offline (this computer), presets and projects live in the Projects folder, picked once and remembered.
+  // Online (the GitHub Pages site), they are committed to the private projects repository through the GitHub API.
+  // Either way the app's files sit in <APP_FOLDER>/: presets.json and projects/<name>.json.
+  const ONLINE=/\.github\.io$/i.test(location.hostname)||new URLSearchParams(location.search).get('mode')==='online';
+  const GITHUB_KEY='blob-studio-github';
+  const kv={get:key=>idb('kv','readonly',s=>s.get(key)),set:(key,value)=>idb('kv','readwrite',s=>s.put(value,key))};
+  const utf8ToBase64=text=>{const bytes=new TextEncoder().encode(text);let s='';for(let i=0;i<bytes.length;i+=0x8000)s+=String.fromCharCode(...bytes.subarray(i,i+0x8000));return btoa(s);};
+  const base64ToUtf8=b64=>new TextDecoder().decode(Uint8Array.from(atob(b64.replace(/\s/g,'')),c=>c.charCodeAt(0)));
+  const storage={
+    state:'checking', // checking | none | unsupported | permission | ready
+    folder:null,      // offline: the Projects folder (or this app's own folder) as a directory handle
+    github:null,      // online: {repo:'owner/name',branch,token}
+    async init(){
+      if(ONLINE){try{this.github=JSON.parse(localStorage.getItem(GITHUB_KEY)||'null');}catch(e){this.github=null;}this.state=this.github?.token?'ready':'none';return;}
+      if(typeof window.showDirectoryPicker!=='function'){this.state='unsupported';return;}
+      try{this.folder=await kv.get('projects-folder')||null;}catch(e){this.folder=null;}
+      this.state=!this.folder?'none':await this.folder.queryPermission({mode:'readwrite'})==='granted'?'ready':'permission';
+    },
+    async connectFolder(){
+      if(this.folder&&this.state==='permission'&&await this.folder.requestPermission({mode:'readwrite'})==='granted'){this.state='ready';return;}
+      const picked=await window.showDirectoryPicker({id:'blob-studio-projects',mode:'readwrite'});
+      this.folder=picked;this.state='ready';
+      try{await kv.set('projects-folder',picked);}catch(e){}
+    },
+    name(){return ONLINE?'GitHub':'the Projects folder';},
+    where(){return ONLINE?this.github.repo+'/'+APP_FOLDER:(this.folder.name===APP_FOLDER?'':this.folder.name+'/')+APP_FOLDER;},
+    async dir(path,create){
+      let dir=this.folder.name===APP_FOLDER?this.folder:await this.folder.getDirectoryHandle(APP_FOLDER,{create});
+      for(const part of path.split('/').filter(Boolean))dir=await dir.getDirectoryHandle(part,{create});
+      return dir;
+    },
+    async api(path,{method='GET',body,raw}={}){
+      const {repo,branch,token}=this.github;
+      const url='https://api.github.com/repos/'+[...repo.split('/'),'contents',...(APP_FOLDER+'/'+path).split('/').filter(Boolean)].map(encodeURIComponent).join('/')+(method==='GET'?'?ref='+encodeURIComponent(branch):'');
+      const headers={Accept:raw?'application/vnd.github.raw+json':'application/vnd.github+json',Authorization:'Bearer '+token,'X-GitHub-Api-Version':'2022-11-28'};
+      if(body)headers['Content-Type']='application/json';
+      const response=await fetch(url,{method,headers,cache:'no-store',body:body?JSON.stringify(body):undefined});
+      if(response.status===404&&method==='GET')return null;
+      if(!response.ok){
+        const info=await response.json().catch(()=>({})),status=response.status;
+        const error=Error(status===401?'GitHub rejected the access token. Reconnect GitHub with a valid token.':status===403?'The token may not write to '+repo+' (or GitHub’s rate limit was hit).':status===404?'Repository '+repo+' was not found, or the token cannot see it.':'GitHub error '+status+(info.message?': '+info.message:'')+'.');
+        error.status=status;throw error;
+      }
+      return raw?response.text():response.json();
+    },
+    async readJSON(path){
+      if(ONLINE){
+        const file=await this.api(path);if(!file)return null;if(Array.isArray(file))throw Error(path+' is a folder.');
+        return JSON.parse(file.encoding==='base64'&&file.content?base64ToUtf8(file.content):await this.api(path,{raw:true}));
+      }
+      try{const parts=path.split('/'),dir=await this.dir(parts.slice(0,-1).join('/'),false);return JSON.parse(await (await (await dir.getFileHandle(parts[parts.length-1])).getFile()).text());}
+      catch(e){if(e.name==='NotFoundError')return null;throw e;}
+    },
+    async writeJSON(path,data,message){
+      const text=JSON.stringify(data,null,2)+'\n';
+      if(ONLINE){
+        for(let attempt=0;;attempt++){
+          const current=await this.api(path);
+          if(current?.encoding==='base64'&&current.content&&base64ToUtf8(current.content)===text)return;
+          try{await this.api(path,{method:'PUT',body:{message,content:utf8ToBase64(text),branch:this.github.branch,...(current?.sha?{sha:current.sha}:{})}});return;}
+          catch(e){if(attempt<1&&(e.status===409||e.status===422))continue;throw e;}
+        }
+      }
+      const parts=path.split('/'),dir=await this.dir(parts.slice(0,-1).join('/'),true);
+      const writable=await (await dir.getFileHandle(parts[parts.length-1],{create:true})).createWritable();
+      await writable.write(text);await writable.close();
+    },
+    async list(path){
+      if(ONLINE){const items=await this.api(path);return (Array.isArray(items)?items:[]).filter(i=>i.type==='file'&&/\.json$/i.test(i.name)).map(i=>({name:i.name,modified:0})).sort((a,b)=>a.name.localeCompare(b.name));}
+      let dir;try{dir=await this.dir(path,false);}catch(e){if(e.name==='NotFoundError')return [];throw e;}
+      const out=[];
+      for await (const [name,entry] of dir.entries())if(entry.kind==='file'&&/\.json$/i.test(name))out.push({name,modified:(await entry.getFile()).lastModified});
+      return out.sort((a,b)=>b.modified-a.modified||a.name.localeCompare(b.name));
+    }
+  };
+  // Writes go one at a time, so GitHub never sees two commits racing for the same file.
+  let writeChain=Promise.resolve();
+  function queue(task){const run=writeChain.then(task,task);writeChain=run.catch(()=>{});return run;}
+  let presetTimer=null;
+  function writePresets(){return queue(async()=>{await storage.writeJSON('presets.json',{app:'blob-logo-studio',kind:'presets',version:1,presets:presets.map(copyPreset)},'Update presets');presetsUnsynced=false;persist();});}
+  // Every preset change is saved to the browser at once and to the project storage shortly after.
+  function savePresetsSoon(){
+    presetsUnsynced=true;persist();clearTimeout(presetTimer);
+    if(storage.state==='ready')presetTimer=setTimeout(()=>writePresets().catch(e=>notice('Presets not saved to '+storage.name()+': '+e.message,true)),ONLINE?1200:250);
+  }
+  // The stored presets.json is the list to use; presets made here that never reached it are added to it.
+  async function syncPresetsFromStorage(keepLocal){
+    if(storage.state!=='ready')return;
+    try{
+      const data=await storage.readJSON('presets.json');
+      if(data&&Array.isArray(data.presets)){
+        const stored=readPresets(data.presets),extra=keepLocal?presets.filter(p=>!stored.some(s=>s.id===p.id)):[];
+        presets=[...stored,...extra];rebuildPresetMenu();paint();persist();
+        if(extra.length)await writePresets();else if(presetsUnsynced){presetsUnsynced=false;persist();}
+      }else if(presets.length)await writePresets();
+      else{presetsUnsynced=false;persist();}
+    }catch(e){notice('Could not read presets from '+storage.name()+': '+e.message,true);}
+  }
+  function renderStorage(){
+    const row=$('storage-row'),status=$('storage-status'),button=$('storage-connect'),s=storage.state;
+    row.classList.toggle('ready',s==='ready');button.hidden=s==='checking'||s==='unsupported';
+    if(s==='checking')status.textContent='Checking project storage…';
+    else if(ONLINE){status.textContent=s==='ready'?'GitHub · '+storage.where():'GitHub not connected';button.textContent=s==='ready'?'Settings':'Connect GitHub';}
+    else if(s==='unsupported')status.textContent='Folder saving needs Chrome or Edge · using files';
+    else if(s==='permission'){status.textContent='Projects folder · allow access again';button.textContent='Reconnect';}
+    else if(s==='ready'){status.textContent='Folder · '+storage.where();button.textContent='Change';}
+    else{status.textContent='Projects folder not connected';button.textContent='Connect folder';}
+    status.title=s==='ready'?'Presets and projects are saved to '+(ONLINE?'GitHub: ':'')+storage.where():status.textContent;
+    $('mode-badge').textContent=ONLINE?'ONLINE':'OFFLINE';$('mode-badge').classList.toggle('online',ONLINE);
+    $('mode-badge').title=ONLINE?'Online: projects and presets are saved to the private GitHub repository':'Offline: projects and presets are saved to the Projects folder on this computer';
+  }
+  $('storage-connect').addEventListener('click',async()=>{
+    if(ONLINE){openGithubDialog();return;}
+    const before={folder:storage.folder,state:storage.state};
+    if(storage.state==='ready')storage.state='none';
+    try{
+      await storage.connectFolder();renderStorage();
+      notice('Connected. Presets and projects are saved to '+storage.where()+'.');
+      await syncPresetsFromStorage(true);
+    }catch(e){Object.assign(storage,before);renderStorage();if(e.name!=='AbortError')notice('Could not open the folder: '+e.message,true);}
+  });
+  function openGithubDialog(){
+    const g=storage.github||{};
+    $('github-repo').value=g.repo||'boemiurgo/BLOB-STUDIO-projects';$('github-branch').value=g.branch||'main';$('github-token').value='';
+    $('github-token').placeholder=g.token?'Saved · leave empty to keep it':'github_pat_…';
+    $('github-disconnect').hidden=!g.token;$('github-error').hidden=true;$('github-dialog').showModal();
+  }
+  $('github-cancel').addEventListener('click',()=>$('github-dialog').close());
+  $('github-disconnect').addEventListener('click',()=>{
+    try{localStorage.removeItem(GITHUB_KEY);}catch(e){}
+    storage.github=null;storage.state='none';renderStorage();$('github-dialog').close();notice('GitHub disconnected. The token was removed from this browser.');
+  });
+  $('github-form').addEventListener('submit',async event=>{
+    event.preventDefault();
+    const fail=text=>{$('github-error').textContent=text;$('github-error').hidden=false;};
+    const repo=$('github-repo').value.trim().replace(/^https?:\/\/github\.com\//i,'').replace(/\.git$/i,'').replace(/\/+$/,''),token=$('github-token').value.trim()||storage.github?.token||'';
+    if(!/^[\w.-]+\/[\w.-]+$/.test(repo))return fail('Write the repository as owner/name.');
+    if(!token)return fail('Paste an access token.');
+    const button=$('github-save');button.disabled=true;button.textContent='Checking…';
+    try{
+      const response=await fetch('https://api.github.com/repos/'+repo.split('/').map(encodeURIComponent).join('/'),{cache:'no-store',headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+token,'X-GitHub-Api-Version':'2022-11-28'}});
+      if(response.status===401)throw Error('GitHub rejected this token.');
+      if(!response.ok)throw Error('Repository not found, or the token cannot access it.');
+      const info=await response.json();
+      if(info.permissions&&info.permissions.push===false)throw Error('This token can read the repository but not write to it.');
+      storage.github={repo,branch:$('github-branch').value.trim()||info.default_branch||'main',token};storage.state='ready';
+      try{localStorage.setItem(GITHUB_KEY,JSON.stringify(storage.github));}catch(e){}
+      $('github-dialog').close();renderStorage();notice('Connected to GitHub: '+repo+'.');
+      await syncPresetsFromStorage(true);
+    }catch(e){fail(e.message);}finally{button.disabled=false;button.textContent='Connect';}
+  });
+  function readPreferences(p){
+    if(!p||typeof p!=='object')return;
+    if(['checker','light','dark','custom'].includes(p.background))preferences.background=p.background;
+    if(/^#[0-9a-f]{6}$/i.test(p.customBackground||''))preferences.customBackground=p.customBackground.toLowerCase();
+    if([1024,2048,4096].includes(p.size))preferences.size=p.size;
+    if(typeof p.name==='string')preferences.name=p.name.slice(0,64);
+    if(typeof p.project==='string')preferences.project=p.project.slice(0,64);
+    if(typeof p.selected==='string')preferences.selected=p.selected;
+    if(p.camera2d)preferences.camera2d=validCamera2d(p.camera2d);
+    if('view3d' in preferences&&typeof p.view3d==='boolean')preferences.view3d=p.view3d;
+    if(preferences.camera&&p.camera)preferences.camera=validCamera(p.camera);
+  }
+  // A project is the whole app: settings, view and camera preferences, and every preset (which it replaces).
+  function applyProject(data,fallbackName){
+    if(data?.app!=='blob-logo-studio'||![1,2,3].includes(data.version))throw Error('Choose a Blob Logo Studio project file.');
+    const imported=validState(data.settings),incoming=readPresets(data.version>=3?data.presets:data.versions);
+    readPreferences(data.preferences);
+    preferences.project=String(data.name||data.preferences?.project||fallbackName||'My project').slice(0,64);
+    presets=incoming;
+    $('preset-name').value=preferences.name;$('project-name').value=preferences.project;
+    rebuildPresetMenu();changeTo(imported);
+    return preferences.project;
+  }
+  $('project-name').addEventListener('input',()=>{preferences.project=$('project-name').value.slice(0,64);rememberSoon();});
+  $('project-name').addEventListener('change',persist);
+  $('save-project').addEventListener('click',async()=>{
+    commit();
+    const title=$('project-name').value.trim()||'My project',file=safeName(title,'project')+'.json';
+    preferences.project=title;$('project-name').value=title;
+    const data={...project(),name:title,savedAt:new Date().toISOString()};
+    if(storage.state!=='ready'){
+      download(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),file);
+      notice(ONLINE?'GitHub is not connected, so the project was downloaded as a file. Use Connect GitHub to save it to the repository.':storage.state==='unsupported'?'This browser cannot write to the Projects folder, so the project was downloaded as a file.':'The Projects folder is not connected, so the project was downloaded as a file. Use Connect folder to save there.');
+      return;
+    }
+    const button=$('save-project');button.disabled=true;button.textContent='Saving…';
+    try{
+      const existing=await storage.list('projects');
+      if(existing.some(p=>p.name.toLowerCase()===file.toLowerCase())&&!confirm('A project called “'+title+'” already exists in '+storage.name()+'. Replace it?')){notice('Project not saved.');return;}
+      await queue(()=>storage.writeJSON('projects/'+file,data,'Save project '+title));
+      await writePresets();
+      notice('Project “'+title+'” saved with '+presets.length+' preset'+(presets.length===1?'':'s')+' to '+storage.where()+'/projects.');
+    }catch(e){notice('Could not save the project: '+e.message,true);}finally{button.disabled=false;button.textContent='Save project';}
+  });
+  function listMessage(text){const li=document.createElement('li');li.className='empty';li.textContent=text;return li;}
+  $('load-project').addEventListener('click',async()=>{
+    if(storage.state!=='ready'){$('project-file').click();return;}
+    const list=$('project-list');
+    $('project-dialog-where').textContent='Saved in '+(ONLINE?'GitHub · ':'')+storage.where()+'/projects. Loading replaces the current settings and presets.';
+    list.replaceChildren(listMessage('Loading…'));$('project-dialog').showModal();
+    try{
+      const items=await storage.list('projects');
+      list.replaceChildren(...(items.length?items.map(item=>{
+        const li=document.createElement('li'),button=document.createElement('button'),label=document.createElement('span');
+        button.type='button';button.dataset.file=item.name;label.textContent=item.name.replace(/\.json$/i,'');button.appendChild(label);
+        if(item.modified){const when=document.createElement('small');when.textContent=new Date(item.modified).toLocaleString([], {dateStyle:'medium',timeStyle:'short'});button.appendChild(when);}
+        li.appendChild(button);return li;
+      }):[listMessage('No saved projects yet. Use Save project first.')]));
+      list.querySelector('button')?.focus();
+    }catch(e){list.replaceChildren(listMessage('Could not list the projects: '+e.message));}
+  });
+  $('project-list').addEventListener('click',async event=>{
+    const button=event.target.closest('button[data-file]');if(!button)return;
+    $('project-dialog').close();
+    try{
+      const data=await storage.readJSON('projects/'+button.dataset.file);if(!data)throw Error('The project file is missing.');
+      const title=applyProject(data,button.dataset.file.replace(/\.json$/i,''));
+      await writePresets();
+      notice('Project “'+title+'” loaded with its '+presets.length+' preset'+(presets.length===1?'':'s')+'.');
+    }catch(e){notice('Could not load the project: '+e.message,true);}
+  });
+  $('project-import').addEventListener('click',()=>{$('project-dialog').close();$('project-file').click();});
+  $('project-cancel').addEventListener('click',()=>$('project-dialog').close());
   $('project-file').addEventListener('change',async()=>{
     try{
-      const file=$('project-file').files[0];if(!file)return;if(file.size>2*1024*1024)throw Error('This project is too large.');
-      const data=JSON.parse(await file.text());if(data.app!=='blob-logo-studio'||![1,2].includes(data.version))throw Error('Choose a Blob Logo Studio project file.');
-      const imported=validState(data.settings);const versions=Array.isArray(data.versions)?data.versions.slice(0,1000):[];
-      const incoming=versions.map(v=>({id:String(v.id).slice(0,100),name:String(v.name||'Imported version').slice(0,64),settings:validState(v.settings)}));
-      for(const version of incoming)if(!savedVersions.some(v=>v.id===version.id))savedVersions.push(version);
-      const incomingBulk=(Array.isArray(data.bulk)?data.bulk:[]).slice(0,200).filter(b=>typeof b?.dataUrl==='string'&&b.dataUrl.startsWith('data:image/'));
-      for(const b of incomingBulk)if(bulkImages.length<200)bulkImages.push({id:String(b.id||Date.now()+'-'+Math.random()).slice(0,100),name:String(b.name||'bulk-image.png').slice(0,120),dataUrl:b.dataUrl});
-      updateBulkButton();
-      preferences.selected='custom';if(typeof data.preferences?.name==='string'){preferences.name=data.preferences.name.slice(0,64);$('version-name').value=preferences.name;}
-      if(['checker','light','dark','custom'].includes(data.preferences?.background))preferences.background=data.preferences.background;
-      if(/^#[0-9a-f]{6}$/i.test(data.preferences?.customBackground||''))preferences.customBackground=data.preferences.customBackground.toLowerCase();
-      if([1024,2048,4096].includes(data.preferences?.size))preferences.size=data.preferences.size;
-      rebuildVersionMenu();changeTo(imported);notice('Project loaded. Existing saved versions were kept.');
-    }catch(e){notice('Could not load project: '+e.message,true);}finally{$('project-file').value='';}
+      const file=$('project-file').files[0];if(!file)return;if(file.size>8*1024*1024)throw Error('This project is too large.');
+      const title=applyProject(JSON.parse(await file.text()),file.name.replace(/\.json$/i,''));
+      savePresetsSoon();
+      notice('Project “'+title+'” loaded with its '+presets.length+' preset'+(presets.length===1?'':'s')+'.');
+    }catch(e){notice('Could not load the project: '+e.message,true);}finally{$('project-file').value='';}
   });
   try{
     const saved=JSON.parse(localStorage.getItem(STORE)||'null');
-    if(saved?.app==='blob-logo-studio'&&[1,2].includes(saved.version)){state=validState(saved.settings);committed={...state};
-      savedVersions=(Array.isArray(saved.versions)?saved.versions:[]).slice(0,1000).map(v=>({id:String(v.id).slice(0,100),name:String(v.name||'Saved version').slice(0,64),settings:validState(v.settings)}));
-      bulkImages=(Array.isArray(saved.bulk)?saved.bulk:[]).slice(0,200).filter(b=>typeof b?.dataUrl==='string'&&b.dataUrl.startsWith('data:image/')).map(b=>({id:String(b.id||Date.now()+'-'+Math.random()).slice(0,100),name:String(b.name||'bulk-image.png').slice(0,120),dataUrl:b.dataUrl}));
-      if(['checker','light','dark','custom'].includes(saved.preferences?.background))preferences.background=saved.preferences.background;
-      if(/^#[0-9a-f]{6}$/i.test(saved.preferences?.customBackground||''))preferences.customBackground=saved.preferences.customBackground.toLowerCase();
-      if([1024,2048,4096].includes(saved.preferences?.size))preferences.size=saved.preferences.size;
-      if(typeof saved.preferences?.name==='string')preferences.name=saved.preferences.name.slice(0,64);
-      if(typeof saved.preferences?.selected==='string')preferences.selected=saved.preferences.selected;
+    if(saved?.app==='blob-logo-studio'&&[1,2,3].includes(saved.version)){state=validState(saved.settings);committed={...state};
+      presets=readPresets(saved.version>=3?saved.presets:saved.versions);
+      presetsUnsynced=saved.version>=3?!!saved.presetsUnsynced:presets.length>0;
+      legacyBulk=(Array.isArray(saved.bulk)?saved.bulk:[]).slice(0,200).filter(b=>typeof b?.dataUrl==='string'&&b.dataUrl.startsWith('data:image/'));
+      readPreferences(saved.preferences);
       notice('Welcome back. Your last edits are loaded.');
     }
   }catch(e){storageOK=false;}
-  $('version-name').value=preferences.name;rebuildVersionMenu();updateBulkButton();paint();persist();
+  $('preset-name').value=preferences.name;$('project-name').value=preferences.project;rebuildPresetMenu();renderPhotos();renderStorage();paint();persist();
   window.addEventListener('pagehide',persist);
+  // Photos wait in the browser's database until they are downloaded; the old "bulk" images move there once.
+  photoStore.all().then(async stored=>{
+    const known=new Set(photos.map(p=>p.id));photos=[...stored.filter(p=>!known.has(p.id)),...photos];
+    for(const [i,item] of legacyBulk.entries()){const photo={id:String(item.id||newId()).slice(0,100),app:APP_FOLDER,takenAt:Date.now()+i,png:dataURLToBlob(item.dataUrl),svg:'',thumb:null,view:'flat'};photos.push(photo);await photoStore.put(photo);}
+    if(legacyBulk.length){legacyBulk=[];persist();}
+  }).catch(()=>{
+    for(const [i,item] of legacyBulk.entries())if(!photos.some(p=>p.id===item.id))photos.push({id:String(item.id||newId()),app:APP_FOLDER,takenAt:Date.now()+i,png:dataURLToBlob(item.dataUrl),svg:'',thumb:null,view:'flat'});
+  }).finally(renderPhotos);
+  storage.init().catch(()=>{storage.state='none';}).then(()=>{renderStorage();return syncPresetsFromStorage(presetsUnsynced);});
 })();
 </script>
 
