@@ -1031,28 +1031,28 @@ html>body{padding:0}</style>
 <body>
 <main id="blob-app">
   <header class="app-header">
-    <div class="brand">
+    <h1 class="brand" aria-label="Blob Record Studio">
 <svg xmlns="http://www.w3.org/2000/svg" width="2800" height="900" viewBox="0 0 28 9" role="img" aria-labelledby="wordmark-title wordmark-description">
   <title id="wordmark-title">blob — pixel wordmark</title>
   <desc id="wordmark-description">The black lowercase blob pixel wordmark.</desc>
   <g id="wordmark" fill="#000000">
-    <g id="letter-b-first" aria-label="b">
+    <g id="letter-b-first">
       <path id="b-first-stem-and-bowl" d="M0 0H1V3H3V4H2V5H1V6H2V8H5V7H6V9H0Z"/>
       <path id="b-first-upper-right" d="M4 3H6V4H7V7H6V5H5V4H4Z"/>
     </g>
-    <g id="letter-l" aria-label="l">
+    <g id="letter-l">
       <path d="M9 0H10V8H11V9H9Z"/>
     </g>
-    <g id="letter-o" aria-label="o">
+    <g id="letter-o">
       <path id="o-upper-left" d="M13 3H18V4H14V8H13Z"/>
       <path id="o-lower-right" d="M18 4H19V8H18V9H14V8H17V7H18Z"/>
     </g>
-    <g id="letter-b-last" aria-label="b">
+    <g id="letter-b-last">
       <path d="M21 0H22V3H24V4H23V5H22V7H23V8H26V6H27V5H26V4H25V3H27V4H28V7H27V9H21Z"/>
     </g>
   </g>
 </svg>
-<span class="brand-divider"></span><span>record studio</span></div>
+<span class="brand-divider"></span><span>record studio</span></h1>
     <div class="header-right"><span class="offline-badge">OFFLINE</span></div>
   </header>
   <div class="workspace">
@@ -1139,13 +1139,13 @@ html>body{padding:0}</style>
       <div class="preview-toolbar"><div class="history-actions"><button id="undo" class="button quiet" disabled aria-label="Undo last edit">Undo</button><button id="redo" class="button quiet" disabled aria-label="Redo last edit">Redo</button></div>
         <div class="backdrops" role="group" aria-label="Preview background"><span class="background-label">Background color</span><button type="button" data-background="checker" class="swatch checker" aria-label="Transparent preview" aria-pressed="false"></button><button type="button" data-background="light" class="swatch light" aria-label="Light preview" aria-pressed="false"></button><button type="button" data-background="dark" class="swatch dark" aria-label="Dark preview" aria-pressed="false"></button><button type="button" data-background="custom" id="custom-bg-btn" class="swatch custom-bg" aria-label="Custom preview color" aria-pressed="true"></button><input id="custom-bg-color" type="color" value="#e6e2da" class="color-input-hidden" tabindex="-1" aria-hidden="true"></div>
       </div>
-      <div id="stage" class="logo-stage" aria-label="Live record preview"></div>
+      <div id="stage" role="region" class="logo-stage" aria-label="Live record preview"></div>
       <section class="download-panel" aria-label="Image downloads">
         <div class="export-controls"><label class="field png-size">PNG size<select id="export-size" aria-label="PNG size"><option value="1024">1024 px</option><option value="2048">2048 px</option><option value="4096" selected>4096 px · HD</option></select></label><label class="export-bg" title="Includes the backdrop. Off gives a transparent image with shadows."><input id="export-bg" type="checkbox"> Include background</label><button id="download-png" class="button primary">Download PNG</button><button id="download-svg" class="button secondary">Download SVG</button><button type="button" id="add-bulk" class="button secondary">Add to Bulk</button><button type="button" id="download-bulk" class="button secondary" disabled>Download Bulk (0)</button></div>
       </section>
     </section>
   </div>
-  <div id="color-sheet" class="color-sheet" hidden role="dialog" aria-modal="false" aria-labelledby="color-sheet-title">
+  <div id="color-sheet" class="color-sheet" tabindex="-1" hidden role="dialog" aria-modal="false" aria-labelledby="color-sheet-title">
     <div class="color-sheet-bar"></div>
     <div class="color-sheet-head"><span id="color-sheet-title">Color</span><span class="color-sheet-actions"><button type="button" id="color-eyedropper" class="button quiet" hidden title="Pick a color from anywhere on screen">Pick from screen</button><button type="button" id="color-sheet-close" class="button quiet">Done</button></span></div>
     <div class="color-sv" id="color-sv"><div class="color-sv-thumb" id="color-sv-thumb"></div></div>
@@ -1156,7 +1156,7 @@ html>body{padding:0}</style>
   <div id="pick-loupe" class="pick-loupe" hidden aria-hidden="true"><span id="pick-loupe-swatch"></span><output id="pick-loupe-value"></output></div>
 </main>
 <style>
-#blob-app { --ink:#232321;--quiet:#797a75;--line:#e4e4de;--paper:#f6f6f1;--panel:#fff; font:14px/1.45 "Segoe UI",Arial,sans-serif;color:var(--ink);max-width:1440px;margin:0 auto;padding:8px 20px 0;color-scheme:light; }
+#blob-app { --ink:#232321;--quiet:#6b6c67;--line:#e4e4de;--paper:#f6f6f1;--panel:#fff; font:14px/1.45 "Segoe UI",Arial,sans-serif;color:var(--ink);max-width:1440px;margin:0 auto;padding:8px 20px 0;color-scheme:light; }
 #blob-app * {box-sizing:border-box;}
 #blob-app button,#blob-app input,#blob-app select {font:inherit;color:inherit;}
 #blob-app button {cursor:pointer;}
@@ -1164,6 +1164,7 @@ html>body{padding:0}</style>
 #blob-app button:focus-visible,#blob-app input:focus-visible,#blob-app select:focus-visible {outline:3px solid #82896e;outline-offset:3px;}
 #blob-app .app-header {display:flex;align-items:center;justify-content:space-between;gap:20px;padding:20px 0 28px;}
 #blob-app .brand {display:flex;align-items:center;gap:18px;white-space:nowrap;font-weight:500;}
+#blob-app h1.brand {margin:0;font-size:inherit;line-height:inherit;letter-spacing:normal;}
 #blob-app .brand svg {width:90px;height:30px;display:block;}
 #blob-app .brand-divider {height:24px;width:1px;background:var(--line);}
 #blob-app .header-right {display:flex;align-items:center;gap:14px;color:var(--quiet);font-size:12px;}
@@ -1221,6 +1222,7 @@ html>body{padding:0}</style>
 #blob-app .color-picker output {font-size:11px;font-family:Consolas,monospace;color:var(--quiet);}
 #blob-app .color-swatch-btn {appearance:none;-webkit-appearance:none;width:33px;height:29px;padding:0;border:1px solid var(--line);border-radius:6px;cursor:pointer;}
 #blob-app .color-input-hidden {position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;opacity:0;overflow:hidden;pointer-events:none;}
+#blob-app .color-sheet:focus {outline:none;}
 #blob-app .color-sheet {position:fixed;left:0;right:0;bottom:0;z-index:60;max-width:660px;margin:0 auto;background:#fff;border-radius:16px 16px 0 0;box-shadow:0 -10px 30px rgba(20,20,18,.25);padding:12px 18px 22px;max-height:calc(100vh - 16px);max-height:calc(100dvh - 16px);overflow-y:auto;}
 #blob-app .color-sheet.popover {right:auto;bottom:auto;width:290px;max-width:calc(100vw - 24px);margin:0;border-radius:14px;border:1px solid var(--line);box-shadow:0 12px 32px rgba(20,20,18,.22);padding:14px 16px 16px;}
 #blob-app .color-sheet.popover .color-sheet-bar {display:none;}
@@ -1244,7 +1246,7 @@ html>body{padding:0}</style>
 #blob-app .slider-field > span {display:flex;justify-content:space-between;margin-bottom:7px;}
 #blob-app .slider-field output {color:var(--quiet);font-size:12px;font-variant-numeric:tabular-nums;}
 #blob-app input[type="range"] {display:block;width:100%;height:14px;margin:0;accent-color:#30342c;cursor:pointer;}
-#blob-app input[type="checkbox"] {accent-color:#30342c;width:15px;height:15px;margin:0;}
+#blob-app input[type="checkbox"] {accent-color:#30342c;width:18px;height:18px;margin:0;}
 #blob-app .first-slider {margin-top:20px;}
 #blob-app .first-slider:not([hidden]) + .first-slider {margin-top:0;}
 #blob-app .pattern-button {margin-top:14px;}
@@ -1260,7 +1262,7 @@ html>body{padding:0}</style>
 #blob-app .button.quiet:hover:not(:disabled) {background:#eceee5;}
 #blob-app .preview-panel {min-width:0;}
 #blob-app .history-actions {display:flex;gap:3px;}
-#blob-app .swatch {width:22px;height:22px;border-radius:50%;border:1px solid #d5d7cf;}
+#blob-app .swatch {width:28px;height:28px;border-radius:50%;border:1px solid #949590;}
 #blob-app .swatch[aria-pressed="true"] {outline:1px solid #414637;outline-offset:3px;}
 #blob-app .checker {background-color:#f8f8f5;background-image:conic-gradient(#eeefe9 25%,transparent 0 50%,#eeefe9 0 75%,transparent 0);background-size:22px 22px;}
 #blob-app .light {background:#fff;}
@@ -1846,10 +1848,12 @@ html>body{padding:0}</style>
     updateSheetVisual(input.value);
     $('color-hex-input').value=input.value.slice(1).toUpperCase();
     $('color-sheet').hidden=false;
+    $('color-sheet').focus({preventScroll:true});
     $('stage').classList.add('picking');
     placeColorSheet();
   }
   function closeColorSheet(){
+    if(sheetAnchor&&$('color-sheet').contains(document.activeElement))sheetAnchor.focus({preventScroll:true});
     $('color-sheet').hidden=true;
     $('stage').classList.remove('picking');$('pick-loupe').hidden=true;
     if(sheetAnchor)sheetAnchor.classList.remove('is-editing');
@@ -1992,12 +1996,15 @@ html>body{padding:0}</style>
     const input=line.querySelector('input[type="range"]');
     if(!input)return;
     const key=input.dataset.setting,value=resetValues[key];
-    line.title='Double-click to reset';
-    line.addEventListener('dblclick',event=>{
+    line.title='Double-click or press Delete to reset';
+    input.setAttribute('aria-keyshortcuts','Delete');
+    const reset=event=>{
       event.preventDefault();
       preferences.selected='custom';changeTo({...state,[key]:value});
       notice(input.getAttribute('aria-label')+' reset to '+fmt(key)+'.');
-    });
+    };
+    line.addEventListener('dblclick',reset);
+    input.addEventListener('keydown',event=>{if(event.key==='Delete'||event.key==='Backspace')reset(event);});
   });
   root.querySelectorAll('[data-choice]').forEach(button=>button.addEventListener('click',()=>{
     preferences.selected='custom';
