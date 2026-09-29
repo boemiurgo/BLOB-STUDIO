@@ -56,18 +56,20 @@ body {
   border-bottom:4px solid var(--pixel-ink);
   overflow:hidden;
 }
-.masthead-text { display:flex; flex-direction:column; justify-content:center; padding:min(30px,3vh) 40px; min-width:0; }
+.masthead-text { display:flex; flex-direction:column; justify-content:center; padding:min(20px,2.5vh) 32px; min-width:0; }
 .masthead h1 {
   margin:0;
   font-family:var(--grid-font);
   font-weight:400;
-  font-size:min(88px,10vh);
+  font-size:min(64px,7.5vh);
   line-height:1;
   letter-spacing:0;
   -webkit-font-smoothing:none;
 }
 .masthead h1 span { display:block; }
-.masthead-art { display:block; height:min(260px,30vh); width:auto; }
+/* The font draws on a 0.1em pixel grid: b is 7x9 pixels with a 2-pixel gap, like the logo's first b */
+.masthead h1 .b-first { display:inline-block; width:.7em; height:.9em; margin-right:.2em; vertical-align:baseline; }
+.masthead-art { display:block; height:min(180px,21vh); width:auto; }
 
 /* Editors: two pixel windows */
 main {
@@ -127,28 +129,26 @@ footer { padding:min(20px,2vh) 20px; text-align:center; color:var(--quiet); }
 .reg { font-family:"Segoe UI",Arial,sans-serif; font-size:9px; vertical-align:top; margin-left:1px; }
 
 @media(max-width:900px) {
-  .masthead h1 { font-size:min(70px,8vh); }
-  .masthead-art { height:min(200px,24vh); }
+  .masthead h1 { font-size:min(54px,6.5vh); }
+  .masthead-art { height:min(150px,18vh); }
 }
 @media(max-width:700px) {
-  .masthead { grid-template-columns:1fr; }
-  .masthead-text { padding:24px 16px; }
-  .masthead h1 { font-size:min(60px,7vh); }
-  .masthead-art { width:100%; max-height:26vh; object-fit:cover; }
+  .masthead-text { padding:14px 16px; }
+  .masthead h1 { font-size:clamp(30px,10vw,46px); }
+  .masthead-art { height:calc(clamp(30px,10vw,46px) * 2 + 28px); width:38vw; }
   main { padding:40px 16px 30px; }
   .grid { gap:20px; }
   .card { width:min(calc(50% - 10px),24vh); }
 }
-@media(max-width:380px) { .masthead h1 { font-size:52px; } }
 @media(prefers-reduced-motion:reduce) { .card, .card:hover, .card:active { transform:none; transition:none; } }
 </style>
 </head>
 <body>
 <header class="masthead">
   <div class="masthead-text">
-    <h1 aria-label="BLOB Studio"><span>Blob</span><span>Studio</span></h1>
+    <h1 aria-label="BLOB Studio"><span><svg class="b-first" viewBox="0 0 7 9" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" d="M0 0H1V3H3V4H2V5H1V6H2V8H5V7H6V9H0Z"/><path fill="currentColor" d="M4 3H6V4H7V7H6V5H5V4H4Z"/></svg>lob</span><span>Studio</span></h1>
   </div>
-  <svg class="masthead-art" viewBox="0 0 686 400" aria-hidden="true" focusable="false" shape-rendering="crispEdges">
+  <svg class="masthead-art" viewBox="0 0 686 400" preserveAspectRatio="xMaxYMid slice" aria-hidden="true" focusable="false" shape-rendering="crispEdges">
     <rect x="120" y="114" width="60" height="60" fill="#ff5a36"/>
     <rect x="0" y="174" width="180" height="120" fill="#9bbc0f"/>
     <rect x="60" y="294" width="120" height="106" fill="#306230"/>
