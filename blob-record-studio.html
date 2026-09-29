@@ -4,8 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src blob: data:; font-src 'none'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
-<title>Blob Record Studio</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src blob: data:; font-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>BLOB Record Studio</title>
+<link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAQAAAABbAUdZAAAAW0lEQVR42mP8z8DAwMRALPHxPwPDP8fa/wznOA/bMxT8/8/LwHj/PxsDH/MPBqa8fywMDAyFh58zMP8++J3pCMt/AYb/3++wM/x/IMfOxCDAeIOJgSNBgZEUKwFcDhx+85ts9AAAAABJRU5ErkJggg==">
 <style>:root {
   color-scheme: light dark;
   background-color: var(
@@ -1031,7 +1032,7 @@ html>body{padding:0}</style>
 <body>
 <main id="blob-app">
   <header class="app-header">
-    <h1 class="brand" aria-label="Blob Record Studio">
+    <h1 class="brand" aria-label="BLOB Record Studio">
 <svg xmlns="http://www.w3.org/2000/svg" width="2800" height="900" viewBox="0 0 28 9" role="img" aria-labelledby="wordmark-title wordmark-description">
   <title id="wordmark-title">blob — pixel wordmark</title>
   <desc id="wordmark-description">The black lowercase blob pixel wordmark.</desc>
@@ -1053,11 +1054,10 @@ html>body{padding:0}</style>
   </g>
 </svg>
 <span class="brand-divider"></span><span>record studio</span></h1>
-    <div class="header-right"><span class="offline-badge">OFFLINE</span></div>
+    <div class="header-right"><span class="offline-badge" id="mode-badge">OFFLINE</span></div>
   </header>
   <div class="workspace">
     <aside class="settings-panel" aria-label="Record settings" tabindex="0">
-      <div class="field version-field"><span id="version-label">Starting version</span><div class="version-picker" id="version-picker"><button type="button" id="version-button" class="version-button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="version-label version-current"><span id="version-current">Classic black</span></button><ul id="version-list" class="version-list" role="listbox" aria-labelledby="version-label" hidden></ul><select id="version-select" hidden aria-hidden="true" tabindex="-1"><option value="classic">Classic black</option><option value="clear">Clear vinyl</option><option value="marble">Marble</option><option value="splatter">Splatter</option><option value="custom">Custom edits</option></select></div></div>
       <div class="mode-picker app-mode" role="group" aria-label="What to show"><button type="button" data-mode="cover" aria-pressed="false">Cover</button><button type="button" data-mode="record" aria-pressed="false">Record</button><button type="button" data-mode="both" aria-pressed="true">Cover + record</button></div>
       <section class="control-section layout-section" data-layout-controls aria-labelledby="scene-heading"><h2 id="scene-heading">Cover + record layout</h2>
         <div class="icon-choice three" role="group" aria-label="Scene">
@@ -1071,7 +1071,6 @@ html>body{padding:0}</style>
         <section class="control-section" aria-labelledby="art-heading"><h2 id="art-heading">Cover art</h2>
           <div class="art-row"><div id="art-thumb" class="art-thumb" role="img" aria-label="Front cover preview"><span>No front</span></div><div class="art-actions"><span class="sub-label">Front cover</span><button type="button" id="art-upload" class="button secondary">Upload front</button><button type="button" id="art-remove" class="button quiet" disabled>Remove</button></div></div>
           <div class="art-row label-row"><div id="back-thumb" class="art-thumb" role="img" aria-label="Back cover preview"><span>No back</span></div><div class="art-actions"><span class="sub-label">Back cover</span><button type="button" id="back-upload" class="button secondary">Upload back</button><button type="button" id="back-remove" class="button quiet" disabled>Remove</button></div></div>
-          <p class="control-note">Square images work best; others are cropped to fit. You can also drop an image on the preview.</p>
           <div class="field segment-field" data-show="closedView"><span>Show</span><div class="mode-picker three" role="group" aria-label="Side of the sleeve to show"><button type="button" data-choice="coverView" data-option="front" aria-pressed="true">Front</button><button type="button" data-choice="coverView" data-option="back" aria-pressed="false">Back</button><button type="button" data-choice="coverView" data-option="both" data-show="coverOnly" aria-pressed="false">Front + back</button></div></div>
           <div class="color-row"><label for="sleeve-color-btn">Sleeve color</label><div class="color-picker"><output data-color-value="sleeveColor"></output><button type="button" id="sleeve-color-btn" class="color-swatch-btn" data-color-for="sleeve-color" data-setting-key="sleeveColor" aria-label="Sleeve color"></button><input id="sleeve-color" type="color" value="#d8c4a4" data-setting="sleeveColor" class="color-input-hidden" tabindex="-1" aria-hidden="true"></div></div>
         </section>
@@ -1108,51 +1107,56 @@ html>body{padding:0}</style>
             <div class="label-cell" data-show="double"><button type="button" id="label-c-thumb" class="art-thumb round" aria-label="Upload the side C label"><span>C</span></button><span class="sub-label">Side C · record 2</span><button type="button" id="label-c-remove" class="button quiet" disabled>Remove</button></div>
             <div class="label-cell" data-show="double"><button type="button" id="label-d-thumb" class="art-thumb round" aria-label="Upload the side D label"><span>D</span></button><span class="sub-label">Side D · record 2</span><button type="button" id="label-d-remove" class="button quiet" disabled>Remove</button></div>
           </div>
-          <p class="control-note label-note" data-show="labelUpload">Click a circle to upload. An empty side reuses side A's label<span data-show="double"> (D reuses C)</span>.</p>
-          <p class="control-note label-note" data-show="labelArtNote">Side B uses the back cover when there is one.</p>
           <div class="color-row" data-show="labelColor"><label for="label-color-btn">Label color</label><div class="color-picker"><output data-color-value="labelColor"></output><button type="button" id="label-color-btn" class="color-swatch-btn" data-color-for="label-color" data-setting-key="labelColor" aria-label="Label color"></button><input id="label-color" type="color" value="#e8d9c5" data-setting="labelColor" class="color-input-hidden" tabindex="-1" aria-hidden="true"></div></div>
           <label class="slider-field first-slider"><span>Label size<output data-value="labelSize">34%</output></span><input type="range" min="24" max="40" value="34" data-setting="labelSize" aria-label="Label size"></label>
         </section>
       </div></details>
       <section class="control-section" aria-labelledby="backdrop-heading"><h2 id="backdrop-heading">Backdrop &amp; light</h2>
         <div class="mode-picker three" role="group" aria-label="Backdrop"><button type="button" data-choice="backdrop" data-option="none" aria-pressed="false">Plain</button><button type="button" data-choice="backdrop" data-option="studio" aria-pressed="true">Studio</button><button type="button" data-choice="backdrop" data-option="wall" aria-pressed="false">Wall + floor</button></div>
-        <p class="control-note backdrop-note" data-show="noBackground">Pick a background color above the preview, or add a background image, to see the backdrop.</p>
-        <div class="art-row label-row"><div id="bg-thumb" class="art-thumb wide" role="img" aria-label="Background image preview"><span>No image</span></div><div class="art-actions"><span class="sub-label">Background image</span><button type="button" id="bg-upload" class="button secondary">Upload image</button><button type="button" id="bg-remove" class="button quiet" disabled>Remove</button></div></div>
-        <label class="slider-field first-slider" data-show="bgImage"><span>Background blur<output data-value="bgBlur">30%</output></span><input type="range" min="0" max="100" value="30" data-setting="bgBlur" aria-label="Background blur"></label>
-        <label class="slider-field" data-show="bgImage"><span>Zoom<output data-value="bgZoom">100%</output></span><input type="range" min="100" max="300" value="100" data-setting="bgZoom" aria-label="Background zoom"></label>
-        <label class="slider-field" data-show="bgImage"><span>Horizontal<output data-value="bgX">0%</output></span><input type="range" min="-100" max="100" value="0" data-setting="bgX" aria-label="Background horizontal position"></label>
-        <label class="slider-field" data-show="bgImage"><span>Vertical<output data-value="bgY">0%</output></span><input type="range" min="-100" max="100" value="0" data-setting="bgY" aria-label="Background vertical position"></label>
-        <p class="control-note bg-note" data-show="bgImage">Tip: drag the preview to move the background.</p>
         <div class="field segment-field"><span>Light from</span><div class="mode-picker three" role="group" aria-label="Light direction"><button type="button" data-choice="light" data-option="left" aria-pressed="true">Left</button><button type="button" data-choice="light" data-option="top" aria-pressed="false">Top</button><button type="button" data-choice="light" data-option="right" aria-pressed="false">Right</button></div></div>
         <label class="slider-field first-slider"><span>Depth<output data-value="depth">50%</output></span><input type="range" min="0" max="100" value="50" data-setting="depth" aria-label="Backdrop depth"></label>
         <label class="slider-field"><span>Shadow<output data-value="shadow">60%</output></span><input type="range" min="0" max="100" value="60" data-setting="shadow" aria-label="Shadow"></label>
       </section>
-      <section class="control-section save-section" aria-labelledby="versions-heading"><h2 id="versions-heading">Keep a version</h2>
-        <label class="field">Version name<input id="version-name" type="text" value="My record" maxlength="64" autocomplete="off"></label>
-        <button id="save-version" class="button secondary full">Save as new version</button>
-      </section>
-      <div class="project-tools"><span>Back up your edits, artwork and saved versions.</span><div><button id="save-project" type="button" class="button secondary">Save project</button><button id="load-project" type="button" class="button secondary">Load project</button><input id="project-file" type="file" accept="application/json,.json" hidden></div></div>
       <input id="art-file" type="file" accept="image/*" hidden>
       <p id="notice" class="notice" role="status" aria-live="polite">Upload a cover to get started.</p>
     </aside>
     <section class="preview-panel" aria-label="Record preview and downloads" tabindex="0">
       <div class="preview-toolbar"><div class="history-actions"><button id="undo" class="button quiet" disabled aria-label="Undo last edit">Undo</button><button id="redo" class="button quiet" disabled aria-label="Redo last edit">Redo</button></div>
-        <div class="backdrops" role="group" aria-label="Preview background"><span class="background-label">Background color</span><button type="button" data-background="checker" class="swatch checker" aria-label="Transparent preview" aria-pressed="false"></button><button type="button" data-background="light" class="swatch light" aria-label="Light preview" aria-pressed="false"></button><button type="button" data-background="dark" class="swatch dark" aria-label="Dark preview" aria-pressed="false"></button><button type="button" data-background="custom" id="custom-bg-btn" class="swatch custom-bg" aria-label="Custom preview color" aria-pressed="true"></button><input id="custom-bg-color" type="color" value="#e6e2da" class="color-input-hidden" tabindex="-1" aria-hidden="true"></div>
+        <div class="backdrops" role="group" aria-label="Preview background"><span class="background-label">Background color</span><button type="button" data-background="checker" class="swatch checker" aria-label="Transparent preview" aria-pressed="false"></button><button type="button" data-background="light" class="swatch light" aria-label="Light preview" aria-pressed="false"></button><button type="button" data-background="dark" class="swatch dark" aria-label="Dark preview" aria-pressed="false"></button><button type="button" data-background="custom" id="custom-bg-btn" class="swatch custom-bg" aria-label="Custom preview color" aria-pressed="true"></button><input id="custom-bg-color" type="color" value="#e6e2da" class="color-input-hidden" tabindex="-1" aria-hidden="true"><span class="bg-image-group"><button type="button" id="bg-image-btn" class="swatch image-bg" aria-label="Background image" title="Background image from your computer"></button><button type="button" id="bg-image-menu-btn" class="bg-menu-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="bg-image-menu" title="Background image options" aria-label="Background image options"></button></span><div id="bg-image-menu" class="bg-menu" role="group" aria-label="Background image options" hidden><label class="slider-field"><span>Blur<output data-value="bgBlur">30%</output></span><input type="range" min="0" max="100" value="30" data-setting="bgBlur" aria-label="Background blur"></label><label class="slider-field"><span>Zoom<output data-value="bgZoom">100%</output></span><input type="range" min="100" max="300" value="100" data-setting="bgZoom" aria-label="Background zoom"></label><label class="slider-field"><span>Horizontal<output data-value="bgX">0%</output></span><input type="range" min="-100" max="100" value="0" data-setting="bgX" aria-label="Background horizontal position"></label><label class="slider-field"><span>Vertical<output data-value="bgY">0%</output></span><input type="range" min="-100" max="100" value="0" data-setting="bgY" aria-label="Background vertical position"></label><div class="button-row"><button type="button" id="bg-upload" class="button secondary">Choose image</button><button type="button" id="bg-remove" class="button secondary" disabled>Remove</button></div></div></div>
       </div>
       <div id="stage" role="region" class="logo-stage" aria-label="Live record preview"></div>
       <section class="download-panel" aria-label="Image downloads">
-        <div class="export-controls"><label class="field png-size">PNG size<select id="export-size" aria-label="PNG size"><option value="1024">1024 px</option><option value="2048">2048 px</option><option value="4096" selected>4096 px · HD</option></select></label><label class="export-bg" title="Includes the backdrop. Off gives a transparent image with shadows."><input id="export-bg" type="checkbox"> Include background</label><button id="download-png" class="button primary">Download PNG</button><button id="download-svg" class="button secondary">Download SVG</button><button type="button" id="add-bulk" class="button secondary">Add to Bulk</button><button type="button" id="download-bulk" class="button secondary" disabled>Download Bulk (0)</button></div>
+        <div class="export-controls"><label class="field png-size"><select id="export-size" aria-label="PNG size"><option value="1024">1024 px</option><option value="2048">2048 px</option><option value="4096" selected>4096 px · HD</option></select></label><button id="download-png" class="button primary">Download PNG</button><button id="download-svg" class="button secondary">Download SVG</button><button type="button" id="take-photo" class="button secondary">Take photo</button><button type="button" id="download-zip" class="button secondary" disabled>Download zip (0)</button></div>
+        <div class="photos" id="photos" hidden><button type="button" class="photos-head" id="photos-toggle" aria-expanded="true" aria-controls="photo-strip"><span>Photos <b id="photo-count">0</b></span></button><div class="photo-strip" id="photo-strip"></div></div>
+        <details class="file-menu" id="file-menu"><summary>Presets &amp; project</summary>
+        <div class="field version-field"><span id="version-label">Preset</span><div class="version-picker" id="version-picker"><button type="button" id="version-button" class="version-button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="version-label version-current"><span id="version-current">Classic black</span></button><ul id="version-list" class="version-list" role="listbox" aria-labelledby="version-label" hidden></ul><select id="version-select" hidden aria-hidden="true" tabindex="-1"><option value="custom">Custom edits</option><optgroup label="Built-in"><option value="classic">Classic black</option><option value="clear">Clear vinyl</option><option value="marble">Marble</option><option value="splatter">Splatter</option></optgroup></select></div></div>
+        <div class="file-tools">
+          <section class="file-group" aria-labelledby="presets-heading"><h2 id="presets-heading">Presets</h2>
+            <label class="field">Preset name<input id="version-name" type="text" value="My record" maxlength="64" autocomplete="off"></label>
+            <div class="button-row"><button type="button" id="save-version" class="button secondary" title="Keep the current settings as a new preset">Add preset</button><button type="button" id="save-preset" class="button secondary" title="Save the current settings as a preset file on this computer">Save preset</button></div>
+          </section>
+          <div class="file-group" role="group" aria-labelledby="projects-heading"><h2 id="projects-heading">Project</h2>
+            <label class="field">Project name<input id="project-name" type="text" value="My project" maxlength="64" autocomplete="off"></label>
+            <div class="button-row"><button id="save-project" type="button" class="button secondary">Save project</button><button id="load-project" type="button" class="button secondary">Load project</button><input id="project-file" type="file" accept="application/json,.json" hidden></div>
+          </div>
+        </div>
+        </details>
       </section>
     </section>
   </div>
+  <dialog class="app-dialog" id="zip-dialog" aria-labelledby="zip-title"><form method="dialog" id="zip-form">
+    <h3 id="zip-title">Download photos</h3>
+    <p id="zip-summary"></p>
+    <label class="field">Name<input id="zip-name" type="text" maxlength="64" autocomplete="off" spellcheck="false"></label>
+    <div class="dialog-actions"><button type="button" id="zip-cancel" class="button secondary">Cancel</button><button type="submit" class="button primary">Download zip</button></div>
+  </form></dialog>
   <div id="color-sheet" class="color-sheet" tabindex="-1" hidden role="dialog" aria-modal="false" aria-labelledby="color-sheet-title">
     <div class="color-sheet-bar"></div>
     <div class="color-sheet-head"><span id="color-sheet-title">Color</span><span class="color-sheet-actions"><button type="button" id="color-eyedropper" class="button quiet" hidden title="Pick a color from anywhere on screen">Pick from screen</button><button type="button" id="color-sheet-close" class="button quiet">Done</button></span></div>
     <div class="color-sv" id="color-sv"><div class="color-sv-thumb" id="color-sv-thumb"></div></div>
     <div class="color-hue" id="color-hue"><div class="color-hue-thumb" id="color-hue-thumb"></div></div>
     <div class="color-hex-row"><span class="color-hex-swatch" id="color-hex-swatch"></span><input id="color-hex-input" type="text" maxlength="7" aria-label="Hex color value" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
-    <p class="color-sheet-hint">Hover over the preview and click to pick a color from it.</p>
-  </div>
+      </div>
   <div id="pick-loupe" class="pick-loupe" hidden aria-hidden="true"><span id="pick-loupe-swatch"></span><output id="pick-loupe-value"></output></div>
 </main>
 <style>
@@ -1827,6 +1831,276 @@ textarea.form-control {
 body { font-size: 0.95em; }
 /* ── end tweak ── */
 </style>
+<style id="blob-studio-theme">
+/* ── BLOB Record Studio · Blob Studio theme (shared with BLOB Logo Studio) ──
+   Base: the Blob Studio launcher (paper, white panels, ink actions).
+   Added from the Blob Studio design system: BLOB Pixel / BLOB Grid type,
+   hard offset shadows, square pixel frames, a 90s title bar and menu bar,
+   DMG greens for what's active, signal lime for the one download action. */
+@font-face {font-family:"BLOB Pixel";src:url("data:font/ttf;base64,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AC8AMwAAETUzFSE1MxUFNTMVITUzFQU1MxUzNTMVBzUzFQc1MxUzNTMVBTUzFSE1MxUFNTMVITUzFWQBLGT+DGQBLGT+cGRkZMhkyGRkZP5wZAEsZP4MZAEsZAJYZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGQAAAoAAAAAAfQCvAADAAcACwAPABMAFwAbAB8AIwAnAAARNTMVITUzFQU1MxUhNTMVBTUzFTM1MxUHNTMVBzUzFQc1MxUHNTMVZAEsZP4MZAEsZP5wZGRkyGRkZGRkZGQCWGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkAAAHAAAAAAH0ArwAAwAHAAsADwATABcAGwAAETUhFQc1MxUHNTMVBzUzFQc1MxUHNTMVBzUhFQH0ZGTIZMhkyGTIZGQB9AJYZGRkZGRkZGRkZGRkZGRkZGRkZGQAAA0AAAAAAfQCvAADAAcACwAPABMAFwAbAB8AIwAnACsALwAzAAATNSEVBTUzFSE1MxUFNTMVMzUzFQU1MxUzNTMVMzUzFQU1MxUzNTMVBTUzFSE1MxUFNSEVZAEs/nBkASxk/gxkyMj+DGRkZGRk/gzIyGT+DGQBLGT+cAEsAlhkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZAAHAAAAAAEsArwAAwAHAAsADwATABcAGwAAEzUzFQc1MxUHNTMVBzUzFQc1MxUHNTMVBzUhFWRkyMhkZGRkZGRkZMgBLAJYZGRkZGRkZGRkZGRkZGRkZGRkZGQAAAgAAAAAAfQCvAADAAcACwAPABMAFwAbAB8AABM1IRUFNTMVITUzFQc1MxUHNTMVBzUzFQc1MxUHNSEVZAEs/nBkASxkZGTIZMhkyGTIAfQCWGRkZGRkZGRkZGRkZGRkZGRkZGRkZGQABwAAAAAB9AK8AAMABwALAA8AEwAXABsAABE1IRUVNTMVBzUzFQU1IRUVNTMVBzUzFQU1IRUBkGRkZP5wASxkZGT+DAGQAlhkZGRkZGRkZGRkZGRkZGRkZGRkZAAJAAAAAAH0ArwAAwAHAAsADwATABcAGwAfACMAAAE1MxUHNTMVBTUzFTM1MxUFNTMVMzUzFQU1IRUHNTMVBzUzFQEsZMjI/tRkZGT+cGTIZP5wAfTIZGRkAlhkZGRkZGRkZGRkZGRkZGRkZGRk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ZGRkZGRkZGRkZGRkZGRkZGRkZGRkAAAJAAAAZAH0ArwAAwAHAAsADwATABcAGwAfACMAABE1MxUzNTMVBTUzFTM1MxUHNTMVBzUzFQc1MxUzNTMVBzUzFcjIZP4MyGRkyGTIZMhkZMjIyAJYZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGQAAAkAAABkAfQCWAADAAcACwAPABMAFwAbAB8AIwAAETUzFTM1MxUzNTMVBTUhFQU1IRUFNSEVBTUzFTM1MxUzNTMVZGRkZGT+cAEs/nAB9P5wASz+cGRkZGRkAfRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkAAUAAADIASwCvAADAAcACwAPABMAABM1MxUHNTMVBzUzFRU1MxUVNTMVyGTIZMhkZGQCWGRkZGRkZGRkZGRkZGRkAAUAAADIASwCvAADAAcACwAPABMAABE1MxUVNTMVFTUzFQc1MxUHNTMVZGRkyGTIZAJYZGRkZGRkZGRkZGRkZGQAAAcAAAAAAMgCvAADAAcACwAPABMAFwAbAAARNTMVBzUzFQc1MxUHNTMVBzUzFQc1MxUHNTMVyMhkZGRkZGRkZGRkyAJYZGRkZGRkZGRkZGRkZGRkZGRkZGQAAAcAAAAAAMgCvAADAAcACwAPABMAFwAbAAARNTMVBzUzFQc1MxUHNTMVBzUzFQc1MxUHNTMVyGRkZGRkZGRkZGTIyAJYZGRkZGRkZGRkZGRkZGRkZGRkZGQAAAcAAAAAASwCvAADAAcACwAPABMAFwAbAAATNTMVBzUzFQc1MxUHNTMVFTUzFQc1MxUHNTMVZMjIZGRkyGRkZGRkyAJYZGRkZGRkZGRkZGRkZGRkZGRkZGQAAAcAAAAAASwCvAADAAcACwAPABMAFwAbAAARNTMVBzUzFQc1MxUVNTMVBzUzFQc1MxUHNTMVyGRkZGRkyGRkZMjIAlhkZGRkZGRkZGRkZGRkZGRkZGRkZAAHAAAAAABkArwAAwAHAAsADwATABcAGwAAETUzFQc1MxUHNTMVBzUzFQc1MxUHNTMVBzUzFWRkZGRkZGRkZGRkZGQCWGRkZGRkZGRkZGRkZGRkZGRkZGRkAAAHAAAAAAH0ArwAAwAHAAsADwATABcAGwAAETUzFQc1MxUVNTMVFTUzFRU1MxUVNTMVBzUzFWRkZGRkZGRkZAJYZGRkZGRkZGRkZGRkZGRkZGRkZGQAAAMAAAH0ASwCvAADAAcACwAAEzUzFQc1MxUzNTMVZGTIZGRkAlhkZGRkZGRkAAAEAAABLAH0AfQAAwAHAAsADwAAEzUzFTM1MxUFNTMVMzUzFWRkyGT+DGRkyAGQZGRkZGRkZGRkAAIAAAH0AMgCvAADAAcAABE1MxUVNTMVZGQCWGRkZGRkAAAJAAAAAAH0ArwAAwAHAAsADwATABcAGwAfACMAABM1MxUHNSEVBTUzFTM1MxUHNSEVBzUzFTM1MxUFNSEVBzUzFchkyAGQ/gxkZGTIASzIZGRk/gwBkMhkAlhkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGQAAAwAAAAAAfQCvAADAAcACwAPABMAFwAbAB8AIwAnACsALwAAEzUhFQU1MxUhNTMVBTUzFSE1MxUFNSEVBTUzFSE1MxUFNTMVITUzFQU1MxUhNTMVZAEs/nBkASxk/gxkASxk/gwB9P4MZAEsZP4MZAEsZP4MZAEsZAJYZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkAAAOAAAAAAK8A4QAAwAHAAsADwATABcAGwAfACMAJwArAC8AMwA3AAARNTMVBzUzFQc1MxUHNSEVMzUzFQU1MxUhNTMVBTUzFSE1MxUFNTMVITUzFQU1MxUhNTMVBTUhFWRkZGRkZAEsZMj9qMgBLMj9RGQB9GT9RMgBkGT9RMgBLGT9qAJYAyBkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGQABwAAAAAB9AK8AAMABwALAA8AEwAXABsAABM1IRUFNTMVBzUzFQc1MxUHNTMVBzUzFRU1IRVkAZD+DGRkZGRkZGRkZAGQAlhkZGRkZGRkZGRkZGRkZGRkZGRkZAAMAAAAAAH0ArwAAwAHAAsADwATABcAGwAfACMAJwArAC8AABE1IRUFNTMVITUzFQU1MxUhNTMVBTUzFSE1MxUFNTMVITUzFQU1MxUhNTMVBTUhFQGQ/nBkASxk/gxkASxk/gxkASxk/gxkASxk/gxkASxk/gwBkAJYZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkAAcAAAAAAfQCvAADAAcACwAPABMAFwAbAAARNSEVBTUzFQc1MxUHNSEVBTUzFQc1MxUHNSEVAfT+DGRkZGQBkP5wZGRkZAH0AlhkZGRkZGRkZGRkZGRkZGRkZGRkZAAHAAAAAAH0ArwAAwAHAAsADwATABcAGwAAETUhFQU1MxUHNTMVBzUhFQU1MxUHNTMVBzUzFQH0/gxkZGRkAZD+cGRkZGRkAlhkZGRkZGRkZGRkZGRkZGRkZGRkZAAACgAAAAAB9AK8AAMABwALAA8AEwAXABsAHwAjACcAABM1IRUFNTMVBzUzFQc1MxUzNSEVBTUzFSE1MxUFNTMVITUzFQU1IRVkAZD+DGRkZGRkZAEs/gxkASxk/gxkASxk/nABLAJYZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGQAAA0AAAAAAfQCvAADAAcACwAPABMAFwAbAB8AIwAnACsALwAzAAARNTMVITUzFQU1MxUhNTMVBTUzFSE1MxUFNSEVBTUzFSE1MxUFNTMVITUzFQU1MxUhNTMVZAEsZP4MZAEsZP4MZAEsZP4MAfT+DGQBLGT+DGQBLGT+DGQBLGQCWGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkAAcAAAAAASwCvAADAAcACwAPABMAFwAbAAARNSEVBzUzFQc1MxUHNTMVBzUzFQc1MxUHNSEVASzIZGRkZGRkZGRkyAEsAlhkZGRkZGRkZGRkZGRkZGRkZGRkZAAACQAAAAAB9AK8AAMABwALAA8AEwAXABsAHwAjAAATNSEVBzUzFQc1MxUHNTMVBTUzFTM1MxUFNTMVMzUzFQU1MxXIASzIZGRkZGT+cGTIZP5wZMhk/tTIAlhkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGQADQAAAAAB9AK8AAMABwALAA8AEwAXABsAHwAjACcAKwAvADMAABE1MxUhNTMVBTUzFTM1MxUFNTMVMzUzFQU1MxUHNTMVMzUzFQU1MxUzNTMVBTUzFSE1MxVkASxk/gxkyGT+cGRkZP7UyMhkZGT+1GTIZP5wZAEsZAJYZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGQACQAAAAAAyAOEAAMABwALAA8AEwAXABsAHwAjAAARNTMVBzUzFQc1MxUHNTMVBzUzFQc1MxUHNTMVBzUzFQc1MxVkZGRkZGRkZGRkZGRkZGRkyAMgZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGQAAA8AAAAAAfQCvAAD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NjgHdW5pMDA2OQd1bmkwMDZBB3VuaTAwNkIHdW5pMDA2RAd1bmkwMDZFB3VuaTAwNzAHdW5pMDA3MQd1bmkwMDcyB3VuaTAwNzMHdW5pMDA3NAd1bmkwMDc1B3VuaTAwNzYHdW5pMDA3Nwd1bmkwMDc4B3VuaTAwNzkHdW5pMDA3QQd1bmkwMDMwB3VuaTAwMzEHdW5pMDAzMgd1bmkwMDMzB3VuaTAwMzQHdW5pMDAzNQd1bmkwMDM2B3VuaTAwMzcHdW5pMDAzOAd1bmkwMDM5B3VuaTAwMkUHdW5pMDAyQwd1bmkwMDNBB3VuaTAwM0IHdW5pMDAyMQd1bmkwMDNGB3VuaTAwMkQHdW5pMDA1Rgd1bmkwMDJGB3VuaTAwMjgHdW5pMDAyOQd1bmkwMDJCB3VuaTAwM0QHdW5pMDAyNwd1bmkwMDIyB3VuaTAwMjMHdW5pMDAyNgd1bmkwMDQwB3VuaTAwMjUHdW5pMDAyQQd1bmkwMDNDB3VuaTAwM0UHdW5pMDA1Qgd1bmkwMDVEB3VuaTAwN0IHdW5pMDA3RAd1bmkwMDdDB3VuaTAwNUMHdW5pMDA1RQd1bmkwMDdFB3VuaTAwNjAHdW5pMDAyNAd1bmkwMDIwB3VuaTAwNDEHdW5pMDA0Mgd1bmkwMDQzB3VuaTAwNDQHdW5pMDA0NQd1bmkwMDQ2B3VuaTAwNDcHdW5pMDA0OAd1bmkwMDQ5B3VuaTAwNEEHdW5pMDA0Qgd1bmkwMDRDB3VuaTAwNEQHdW5pMDA0RQd1bmkwMDRGB3VuaTAwNTAHdW5pMDA1MQd1bmkwMDUyB3VuaTAwNTMHdW5pMDA1NAd1bmkwMDU1B3VuaTAwNTYHdW5pMDA1Nwd1bmkwMDU4B3VuaTAwNTkHdW5pMDA1QQAA") format("truetype");font-display:block;}
+@font-face {font-family:"BLOB Grid";src:url("data:font/ttf;base64,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ZGRkZAEsZGRkZGRkZGRkZGRkZAH0ZGRkZGQAAwAAAAACWAJYABUAHwApAAA9BDMVOwM1MxUVKwQdAjU7AxUrAgM1OwMVKwJkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkAfRkZAAABQAA/tQCWAJYAAMADQAXAB8AOwAAFTUzFQM9AzMdAxE1OwMVKwIDNTsCFSMjAzU7BB0HIz0CIzUzPQIrAmRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGTIZGQBLGRkZGRkZGRk/nBkZAEsZGQB9GRkZGRkZGRkZGRkZGRkZGQAAAIAAAAAAMgDhAAPABMAADE9BTMdBDMVIwM1MxVkZGRkZGRkZGRkZGRkZGRkZAMgZGQABgAAAAADhAJYAA8AEwAZACUAKwA3AAAxPQUzMxUjHQQTNTMVNTUzMxUjEz0EMx0EETUzMxUjEz0EMx0EZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkAZBkZGRkZP4MZGRkZGRkZGRkZAH0ZGT+DGRkZGRkZGRkZGQAAAQAAAAAAlgCWAAPABMAGQAlAAAxPQUzMxUjHQQTNTMVNTUzMxUjEz0EMx0EZGRkZGRkZGRkZGRkZGRkZGRkZGRkZAGQZGRkZGT+DGRkZGRkZGRkZGQAAgAA/tQCWAJYAB0ALwAAET0IOwQVKwMdAjMVIx0DEzUzMzUzPQIzHQMjFSMjZGRkZGRkZGRkZGRkZGRkZGRkZP7UZGRkZGRkZGRkZGRkZGRkZGRkASxkZGRkZGRkZGRkAAADAAD+1AJYAlgACQARAC8AAD0EMx0ENTsCFSMjAzU7BB0IIz0DIzUzPQIrAmRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZAH0ZGRkZGRkZGRkZGRkZGRkZGRkAAAEAAAAAAJYAlgADwATABkAHQAAMT0FMzMVIx0EEzUzFTU1MzMVIxc1MxVkZGRkZGRkZGRkZGRkZGRkZGRkZGRkAZBkZGRkZGRkZAAABQAAAAACWAJYAAsADwAXACMAKwAAMTU7BBUrAwM1MxUVNTsCFSMjJzU7BBUrAxM1MzMVFSM1ZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGTIZGRkZGQBkGRkZGRkyGRk/tRkZGRkAAADAAAAAAJYAlgACwATACMAAD0FMx0FNTsCFSMjNzUzPQMzHQUjNWRkZGRkZMhkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGQABQAAAAACWAJYAAcADQATABkAIQAAET0CMx0DNTUzHQI1MzMVIzc1NTMVFT0DMx0CZGRkZGRkZGQBLGRkZGRkZMhkZGRkZGRkZGRkZGTIZGRkZGRkAAAHAAAAAAOEAlgACwAPABMAGQAnACsANwAAPQUzHQU1MxU1NTMVFTUzMxUjNz0EMx0DMxUjFzUzFT0FMx0EZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZAAJAAAAAAJYAlgAAwAHAAsADwAXABsAHwAjACcAADE1MxUDNTMVETUzFQM1MxUVNTUzMxUVIxc1MxUDNTMVETUzFQM1MxVkZGRkZGRkZGRkZGRkZGRkZGQB9GRk/nBkZAEsZGTIZGRkZGRkZAEsZGT+cGRkAfRkZAAFAAD+1AJYAlgAAwAPABkAIQA1AAAVNTMVAz0EMx0EETU7AxUrAgM1OwIVIyM3NTM9AzMdByM9AmRkZGRkZGRkZGRkZGRkZGTIZGRkyGRkASxkZGRkZGRkZGRk/nBkZAEsZGRkZGRkZGRkZGRkZGRkZGRkZAAABAAAAAACWAJYAA8AHwAjACcAADE1MzUzFTsDFSsEAzU7BRUjFSM1KwITNTMVNTUzFWRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZAH0ZGRkZP7UZGRkZGQAAAIAAAAAAlgDhAAJAC0AAD0EMx0ENTsCNTM9AisDNTsDPQIzHQgrA2RkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGQAAwAAAAACWAOEABcAHwAjAAARNTM1NTMVFTMzFSMjHQQjPQQTNTsCFSMjFzUzFWRkZGRkZGRkZGRkZGTIZAH0ZGRkZGRkZGRkZGRkZGRkZAEsZGRkZGQAAAQAAAAAAlgDhAAVABkAHwArAAAxPQgzHQIzFSMdBBM1MxU1NTMzFSMTPQQzHQRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkAZBkZGRkZP4MZGRkZGRkZGRkZAAEAAD+1AGQA4QAAwAJABsAHwAAFTUzFRU1MzMVIzc9BzMdBwM1MxVkZGRkZGRkZMhkZGRkZGRkZGRkZGRkZGRkZGRkZGRkA+hkZAAABgAAAAACWAOEABUAGwAfACMAKQAtAAAxPQgzHQUzFSMVFRM1MzMVIxc1MxUnNTMVETU1MxUVAzUzFWRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkASxkZGRkZMhkZP5wZGRkZAH0ZGQAAAMAAAAAAfQDhAAXAB0AIQAAETUzPQIzHQIzMxUjIx0DIz0DEzUzMxUjNzUzFWRkZGRkZGRkZGRkZGQB9GRkZGRkZGRkZGRkZGRkZGT+DGRkZGRkAAQAAAAAAlgDhAAlACkALwAzAAAxPQYzFRU7AzU1Mx0GIz0DKwMdAxE1MxU1NTMzFSMXNTMVZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZAK8ZGRkZGRkZGQAAAUAAAAAAlgDhAApAC0AMQA3AD0AADE9CDsEFSsDHQI7AhUrAh0COwMVKwMBNTMVJzUzFRE1NTMVFQM1NTMVFWRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkASxkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGQBLGRkyGRk/nBkZGRkAfRkZGRkAAUAAAAAAlgDhAAPABkAIwAnACsAAD0HMx0HNTsDFSsCAzU7AxUrAgE1MxUDNTMVZGRkZGRkZGRkZGRkZGRkZAEsZGRkZGRkZGRkZGRkZGRkZGRkZGRkAyBkZP1EZGQCWGRkAAAEAAAAAAJYA4QAHwAjACcAMwAAMT0IOwMVKwIdBjsCFSsCJTUzFQM1MxURPQQzHQRkZGRkZGRkZGRkZGRkASxkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkAlhkZP4MZGRkZGRkZGRkZAAAAQAAAAACWAOEAC8AADE9CDsFFSsEHQI7AxUrAx0COwQVKwRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZAAAAQAAAAACWAOEACUAADE9CDsFFSsEHQI7AxUrAx0DZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZAAFAAAAAAJYA4QADwAXACEAMwA3AAA9BzMdBzU7AhUjIwM1OwMVKwITNTsCHQQjNSM1MzU1IxM1MxVkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGQDIGRk/nBkZGRkZGRkZGRkASxkZAABAAAAAAJYA4QALQAAMT0IMx0DOwM9AzMdCCM9AysDHQNkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGQAAAEAAAAAAZADhAAdAAAxNTM9BiM1OwMVIx0GMxUrAmRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkAAMAAAAAAlgDhAAFAA0AIwAAPQIzHQI1OwIVIyMTNTsCFSMdBiM9BmRkZGRkZGRkZGRkZGRkZGRkZGRkAyBkZGRkZGRkZGRkZGRkZGRkAAkAAAAAAlgDhAAVABkAHQAhACUAKQAtADEANQAAMT0IMx0DMxUjHQMTNTMVJzUzFRE1MxUDNTMVETUzFQM1MxURNTMVAzUzFWRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGQBLGRkyGRk/tRkZAGQZGT+DGRkAlhkZP1EZGQDIGRkAAEAAAAAAfQDhAAbAAAxPQgzHQc7AxUrA2RkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZAAFAAAAAAK8A4QAFQAZAB0AIQA3AAAxPQgzFTMVIx0GEzUzFRU1MxU1NTMVNTUzNTMdCCM9BmRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGQCWGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZAAABAAAAAACWAOEABUAGwAfADUAADE9CDMVMxUVIx0FEzU1Mx0CNTMVFTU1Mz0FMx0IIzVkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGQBkGRkZGRkZGTIZGRkZGRkZGRkZGRkZGRkZGRkAAMAAAAAAlgDhAAPACkAMwAAPQczHQc1OwI1Mz0FMx0GIxUrAgM1OwMVKwJkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZAMgZGQAAgAAAAACWAOEACMAKwAAMT0IOwQVKwMdAjsDFSsDHQMBPQIzHQJkZGRkZGRkZGRkZGRkZGRkZAGQZGRkZGRkZGRkZGRkZGRkZGRkZAH0ZGRkZGRkAAAGAAAAAAJYA4QADwAbACUAKQAtADsAAD0HMx0HNTMzNTMzFSMVIyMDNTsDFSsCETUzFRc1MxUnPQUzHQVkZGRkZGRkZGRkZGRkZGRkZMhkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZAMgZGT9qGRkyGRkyGRkZGRkZGRkZGRkZAAFAAAAAAJYA4QAJQApAC0AMQA5AAAxPQg7BBUrAx0COwMVIyMVIzUjHQM3NTMVFTUzFRU1MxUDPQIzHQJkZGRkZGRkZGRkZGRkZGRkZMhkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkyGRkZGRkZGRkAfRkZGRkZGQAAAUAAAAAAlgDhAALABMAHQApADEAADE1OwQVKwMDPQIzHQM1OwMVKwIDNTsEFSsDAT0CMx0CZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZAEsZGRkAfRkZGRkZGRkZGQBkGRk/URkZGRkZGQAAQAAAAACWAOEAB0AABE1OwUVIyMdByMjPQcjZGRkZGRkZGRkZGQDIGRkZGRkZGRkZGRkZGRkZGRkZAAAAgAAAAACWAOEABEALQAAPQgzHQg1OwI1Mz0GMx0HIxUrAmRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGQAAAUAAAAAAlgDhAALABEAGQAfACsAABE9BDMdBTU1Mx0CNTUzMxUVIzc1NTMVFT0FMx0EZGRkZGRkZGQBkGRkZGRkZGRkZGTIZGRkZMhkZGRkyGRkZGTIZGRkZGRkZGRkZAAABQAAAAACvAOEABUAGQAfACMAOQAAMT0IMx0GMxUjFTc1MxU9AjMdAjUzFRU1Mz0GMx0IIzVkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkyGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkAAkAAAAAAlgDhAAFAAsAEQAXAB0AIwApAC8ANQAAMTU1MxUVAzU1MxUVETU1MxUVAzU1Mx0CNTMzFSMXNTUzFRUDNTUzFRURNTUzFRUDNTUzFRVkZGRkZGRkZGRkZGRkZGRkZGRkZAK8ZGRkZP4MZGRkZAEsZGRkZGRkZMhkZGRkASxkZGRk/gxkZGRkArxkZGRkAAAFAAAAAAJYA4QABQALABkAHwAlAAARNTUzHQI1NTMVFRE9BDMzHQQjEzU1MxUVPQIzFRVkZGRkZGRkZAK8ZGRkZMhkZGRk/gxkZGRkZGRkZGRkAfRkZGRkyGRkZGQABgAAAAACWAOEABEAIQAlACkALQAxAAAxPQIzFRU7BBUrBAM1OwUVFSM1KwMRNTMVNTUzFTU1MxU1NTMVZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkAyBkZGRk/gxkZGRkZGRkZGRkZAAABQAAAAACWAOEABEAKwA1ADkAPQAAPQczHQMzFSMdAjU7AjUzPQUzHQYjFSsCAzU7AxUrAhE1MxU1NTMVZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkAyBkZP5wZGRkZGQAAQAAAAAB9AOEAB0AADE1MzM9BSM1MzUzHQczMxUrA2RkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkAAAHAAAAAAJYA4QADwATAB0AIQAlACkAMQAAMTUzNTMVOwMVKwQDNTMVNTU7AxUrAhE1MxU1NTMVNTUzFT0DMx0CZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZAK8ZGRkZGT9qGRkZGRkZGRkZGRkZGRkZAAABQAAAAACWAOEAAsAFwAhACkAMQAAMTU7BBUrAwM1OwQVKwMRNTsDFSsCAT0CMx0CAz0CMx0CZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGQBLGRkZGRkAyBkZP5wZGT+1GRkZGRkZAGQZGRkZGRkAAMAAAAAAlgDhAAhACUAKQAAETU1MxU7Aj0CIzUzNTMdBDMVIx0CIz0CKwI1NTMVNTUzFWRkZGRkZGRkZGRkZGRkZAEsZGRkZGRkZGRkZGRkZGRkZGRkZGTIZGRkZGQAAAQAAAAAAlgDhAADACEAKwAzAAA1NTMVAz0EOwUVKwQdAjsDFSsDETU7AxUrAiU9AjMdAmRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGQBLGRkZGQBLGRkZGRkZGRkZGT+cGRkZGRkZGRkZAAABAAAAAACWAOEABcAKQAzADcAAD0HMx0COwMVKwMdAzU7AjUzNTUzHQIjFSsCAzU7AxUrAgU1MxVkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZAEsZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZAMgZGRkZGQAAAQAAAAAAlgDhAARABsAHwAjAAARNTsFHQIjNTUrAxM9AzMdAxE1MxU1NTMVZGRkZGRkZGRkZGRkZGRkAyBkZGRkZGT84GRkZGRkZGRkAZBkZGRkZAAACAAAAAACWAOEAAcADwAfACcAMQA1ADkAPwAAPQMzHQIDPQIzHQIRNTsCNTM1MxUVIxUrAgM1OwIVIyMDNTsDFSsCEzUzFSc1MxU9AjMVFWRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkyGRkZGRkZGRkZGRkAZBkZGRkZGT+DGRkZGRkZAGQZGQBkGRk/gxkZMhkZGRkZGRkAAUAAAAAAlgDhAADAAsAFQAtADcAADU1MxUDPQIzHQIRNTsDFSsCAzU7AjUzNTUzHQYjPQIrAgM1OwMVKwJkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkAZBkZGRkZGT+DGRkAZBkZGRkZGRkZGRkZGRkZAGQZGQAAAEAAAAAAGQAZAADAAAxNTMVZGRkAAACAAAAAADIAMgAAwAHAAAxNTMVNTUzFWRkZGRkZGQAAAIAAADIAGQB9AADAAcAADU1MxUnNTMVZGRkyGRkyGRkAAADAAAAAADIAfQAAwAJAA0AADE1MxU9AjMVFQM1MxVkZGRkZGRkZGRkZAEsZGQAAgAAAAAAZAK8AAMADwAAMTUzFSc9BDMdBGRkZGRkyGRkZGRkZGRkZGQABQAAAAABkAK8AAcACwAPABMAGQAAETU7AhUjIxE1MxUnNTMVNTUzFT0CMxUVZGRkZGRkZGRkZAJYZGT9qGRkyGRkZGRkZGRkZGQAAAEAAAEsASwBkAAHAAARNTsCFSMjZGRkZGQBLGRkAAEAAAAAASwAZAAHAAAxNTsCFSMjZGRkZGRkZAAFAAAAAAH0ArwABQAJAA0AEQAXAAAxNTUzFRU1NTMVNTUzFTU1MxU9AjMVFWRkZGRkZGRkZMhkZGRkZGRkZGRkZGRkAAMAAAAAAMgCvAALAA8AEwAAPQUzHQU1MxUDNTMVZGRkZGRkZGRkZGRkZGRkZGRkAlhkZAADAAAAAADIArwAAwAHABMAADE1MxUDNTMVET0EMx0EZGRkZGRkAlhkZP4MZGRkZGRkZGRkZAABAAAAZAEsAlgADwAAETUzNTUzFRUzFSMVFSM1NWRkZGRkASxkZGRkZGRkZGRkAAACAAAAyAEsAfQABwAPAAA1NTsCFSMjJzU7AhUjI2RkZGRkZGRkZGRkyGRkyGRkAAABAAAB9ABkArwABQAAETU1MxUVZAH0ZGRkZAAAAgAAAfQBLAK8AAUACwAAETU1MxUVMzU1MxUVZGRkAfRkZGRkZGRkZAAAAgAAAGQB9AK8AB0AIwAANTUzNTUjNTM1MxUzNTMVMxUjFRUzFSMVIzUjFSM1NzM1NSMVZGRkZGRkZGRkZGRkZGRkZMhkZGRkZGRkZGRkZGRkZGRkZGRkZAAACwAAAAAB9AK8AAUACwARABUAGwAfACMAJwArAC8AMwAAPQIzFRUDNTUzFRURNTMzFSMDNTMVAzUzMxUjETUzFSc1MxURNTMVAzUzFRE1MxUnNTMVZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGQBLGRkZGT+cGRkASxkZAEsZGT+cGRkyGRk/tRkZAGQZGT+DGRkyGRkAAAFAAAAAAH0ArwACwAVAB0AKwAvAAA9BTMdBTU7AxUrAgM1OwIVIyMRPQIzMzUzHQMjIzUzNSNkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZAJYZGT+cGRkZGRkZGRkZGQABwAAAGQB9AK8AAMACwAPABcAGwAfACMAADU1MxUDNTUzMxUVIxU1MxUVNTUzMxUVIwM1MxU1NTMVNTUzFWRkZGRkZGRkZGRkZGTIZGQBLGRkZGTIZGTIZGRkZAEsZGRkZGRkZGQABQAAAGQB9AJYAAMAFwAbAB8AIwAANTUzFSc1MzUzNTMVMxUzFSMVIxUjNSM1JzUzFQE1MxUDNTMVZGRkZGRkZGRkZGRkZAEsZGRkZGRkyGRkZGRkZGRkZGTIZGT+cGRkAZBkZAAABQAAAMgBLAK8AAMABwALAA8AEwAAETUzFRU1MxUnNTMVETUzFQM1MxVkZGRkZGRkAZBkZGRkZMhkZP7UZGQBkGRkAAAFAAAAyAEsArwAAwAHAAsADwATAAA1NTMVAzUzFRE1MxUnNTMVFTUzFWRkZGRkZGTIZGQBkGRk/tRkZMhkZGRkZAABAAAAAADIArwAEwAAMT0GMzMVIx0EMxUjZGRkZGRkZGRkZGRkZGRkZGRkZAAAAQAAAAAAyAK8ABMAADE1Mz0EIzUzMx0GI2RkZGRkZGRkZGRkZGRkZGRkZGQAAAMAAAAAASwCvAADAA0AFwAAETUzFRE9AjMVFTMVIwM9AjMz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bmkwMDQ4B3VuaTAwNDkHdW5pMDA0QQd1bmkwMDRCB3VuaTAwNEMHdW5pMDA0RAd1bmkwMDRFB3VuaTAwNEYHdW5pMDA1MAd1bmkwMDUxB3VuaTAwNTIHdW5pMDA1Mwd1bmkwMDU0B3VuaTAwNTUHdW5pMDA1Ngd1bmkwMDU3B3VuaTAwNTgHdW5pMDA1OQd1bmkwMDVBB3VuaTAwMzAHdW5pMDAzMQd1bmkwMDMyB3VuaTAwMzMHdW5pMDAzNAd1bmkwMDM1B3VuaTAwMzYHdW5pMDAzNwd1bmkwMDM4B3VuaTAwMzkHdW5pMDAyRQd1bmkwMDJDB3VuaTAwM0EHdW5pMDAzQgd1bmkwMDIxB3VuaTAwM0YHdW5pMDAyRAd1bmkwMDVGB3VuaTAwMkYHdW5pMDAyOAd1bmkwMDI5B3VuaTAwMkIHdW5pMDAzRAd1bmkwMDI3B3VuaTAwMjIHdW5pMDAyMwd1bmkwMDI2B3VuaTAwNDAHdW5pMDAyNQd1bmkwMDJBB3VuaTAwM0MHdW5pMDAzRQd1bmkwMDVCB3VuaTAwNUQHdW5pMDA3Qgd1bmkwMDdEB3VuaTAwN0MHdW5pMDA1Qwd1bmkwMDVFB3VuaTAwN0UHdW5pMDA2MAd1bmkwMDI0B3VuaTAwMjAAAAABAAAACgAeACwAAURGTFQACAAEAAAAAP//AAEAAAABY2FsdAAIAAAAAQAAAAIABgAsAAYAAAABAAgAAQAsAAEACAABAAQAAAABAAMAAgADAAQAAQAAAAEAAQAAAAEACAABAAb//QABAAEABA==") format("truetype");font-display:block;}
+
+:root[data-visualize-standalone] {--background:#f6f6f1;}
+html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:radial-gradient(#dcded4 1px,transparent 1.2px);background-size:20px 20px;min-height:100vh;}
+
+#blob-app {
+  --paper:#f6f6f1;
+  --well:#eeefe8;
+  --signal:#b8ff1a;
+  --on-signal:#000000;
+  --dmg-light:#9bbc0f;
+  --dmg-mid:#8bac0f;
+  --dmg-dark:#306230;
+  --on-dmg:#ffffff;
+  --window-face:#c0c0c0;
+  --window-title:#4f4f4f;
+  --window-title-ink:#f7f7f7;
+  --bevel-light:#ffffff;
+  --bevel-dark:#444444;
+  --pixel-ink:#000000;
+  --splash:#ff5a36;
+  --shadow-ink:4px 4px 0 #000000;
+  --shadow-hard-sm:2px 2px 0 #000000;
+  --shadow-hard:4px 4px 0 rgba(0,0,0,.35);
+  --pixel-font:"BLOB Pixel","Press Start 2P",Consolas,monospace;
+  --grid-font:"BLOB Grid","BLOB Pixel",Consolas,monospace;
+  --pp:19.55px;
+}
+#blob-app .px-caps,
+#blob-app h2,
+#blob-app .control-menu > summary,
+#blob-app[data-mode="both"] .control-menu > summary,
+#blob-app .camera-menu > summary,
+#blob-app .button,
+#blob-app .button.quiet,
+#blob-app .view3d-bar .button.quiet,
+#blob-app .mode-picker button,
+#blob-app .camera-presets button,
+#blob-app .view-toggle,
+#blob-app .offline-badge,
+#blob-app .win-title,
+#blob-app .edition-chip,
+#blob-app .app-dialog h3,
+#blob-app .preset-group,
+#blob-app .version-group {font-family:var(--pixel-font);font-size:10px;line-height:1.2;letter-spacing:.1em;text-transform:uppercase;font-weight:400;-webkit-font-smoothing:none;font-smooth:never;}
+
+/* Header lockup */
+#blob-app .brand > span:not(.brand-divider):not(.edition-chip) {font-family:var(--grid-font);font-size:20px;line-height:1;letter-spacing:0;-webkit-font-smoothing:none;}
+#blob-app .brand-divider {width:2px;background:var(--pixel-ink);}
+#blob-app .edition-chip {display:inline-block;padding:5px 6px 4px;background:var(--signal);color:var(--on-signal);border:2px solid var(--pixel-ink);box-shadow:var(--shadow-hard-sm);}
+#blob-app .offline-badge {border:0;border-radius:0;padding:5px 7px 4px;background:var(--window-face);color:var(--pixel-ink);box-shadow:inset 2px 2px 0 var(--bevel-light),inset -2px -2px 0 var(--bevel-dark);}
+#blob-app .offline-badge.online {background:var(--dmg-dark);color:var(--on-dmg);box-shadow:inset 2px 2px 0 var(--dmg-light),inset -2px -2px 0 #0f2a0f;}
+#blob-app .view-toggle {height:30px;border:2px solid var(--pixel-ink);border-radius:0;background:var(--panel);color:var(--pixel-ink);box-shadow:var(--shadow-hard-sm);}
+#blob-app .view-toggle[aria-pressed="true"] {background:var(--dmg-dark);border-color:var(--pixel-ink);color:var(--on-dmg);}
+#blob-app .view-toggle:active {transform:translate(2px,2px);box-shadow:none;}
+
+/* Settings window */
+#blob-app .settings-panel {border:2px solid var(--pixel-ink);border-radius:0;box-shadow:var(--shadow-ink);padding:var(--pp);scrollbar-color:var(--dmg-mid) transparent;}
+#blob-app .win-title {position:sticky;top:0;z-index:4;display:flex;align-items:center;gap:8px;height:30px;margin:0 calc(-1 * var(--pp)) var(--pp);padding:0 8px 0 5px;background:var(--window-title);color:var(--window-title-ink);}
+#blob-app .win-title img {width:20px;height:20px;padding:1px;background:#ffffff;image-rendering:pixelated;box-shadow:inset 0 0 0 1px var(--pixel-ink);}
+#blob-app .win-title .win-led {margin-left:auto;width:8px;height:8px;background:var(--signal);box-shadow:0 0 0 2px var(--pixel-ink);}
+#blob-app h2 {display:flex;align-items:center;gap:8px;color:var(--pixel-ink);}
+#blob-app h2::before {content:"";flex:none;width:6px;height:6px;background:var(--dmg-mid);box-shadow:0 0 0 1px var(--pixel-ink);}
+#blob-app .control-section {border-top:2px dotted var(--control-border,#cfd1c7);}
+#blob-app[data-mode="both"] .control-menu,#blob-app .camera-menu,#blob-app .settings-panel .project-tools {border-top:2px dotted #cfd1c7;}
+#blob-app[data-mode="both"] .control-menu > summary,#blob-app .camera-menu > summary {color:var(--pixel-ink);}
+#blob-app[data-mode="both"] .control-menu > summary::after,#blob-app .camera-menu > summary::after {border-width:0 3px 3px 0;border-radius:0;}
+
+/* Segments and choices: DMG green marks what's active */
+#blob-app .mode-picker {border:2px solid var(--pixel-ink);border-radius:0;background:var(--well);padding:3px;}
+#blob-app .mode-picker button {border-radius:0;padding:8px 3px 7px;}
+#blob-app .mode-picker button:hover:not([aria-pressed="true"]) {background:#dfe6c8;}
+#blob-app .mode-picker button[aria-pressed="true"] {background:var(--dmg-dark);color:var(--on-dmg);box-shadow:inset 2px 2px 0 var(--dmg-mid);}
+#blob-app .icon-choice button,#blob-app .camera-presets button {border:2px solid var(--pixel-ink);border-radius:0;}
+#blob-app .icon-choice button:hover:not([aria-pressed="true"]),#blob-app .camera-presets button:hover:not([aria-pressed="true"]) {background:#eef3dc;}
+#blob-app .icon-choice button[aria-pressed="true"],#blob-app .camera-presets button[aria-pressed="true"] {--btn-bg:var(--dmg-dark);background:var(--dmg-dark);border-color:var(--pixel-ink);color:var(--on-dmg);}
+
+/* Fields */
+#blob-app select,#blob-app input[type="text"],#blob-app .preset-button,#blob-app .color-hex-row input,#blob-app .app-dialog input[type="password"] {border:2px solid var(--pixel-ink);border-radius:0;}
+#blob-app .color-swatch-btn,#blob-app .color-hex-swatch {border:2px solid var(--pixel-ink);border-radius:0;}
+#blob-app input[type="checkbox"] {accent-color:var(--dmg-dark);}
+#blob-app .preset-list,#blob-app .project-list {border:2px solid var(--pixel-ink);border-radius:0;box-shadow:var(--shadow-hard);}
+#blob-app .preset-list [role="option"] {border-radius:0;}
+#blob-app .preset-list [role="option"]:hover,#blob-app .preset-list [role="option"]:focus {background:#eef3dc;}
+
+/* Health-bar sliders */
+#blob-app input[type="range"] {-webkit-appearance:none;appearance:none;height:18px;background:transparent;--p:50%;}
+#blob-app input[type="range"]::-webkit-slider-runnable-track {height:10px;box-sizing:border-box;border:2px solid var(--pixel-ink);background:repeating-linear-gradient(90deg,transparent 0 5px,rgba(0,0,0,.22) 5px 6px) 0 0/var(--p) 100% no-repeat,linear-gradient(90deg,var(--dmg-light) 0 var(--p),var(--panel) var(--p));}
+#blob-app input[type="range"]::-webkit-slider-thumb {-webkit-appearance:none;appearance:none;width:10px;height:18px;margin-top:-6px;border:0;border-radius:0;background:var(--pixel-ink);box-shadow:inset 2px 2px 0 #4a4a4a;}
+#blob-app input[type="range"]::-moz-range-track {height:6px;border:2px solid var(--pixel-ink);background:var(--panel);}
+#blob-app input[type="range"]::-moz-range-progress {height:6px;border:2px solid var(--pixel-ink);background:var(--dmg-light);}
+#blob-app input[type="range"]::-moz-range-thumb {width:10px;height:18px;border:0;border-radius:0;background:var(--pixel-ink);}
+
+/* Buttons: pixel buttons, lime for the one download */
+#blob-app .button {border-radius:0;transition:background .12s;}
+#blob-app .button.primary {background:var(--signal);color:var(--on-signal);border:2px solid var(--pixel-ink);box-shadow:var(--shadow-hard-sm);}
+#blob-app .button.primary:hover {background:var(--dmg-light);}
+#blob-app .button.secondary {background:var(--panel);border:2px solid var(--pixel-ink);box-shadow:var(--shadow-hard-sm);}
+#blob-app .button.secondary:hover:not(:disabled) {background:#eef3dc;}
+#blob-app .button:is(.primary,.secondary):active:not(:disabled) {transform:translate(2px,2px);box-shadow:none;}
+#blob-app .button.quiet {border-radius:0;color:var(--pixel-ink);}
+#blob-app .button.quiet:hover:not(:disabled) {background:#dfe6c8;}
+#blob-app .text-button {border-bottom:2px solid var(--dmg-mid);}
+
+/* Preview window: menu bar + stage */
+#blob-app .preview-toolbar {padding:5px 8px;background:var(--window-face);border:2px solid var(--pixel-ink);border-bottom:0;box-shadow:inset 2px 2px 0 var(--bevel-light),4px 4px 0 var(--pixel-ink);margin-bottom:-13.6px;}
+#blob-app .background-label {color:var(--pixel-ink);font-family:var(--pixel-font);font-size:10px;letter-spacing:.1em;text-transform:uppercase;-webkit-font-smoothing:none;}
+#blob-app .swatch {border:2px solid var(--pixel-ink);border-radius:0;width:24px;height:24px;}
+#blob-app .swatch.custom-bg {border:2px solid transparent;box-shadow:0 0 0 1px var(--pixel-ink);}
+#blob-app .swatch[aria-pressed="true"] {outline:2px solid var(--dmg-dark);outline-offset:2px;}
+#blob-app .logo-stage {border:2px solid var(--pixel-ink);border-radius:0;box-shadow:var(--shadow-ink);}
+#blob-app .view3d-bar {border:0;border-radius:0;background:var(--window-face);color:var(--pixel-ink);box-shadow:inset 2px 2px 0 var(--bevel-light),inset -2px -2px 0 var(--bevel-dark);}
+#blob-app .download-panel {border:2px solid var(--pixel-ink);border-radius:0;background:var(--well);box-shadow:var(--shadow-ink);}
+#blob-app .photo-thumb {border:2px solid var(--pixel-ink);border-radius:0;}
+#blob-app .photo-frame {border-color:var(--splash);}
+
+/* Pop-ups keep the window look */
+#blob-app dialog.app-dialog {border:2px solid var(--pixel-ink);border-radius:0;box-shadow:var(--shadow-ink);padding-top:0;}
+#blob-app .app-dialog h3 {display:flex;align-items:center;height:30px;margin:0 -17px 14px;padding:0 10px;background:var(--window-title);color:var(--window-title-ink);}
+#blob-app .color-sheet {border:2px solid var(--pixel-ink);border-radius:0;box-shadow:var(--shadow-ink);}
+#blob-app .color-sheet.popover {border-radius:0;border:2px solid var(--pixel-ink);box-shadow:var(--shadow-ink);}
+#blob-app .color-sv,#blob-app .color-hue {border-radius:0;box-shadow:0 0 0 2px var(--pixel-ink);}
+#blob-app .color-sv-thumb,#blob-app .color-hue-thumb {border-radius:0;}
+#blob-app .pick-loupe {border:2px solid var(--pixel-ink);border-radius:0;box-shadow:var(--shadow-hard-sm);}
+#blob-app .pick-loupe span {border-radius:0;}
+#blob-app .notice {color:var(--dmg-dark);}
+#blob-app:has(#toggle-3d[aria-pressed="true"]) [data-2d-only] {display:none!important;}
+#blob-app #camera-note {display:none;}
+/* Presets + Project: file tools, set apart as small recessed trays */
+#blob-app .save-section,#blob-app .settings-panel .project-tools {position:relative;margin-top:23px;padding:40px 12px 12px;border:2px solid var(--pixel-ink);background:var(--well);box-shadow:inset 2px 2px 0 #d6d7d0;}
+#blob-app .save-section + .project-tools {margin-top:14px;}
+#blob-app .save-section > h2,#blob-app .project-tools > h2 {position:absolute;top:0;left:0;right:0;height:26px;margin:0;padding:0 10px;background:var(--window-face);color:var(--pixel-ink);box-shadow:inset 2px 2px 0 var(--bevel-light),inset 0 -2px 0 var(--pixel-ink);}
+#blob-app .save-section > h2::before,#blob-app .project-tools > h2::before {background:var(--signal);}
+#blob-app .save-section .field input,#blob-app .project-tools .field input {background:var(--panel);}
+#blob-app .project-tools .storage-row {margin-top:-4px;}
+#blob-app :is(.save-section,.project-tools) .button {min-width:0;padding-left:6px;padding-right:6px;letter-spacing:.04em;}
+#blob-app .save-section .button-row,#blob-app .project-tools > div:last-child {padding-right:2px;}
+#blob-app .camera-menu {border-bottom:2px dotted #cfd1c7;padding-bottom:17px;}
+#blob-app .save-section .storage-row {display:flex;gap:10px;margin:-4px 0 12px;font-size:10.45px;color:var(--quiet);}
+#blob-app .storage-row .text-button {white-space:nowrap;}
+#blob-app #notice.error {position:fixed;left:50%;top:auto;bottom:20px;width:auto;height:auto;margin:0;overflow:visible;clip:auto;white-space:normal;transform:translateX(-50%);z-index:80;max-width:min(520px,calc(100vw - 32px));padding:10px 14px;background:var(--panel);border:2px solid var(--pixel-ink);box-shadow:4px 4px 0 var(--danger,#a43c31);color:var(--danger,#a43c31);}
+#blob-app .storage-row.ready > span {color:var(--ink);font-weight:600;}
+@media(max-width:660px) {#blob-app .settings-panel {position:relative;z-index:1;}}
+#blob-app #storage-row,#blob-app #preset-storage-row {display:none!important;}
+#blob-app .swatch.checker {background-color:#ffffff;background-image:conic-gradient(#8f918a 25%,transparent 0 50%,#8f918a 0 75%,transparent 0);background-size:10px 10px;background-position:0 0;}
+/* Background image: layer behind the artwork, its swatch and options menu */
+#blob-app .logo-stage {isolation:isolate;}
+#blob-app .bg-image-layer {position:absolute;inset:0;z-index:-1;display:none;background:center/cover no-repeat;pointer-events:none;}
+#blob-app .logo-stage[data-bg-image="on"] .bg-image-layer {display:block;}
+#blob-app:has(.logo-stage[data-bg-image="on"]) .swatch[data-background][aria-pressed="true"] {outline:none;}
+#blob-app .backdrops {position:relative;}
+#blob-app .bg-image-group {display:inline-flex;align-items:stretch;}
+#blob-app .swatch.image-bg {background:#ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2 12l4-5 3 3.5 2-2.5 3 4z' fill='%23000'/%3E%3Crect x='10' y='3' width='3' height='3' fill='%23000'/%3E%3C/svg%3E") center/14px no-repeat;}
+#blob-app .swatch.image-bg.has-image {background-size:cover;background-position:center;}
+#blob-app .bg-menu-toggle {display:none;width:18px;height:24px;margin-left:4px;padding:0;border:2px solid var(--pixel-ink);border-radius:0;background:var(--panel);position:relative;color:var(--pixel-ink);}
+#blob-app .swatch.image-bg.has-art + .bg-menu-toggle {display:block;}
+#blob-app .swatch.image-bg.has-art {background-size:cover;background-position:center;}
+#blob-app .bg-menu-toggle::after {content:"";position:absolute;left:50%;top:50%;width:5px;height:5px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translate(-50%,-70%) rotate(45deg);}
+#blob-app .bg-menu-toggle[aria-expanded="true"]::after {transform:translate(-50%,-30%) rotate(-135deg);}
+#blob-app .bg-menu-toggle:hover {background:#eef3dc;}
+#blob-app .bg-menu {position:absolute;right:0;top:calc(100% + 10px);z-index:50;width:250px;padding:14px;background:var(--panel);border:2px solid var(--pixel-ink);box-shadow:var(--shadow-ink);}
+#blob-app .bg-menu .slider-field {margin:0 0 12px;}
+#blob-app .bg-menu .button-row {margin-top:4px;}
+#blob-app .bg-menu .button {min-width:0;padding-left:6px;padding-right:6px;}
+#blob-app .bg-menu-note {margin:10px 0 0;font-size:10.45px;color:var(--quiet);}
+#blob-app .preview-toolbar {position:relative;z-index:6;}
+#blob-app #take-photo {background:var(--dmg-dark);color:var(--on-dmg);}
+#blob-app #take-photo:hover:not(:disabled) {background:#3f7a3f;}
+#blob-app .photo-frame {display:none!important;}
+#blob-app #notice:not(.error) {position:fixed;top:0;left:0;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+
+@media(max-width:900px) {#blob-app {--pp:15.3px;}}
+@media(max-width:660px) {
+  #blob-app .preview-toolbar {margin-bottom:12px;border-bottom:2px solid var(--pixel-ink);}
+  #blob-app .brand > span:not(.brand-divider):not(.edition-chip) {font-size:14px;}
+  #blob-app .brand {gap:8px;}
+  #blob-app .brand-divider {height:18px;}
+  #blob-app .edition-chip {padding:3px 4px 2px;box-shadow:1px 1px 0 var(--pixel-ink);}
+}
+@media(prefers-reduced-motion:reduce) {#blob-app .button:active,#blob-app .view-toggle:active {transform:none;}}
+/* Shared editor parts the Record Studio base didn't have */
+#blob-app .offline-badge.online {border-color:transparent;}
+#blob-app .button-row {display:flex;gap:8px;margin-top:11px;}
+#blob-app .button-row .button {flex:1;margin-top:0!important;}
+#blob-app .project-tools .field {width:100%;color:var(--ink);}
+#blob-app .text-button {border:0;border-bottom:2px solid var(--dmg-mid);padding:3px 0;background:none;font-size:11px;}
+#blob-app .photos {margin-top:14px;}
+#blob-app .photos-head {display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12px;color:#606457;margin-bottom:8px;}
+#blob-app .photos-head span:last-child {font-size:11px;color:#8a8d80;}
+#blob-app .photo-strip {display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;}
+#blob-app .photo-thumb {position:relative;flex:none;height:58px;min-width:40px;overflow:hidden;background-color:#f8f8f5;background-image:conic-gradient(#eeefe9 25%,transparent 0 50%,#eeefe9 0 75%,transparent 0);background-size:12px 12px;}
+#blob-app .photo-thumb img {display:block;height:100%;width:auto;max-width:150px;object-fit:contain;}
+#blob-app .photo-thumb button {position:absolute;top:3px;right:3px;width:20px;height:20px;border:0;border-radius:0;background:var(--pixel-ink);color:#fff;font-size:13px;line-height:20px;padding:0;opacity:0;transition:opacity .12s;}
+#blob-app .photo-thumb:hover button,#blob-app .photo-thumb button:focus-visible {opacity:1;}
+@media(hover:none) {#blob-app .photo-thumb button {opacity:1;}}
+#blob-app dialog.app-dialog {padding:20px;width:min(390px,calc(100vw - 32px));color:var(--ink);background:#fff;font:14px/1.45 "Segoe UI",Arial,sans-serif;}
+#blob-app dialog.app-dialog::backdrop {background:rgba(30,30,28,.35);}
+#blob-app .app-dialog p {font-size:12px;color:var(--quiet);margin:0 0 14px;}
+#blob-app .app-dialog .field {margin-bottom:12px;}
+#blob-app .dialog-actions {display:flex;justify-content:flex-end;gap:8px;margin-top:16px;flex-wrap:wrap;}
+/* Record Studio parts in the pixel style */
+#blob-app .version-button {border:2px solid var(--pixel-ink);border-radius:0;}
+#blob-app .version-list {border:2px solid var(--pixel-ink);border-radius:0;box-shadow:var(--shadow-hard);}
+#blob-app .version-list [role="option"] {border-radius:0;}
+#blob-app .version-list [role="option"]:hover,#blob-app .version-list [role="option"]:focus {background:#eef3dc;}
+#blob-app .version-group {color:var(--pixel-ink);border-top:2px dotted #cfd1c7;}
+#blob-app .version-delete {border-radius:0;}
+#blob-app .art-thumb {border:2px dashed var(--pixel-ink);border-radius:0;background-color:var(--well);}
+#blob-app .art-thumb.round {border-radius:50%;}
+#blob-app .art-thumb.has-art {border-style:solid;border-color:var(--pixel-ink);}
+#blob-app .label-cell .art-thumb:hover {border-color:var(--dmg-dark);background-color:#eef3dc;}
+#blob-app .logo-stage.dropping {outline:2px dashed var(--dmg-dark);}
+#blob-app .export-controls > .png-size {margin-right:auto;}
+/* Presets + Project live in the download footer, under the export row */
+#blob-app .download-panel {container-type:inline-size;}
+/* Export row: size + four buttons on one line, no label above */
+#blob-app .export-controls {display:flex;flex-wrap:nowrap;align-items:stretch;gap:8px;margin:0;}
+#blob-app .export-controls > .png-size {flex:0 0 150px;width:auto;margin:0;}
+#blob-app .export-controls > .png-size select {height:100%;min-height:39px;}
+#blob-app .export-controls > .button {flex:1 1 0;min-width:0;margin:0;padding-left:8px;padding-right:8px;overflow:hidden;text-overflow:ellipsis;}
+@container (max-width:640px) {
+  #blob-app .export-controls {flex-wrap:wrap;}
+  #blob-app .export-controls > .png-size {flex:1 1 100%;}
+  #blob-app .export-controls > .button {flex:1 1 calc(50% - 4px);}
+}
+/* Photos: the head row shows or hides the strip */
+#blob-app .photos {margin-top:12px;}
+#blob-app button.photos-head {width:100%;padding:2px 0;border:0;background:none;text-align:left;cursor:pointer;font:inherit;font-size:11.4px;color:#606457;}
+#blob-app button.photos-head > span:first-child {display:flex;align-items:center;gap:6px;}
+#blob-app button.photos-head > span:first-child::before {content:"";width:6px;height:6px;border:solid currentColor;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px);}
+#blob-app button.photos-head[aria-expanded="false"] > span:first-child::before {transform:rotate(-45deg);}
+#blob-app button.photos-head[aria-expanded="false"] {margin-bottom:0;}
+#blob-app .photo-strip[hidden] {display:none;}
+#blob-app button.photos-head:hover {color:var(--pixel-ink);}
+#blob-app button.photos-head:focus-visible {outline:2px solid var(--dmg-dark);outline-offset:2px;}
+/* Presets & project: a collapsible menu under the export row */
+#blob-app .file-menu {margin-top:14px;padding-top:12px;border-top:2px dotted #cfd1c7;}
+#blob-app .file-menu > summary {list-style:none;display:flex;align-items:center;gap:8px;min-height:24px;cursor:pointer;user-select:none;color:var(--pixel-ink);font-family:var(--pixel-font);font-size:10px;line-height:1.2;letter-spacing:.1em;text-transform:uppercase;-webkit-font-smoothing:none;}
+#blob-app .file-menu > summary::-webkit-details-marker {display:none;}
+#blob-app .file-menu > summary::before {content:"";flex:none;width:6px;height:6px;background:var(--dmg-mid);box-shadow:0 0 0 1px var(--pixel-ink);}
+#blob-app .file-menu > summary::after {content:"";margin-left:auto;margin-right:4px;width:7px;height:7px;border:solid currentColor;border-width:0 3px 3px 0;transform:translateY(-2px) rotate(45deg);}
+#blob-app .file-menu[open] > summary::after {transform:translateY(2px) rotate(-135deg);}
+#blob-app .file-menu > summary:hover {color:var(--dmg-dark);}
+#blob-app .file-menu > summary:focus-visible {outline:2px solid var(--dmg-dark);outline-offset:3px;}
+#blob-app .file-menu .version-field {margin:12px 0 0;}
+#blob-app .file-menu .version-list {top:auto;bottom:calc(100% + 4px);}
+#blob-app .file-tools {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:16px;margin-top:12px;}
+#blob-app .file-group {display:flex;align-items:end;gap:9px;min-width:0;margin:0;padding:0;border:0;}
+#blob-app .file-group + .file-group {padding-left:16px;border-left:2px dotted #cfd1c7;}
+#blob-app .file-group > h2 {position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+#blob-app .file-group .field {flex:1;}
+#blob-app .file-group .field input {background:var(--panel);}
+#blob-app .file-group .button-row {flex:none;margin-top:0;}
+#blob-app .file-group .button {min-width:0;padding-left:10px;padding-right:10px;}
+@container (max-width:720px) {
+  #blob-app .file-tools {grid-template-columns:minmax(0,1fr);row-gap:12px;}
+  #blob-app .file-group + .file-group {padding:12px 0 0;border-left:0;border-top:2px dotted #cfd1c7;}
+}
+@container (max-width:420px) {
+  #blob-app .file-group {flex-wrap:wrap;}
+  #blob-app .file-group .field,#blob-app .file-group .button-row {flex:1 1 100%;}
+}
+</style>
 <script>
 (() => {
   'use strict';
@@ -1845,10 +2119,10 @@ body { font-size: 0.95em; }
   const artKeys=['artId','backArtId','insideArtId','bgArtId','labelAId','labelBId','labelCId','labelDId'];
   const legacyArtKeys={labelAId:'labelArtId',labelCId:'label2ArtId'};
   const resetValues={position:50,clarity:70,grooves:70,sheen:60,labelSize:34,sleeveGloss:35,texture:20,wear:0,depth:50,shadow:60,bgBlur:30,bgZoom:100,bgX:0,bgY:0};
-  let state={...defaults}, committed={...defaults}, undoStack=[], redoStack=[], savedVersions=[], bulkImages=[], saveTimer=null;
+  let state={...defaults}, committed={...defaults}, undoStack=[], redoStack=[], savedVersions=[], photos=[], legacyBulk=[], saveTimer=null;
   // Uploaded images live outside the settings so undo and versions only carry a short id.
   let images={};
-  let preferences={background:'custom',customBackground:'#e6e2da',size:4096,name:'My record',selected:'classic',includeBackground:true};
+  let preferences={background:'custom',customBackground:'#e6e2da',size:4096,name:'My record',project:'My project',selected:'classic',includeBackground:true};
   let storageOK=true;
   const inputList=[...root.querySelectorAll('[data-setting]')];
   const img=(id,x,y,w,h=w)=>'<image id="'+id+'" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" preserveAspectRatio="xMidYMid slice"/>';
@@ -1878,10 +2152,10 @@ body { font-size: 0.95em; }
   }
   function notice(text,error=false){$('notice').textContent=text;$('notice').classList.toggle('error',error);}
   function usedImages(){const ids=new Set([state,...savedVersions.map(v=>v.settings)].flatMap(s=>artKeys.map(k=>s[k])).filter(id=>id&&images[id]));return Object.fromEntries([...ids].map(id=>[id,images[id]]));}
-  function project(){return {app:APP,version:2,settings:{...state},preferences:{...preferences},versions:savedVersions.map(v=>({...v,settings:{...v.settings}})),images:usedImages(),bulk:bulkImages.map(b=>({...b}))};}
+  function project(){return {app:APP,version:2,settings:{...state},preferences:{...preferences},versions:savedVersions.map(v=>({...v,settings:{...v.settings}})),images:usedImages()};}
   function persist(){
     clearTimeout(saveTimer);
-    try{localStorage.setItem(STORE,JSON.stringify(project()));storageOK=true;}
+    try{localStorage.setItem(STORE,JSON.stringify({...project(),...(legacyBulk.length?{bulk:legacyBulk}:{})}));storageOK=true;}
     catch(e){
       // Usually the artwork is too big for browser storage: keep at least the settings.
       storageOK=false;
@@ -1890,8 +2164,8 @@ body { font-size: 0.95em; }
   }
   function rememberSoon(){clearTimeout(saveTimer);saveTimer=setTimeout(persist,180);}
   function rebuildVersionMenu(){
-    $('version-select').querySelectorAll('optgroup').forEach(el=>el.remove());
-    if(savedVersions.length){const group=document.createElement('optgroup');group.label='Your saved versions';for(const version of savedVersions){const option=document.createElement('option');option.value='saved:'+version.id;option.textContent=version.name;group.appendChild(option);}$('version-select').appendChild(group);}
+    $('version-select').querySelectorAll('optgroup[data-saved]').forEach(el=>el.remove());
+    if(savedVersions.length){const group=document.createElement('optgroup');group.dataset.saved='';group.label='Your presets';for(const version of savedVersions){const option=document.createElement('option');option.value='saved:'+version.id;option.textContent=version.name;group.appendChild(option);}$('version-select').appendChild(group);}
     const exists=[...$('version-select').options].some(o=>o.value===preferences.selected);
     if(!exists)preferences.selected='custom';
     $('version-select').value=preferences.selected;
@@ -2214,7 +2488,7 @@ body { font-size: 0.95em; }
     return '<defs>'+defs+'</defs>'+body;
   }
   function fmt(key){const v=state[key];return key==='position'&&state.scene==='flat'?Math.round((v-50)/50*25)+'°':v+'%';}
-  const slots={artId:{thumb:'art-thumb',upload:'art-upload',remove:'art-remove',words:['Upload front','Replace front']},backArtId:{thumb:'back-thumb',upload:'back-upload',remove:'back-remove',words:['Upload back','Replace back']},insideArtId:{thumb:'inside-thumb',upload:'inside-upload',remove:'inside-remove',words:['Upload inside','Replace inside']},bgArtId:{thumb:'bg-thumb',upload:'bg-upload',remove:'bg-remove',words:['Upload image','Replace image']},...Object.fromEntries('ABCD'.split('').map(l=>['label'+l+'Id',{thumb:'label-'+l.toLowerCase()+'-thumb',upload:'label-'+l.toLowerCase()+'-thumb',remove:'label-'+l.toLowerCase()+'-remove'}]))};
+  const slots={artId:{thumb:'art-thumb',upload:'art-upload',remove:'art-remove',words:['Upload front','Replace front']},backArtId:{thumb:'back-thumb',upload:'back-upload',remove:'back-remove',words:['Upload back','Replace back']},insideArtId:{thumb:'inside-thumb',upload:'inside-upload',remove:'inside-remove',words:['Upload inside','Replace inside']},bgArtId:{thumb:'bg-image-btn',upload:'bg-upload',remove:'bg-remove',words:['Choose image','Change image']},...Object.fromEntries('ABCD'.split('').map(l=>['label'+l+'Id',{thumb:'label-'+l.toLowerCase()+'-thumb',upload:'label-'+l.toLowerCase()+'-thumb',remove:'label-'+l.toLowerCase()+'-remove'}]))};
   const shownThumb={};
   let exportBox=[0,0,S,S];
   let pickDirty=true;
@@ -2266,7 +2540,6 @@ body { font-size: 0.95em; }
     $('custom-bg-color').value=preferences.customBackground;
     root.querySelectorAll('[data-background]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.background===preferences.background)));
     $('export-size').value=preferences.size;
-    $('export-bg').checked=preferences.includeBackground;
     $('version-select').value=preferences.selected;
     updateVersionButton();
   }
@@ -2542,6 +2815,14 @@ body { font-size: 0.95em; }
     $(slot.upload).addEventListener('click',()=>{uploadKey=key;$('art-file').click();});
     $(slot.remove).addEventListener('click',()=>{preferences.selected='custom';changeTo({...state,[key]:null});notice('Artwork removed. Undo brings it back.');});
   }
+  // Background image: the toolbar swatch picks an image; the arrow next to it opens its options.
+  const bgMenu=$('bg-image-menu'),bgToggle=$('bg-image-menu-btn');
+  const openBgMenu=open=>{bgMenu.hidden=!open;bgToggle.setAttribute('aria-expanded',String(open));};
+  $('bg-image-btn').addEventListener('click',()=>{if(!state.bgArtId){uploadKey='bgArtId';$('art-file').click();}else openBgMenu(bgMenu.hidden);});
+  bgToggle.addEventListener('click',e=>{e.stopPropagation();openBgMenu(bgMenu.hidden);});
+  $('bg-remove').addEventListener('click',()=>openBgMenu(false));
+  document.addEventListener('pointerdown',e=>{if(!bgMenu.hidden&&!bgMenu.contains(e.target)&&!bgToggle.contains(e.target)&&e.target.id!=='bg-image-btn')openBgMenu(false);});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!bgMenu.hidden){openBgMenu(false);bgToggle.focus();}});
   $('art-file').addEventListener('change',async()=>{await useArtFile($('art-file').files[0],uploadKey);$('art-file').value='';});
   const dropTargets=[[$('stage'),()=>state.mode==='record'?'label'+sideLetter(state,0)+'Id':state.cover==='gatefold'&&state.gateOpen==='open'?'insideArtId':state.coverView==='back'?'backArtId':'artId'],...Object.entries(slots).map(([key,slot])=>[$(slot.thumb),()=>key])];
   for(const [el,target] of dropTargets){
@@ -2554,7 +2835,7 @@ body { font-size: 0.95em; }
     if(key==='custom')return;
     const saved=savedVersions.find(v=>'saved:'+v.id===key);
     if(saved){preferences.name=saved.name;$('version-name').value=saved.name;changeTo(saved.settings);}else changeTo({...state,...looks[key]});
-    notice('Version loaded.');
+    notice('Preset loaded.');
   });
   $('undo').addEventListener('click',()=>{if(!undoStack.length)return;redoStack.push({...state});state=undoStack.pop();committed={...state};preferences.selected='custom';paint();persist();notice('Previous edit restored.');});
   $('redo').addEventListener('click',()=>{if(!redoStack.length)return;undoStack.push({...state});state=redoStack.pop();committed={...state};preferences.selected='custom';paint();persist();notice('Edit restored.');});
@@ -2564,7 +2845,6 @@ body { font-size: 0.95em; }
   $('custom-bg-color').addEventListener('input',()=>{preferences.customBackground=$('custom-bg-color').value.toLowerCase();preferences.background='custom';paint();rememberSoon();});
   $('custom-bg-color').addEventListener('change',persist);
   $('export-size').addEventListener('change',()=>{preferences.size=Number($('export-size').value);paint();persist();});
-  $('export-bg').addEventListener('change',()=>{preferences.includeBackground=$('export-bg').checked;persist();notice(preferences.includeBackground?(previewBackground()?'Downloads include the backdrop.':'Pick a light, dark or custom preview background to include it.'):'Downloads have a transparent background with shadows.');});
   $('version-name').addEventListener('input',()=>{preferences.name=$('version-name').value.slice(0,64);rememberSoon();});
   $('version-name').addEventListener('change',persist);
   // Custom "Starting version" dropdown: mirrors the hidden <select> and adds a bin to saved versions.
@@ -2637,31 +2917,67 @@ body { font-size: 0.95em; }
   });
   document.addEventListener('pointerdown',event=>{if(!event.target.closest('#version-picker'))closeVersionList(false);});
   $('save-version').addEventListener('click',()=>{
-    const name=$('version-name').value.trim();if(!name){notice('Give your version a name first.',true);$('version-name').focus();return;}
+    const name=$('version-name').value.trim();if(!name){notice('Give your preset a name first.',true);$('version-name').focus();return;}
     let unique=name;let number=2;while(savedVersions.some(v=>v.name===unique))unique=name+' ('+(number++)+')';
     const version={id:Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7),name:unique,settings:{...state}};
-    savedVersions.push(version);preferences.selected='saved:'+version.id;preferences.name=unique;$('version-name').value=unique;rebuildVersionMenu();persist();notice(storageOK?'“'+unique+'” saved. Find it under Starting version.':'Version kept for this visit. Use Save project for a backup.',!storageOK);
+    savedVersions.push(version);preferences.selected='saved:'+version.id;preferences.name=unique;$('version-name').value=unique;rebuildVersionMenu();persist();notice(storageOK?'Preset “'+unique+'” added. Find it under Preset.':'Preset kept for this visit. Use Save project for a backup.',!storageOK);
+  });
+  function newId(){return Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);}
+  // A name that is safe as a file name everywhere (Windows included); spaces are kept.
+  const safeName=(text,fallback)=>String(text).replace(/[<>:"/\\|?*\u0000-\u001f]+/g,'-').replace(/\s+/g,' ').replace(/^[\s.-]+|[\s.-]+$/g,'').slice(0,64)||fallback;
+  // Files are saved where the person chooses (a save dialog), or downloaded where the browser can't ask.
+  const FILE_TYPES=[{description:'Blob Record Studio file',accept:{'application/json':['.json']}}];
+  async function saveFile(data,suggestedName){
+    const blob=new Blob([JSON.stringify(data,null,2)+'\n'],{type:'application/json'});
+    if(typeof window.showSaveFilePicker==='function'){
+      const started=performance.now();
+      try{
+        const handle=await window.showSaveFilePicker({id:'blob-record-files',suggestedName,types:FILE_TYPES});
+        const writable=await handle.createWritable();await writable.write(blob);await writable.close();
+        return handle.name;
+      }catch(e){if(e.name==='AbortError'&&performance.now()-started>350)return null;/* no dialog here: download instead */}
+    }
+    download(blob,suggestedName);return suggestedName;
+  }
+  function imagesOf(settings){return Object.fromEntries(artKeys.map(k=>settings[k]).filter(id=>id&&images[id]).map(id=>[id,images[id]]));}
+  $('save-preset').addEventListener('click',async()=>{
+    const name=$('version-name').value.trim()||'My record';commit();
+    const preset={id:newId(),name,settings:{...state}};
+    const saved=await saveFile({app:APP,kind:'preset',version:1,preset,images:imagesOf(state)},safeName(name,'preset')+'.json');
+    notice(saved?'Preset \u201c'+name+'\u201d saved as '+saved+'.':'Preset not saved.');
   });
   function filename(){return (preferences.name.trim().replace(/[^a-z0-9_-]+/gi,'-').replace(/^-+|-+$/g,'').slice(0,64)||'blob-record').toLowerCase()+{cover:'-cover',record:'-record',both:''}[state.mode];}
   function download(blob,name){
     const url=URL.createObjectURL(blob);const anchor=document.createElement('a');anchor.href=url;anchor.download=name;document.body.appendChild(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
   }
-  async function svgExport(){
+  // Downloads carry the backdrop whenever the preview shows one (a background colour or image);
+  // with the transparent preview they are transparent, shadows included.
+  const includeBackdrop=()=>!!(previewBackground()||images[state.bgArtId]);
+  async function svgExport(box=exportBox){
     await finishDiscs();
     const copy=svg.cloneNode(true);
-    copy.setAttribute('xmlns',NS);copy.setAttribute('viewBox',exportBox.map(round).join(' '));copy.setAttribute('width',round(exportBox[2]));copy.setAttribute('height',round(exportBox[3]));
+    copy.setAttribute('xmlns',NS);copy.setAttribute('viewBox',box.map(round).join(' '));copy.setAttribute('width',round(box[2]));copy.setAttribute('height',round(box[3]));
     copy.removeAttribute('style');copy.querySelector('title').textContent=preferences.name.trim()||'Vinyl record';
     const record=(state.discs==='double'?'double ':'')+{solid:'solid',translucent:'clear',marble:'marble',splatter:'splatter'}[state.finish]+' vinyl record',sleeve=(state.cover==='gatefold'?'gatefold':'standard')+' sleeve';
     copy.querySelector('desc').textContent={cover:'A '+sleeve,record:'A '+record,both:'A '+record+' with a '+sleeve}[state.mode]+'. Exported from Blob Record Studio.';
     for(const [key,id] of [['artId','cover-art'],['backArtId','back-art'],['insideArtId','inside-art'],['bgArtId','bg-art']])if(!images[state[key]])copy.querySelector('#'+id).remove();
     for(let i=discCount(state);i<2;i++)copy.querySelector('#disc-'+i).remove();
-    if(!preferences.includeBackground){copy.querySelector('#backdrop')?.remove();copy.querySelector('#bg-art')?.remove();}
+    if(!includeBackdrop()){copy.querySelector('#backdrop')?.remove();copy.querySelector('#bg-art')?.remove();}
     return '<?xml version="1.0" encoding="UTF-8"?>\n'+new XMLSerializer().serializeToString(copy);
   }
   $('download-svg').addEventListener('click',async()=>{try{commit();download(new Blob([await svgExport()],{type:'image/svg+xml;charset=utf-8'}),filename()+'.svg');notice('SVG download started.');}catch(e){notice('Could not export SVG: '+e.message,true);}});
-  async function renderPNGBlob(width){
-    const height=Math.round(width*exportBox[3]/exportBox[2]);
-    const url=URL.createObjectURL(new Blob([await svgExport()],{type:'image/svg+xml;charset=utf-8'}));
+  const canvasPNG=canvas=>new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(Error('PNG creation failed.')),'image/png'));
+  // PNG downloads and photos capture the preview window itself, edge to edge, at the chosen width.
+  function stageBox(){
+    const stage=$('stage'),cw=stage.clientWidth,ch=stage.clientHeight;if(!cw||!ch)throw Error('the preview is not visible.');
+    const vb=svg.viewBox.baseVal,r=svg.getBoundingClientRect(),s=Math.min(r.width/vb.width,r.height/vb.height);if(!s)throw Error('the preview is not ready.');
+    const sr=stage.getBoundingClientRect(),left=sr.left+stage.clientLeft,top=sr.top+stage.clientTop;
+    return [vb.x+vb.width/2+(left-r.left-r.width/2)/s,vb.y+vb.height/2+(top-r.top-r.height/2)/s,cw/s,ch/s];
+  }
+  async function stagePNG(width){return renderPNGBlob(width,stageBox());}
+  async function renderPNGBlob(width,box=exportBox){
+    const height=Math.max(1,Math.round(width*box[3]/box[2]));
+    const url=URL.createObjectURL(new Blob([await svgExport(box)],{type:'image/svg+xml;charset=utf-8'}));
     try{
       const image=new Image();await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=()=>reject(Error('The record could not be rendered.'));image.src=url;});
       const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const context=canvas.getContext('2d');if(!context)throw Error('Canvas is unavailable.');
@@ -2674,11 +2990,10 @@ body { font-size: 0.95em; }
     const button=$('download-png');button.disabled=true;button.textContent='Preparing PNG…';
     try{
       commit();const width=preferences.size,name=filename();
-      const png=await renderPNGBlob(width);
-      download(png,name+'-'+width+'px.png');notice('PNG download started.');
+      const png=await stagePNG(width);
+      download(png,name+'-'+width+'px.png');notice((includeBackdrop()?'PNG with its background':'Transparent PNG')+' download started.');
     }catch(e){notice('Could not export PNG: '+e.message,true);}finally{button.disabled=false;button.textContent='Download PNG';}
   });
-  function blobToDataURL(blob){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(Error('Could not read image.'));reader.readAsDataURL(blob);});}
   function dataURLToBlob(dataUrl){const [head,body]=dataUrl.split(',');const type=/data:(.*?);base64/.exec(head)[1];const bytes=atob(body);const array=new Uint8Array(bytes.length);for(let i=0;i<bytes.length;i++)array[i]=bytes.charCodeAt(i);return new Blob([array],{type});}
   function crc32(bytes){
     const table=crc32.table||(crc32.table=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?(0xEDB88320^(c>>>1)):(c>>>1);t[n]=c>>>0;}return t;})());
@@ -2686,43 +3001,123 @@ body { font-size: 0.95em; }
   }
   function u16(n){return new Uint8Array([n&255,(n>>8)&255]);}
   function u32(n){return new Uint8Array([n&255,(n>>8)&255,(n>>16)&255,(n>>24)&255]);}
+  async function deflateRaw(data){
+    if(typeof CompressionStream!=='function')return null;
+    try{return new Uint8Array(await new Response(new Blob([data]).stream().pipeThrough(new CompressionStream('deflate-raw'))).arrayBuffer());}catch(e){return null;}
+  }
+  // A standard zip: SVGs are deflated when the browser can, PNGs (already compressed) are stored as they are.
   async function buildZip(files){
     const encoder=new TextEncoder(),now=new Date();
     const time=((now.getHours()&31)<<11)|((now.getMinutes()&63)<<5)|((now.getSeconds()>>1)&31);
     const date=(((now.getFullYear()-1980)&127)<<9)|(((now.getMonth()+1)&15)<<5)|(now.getDate()&31);
-    const localParts=[],centralParts=[];let offset=0;
+    const localParts=[],centralParts=[],UTF8=0x0800;let offset=0;
     for(const file of files){
       const nameBytes=encoder.encode(file.name),data=new Uint8Array(await file.blob.arrayBuffer()),crc=crc32(data);
-      const local=[u32(0x04034b50),u16(20),u16(0),u16(0),u16(time),u16(date),u32(crc),u32(data.length),u32(data.length),u16(nameBytes.length),u16(0),nameBytes];
+      let method=0,body=data;
+      if(!/\.png$/i.test(file.name)){const packed=await deflateRaw(data);if(packed&&packed.length<data.length){method=8;body=packed;}}
+      const local=[u32(0x04034b50),u16(20),u16(UTF8),u16(method),u16(time),u16(date),u32(crc),u32(body.length),u32(data.length),u16(nameBytes.length),u16(0),nameBytes];
       const localSize=local.reduce((n,p)=>n+p.length,0);
-      localParts.push(...local,data);
-      centralParts.push(u32(0x02014b50),u16(20),u16(20),u16(0),u16(0),u16(time),u16(date),u32(crc),u32(data.length),u32(data.length),u16(nameBytes.length),u16(0),u16(0),u16(0),u32(0),u32(offset),nameBytes);
-      offset+=localSize+data.length;
+      localParts.push(...local,body);
+      centralParts.push(u32(0x02014b50),u16(20),u16(20),u16(UTF8),u16(method),u16(time),u16(date),u32(crc),u32(body.length),u32(data.length),u16(nameBytes.length),u16(0),u16(0),u16(0),u16(0),u32(0),u32(offset),nameBytes);
+      offset+=localSize+body.length;
     }
     const centralSize=centralParts.reduce((n,p)=>n+p.length,0);
     const end=[u32(0x06054b50),u16(0),u16(0),u16(files.length),u16(files.length),u32(centralSize),u32(offset),u16(0)];
     return new Blob([...localParts,...centralParts,...end],{type:'application/zip'});
   }
-  function updateBulkButton(){$('download-bulk').textContent='Download Bulk ('+bulkImages.length+')';$('download-bulk').disabled=!bulkImages.length;}
-  $('add-bulk').addEventListener('click',async()=>{
-    const button=$('add-bulk');button.disabled=true;button.textContent='Adding…';
+  // ---- Browser database: photos wait here until they are downloaded ----
+  let dbOpen=null;
+  function database(){
+    return dbOpen||(dbOpen=new Promise((resolve,reject)=>{
+      const request=indexedDB.open('blob-studio',1);
+      request.onupgradeneeded=()=>{const db=request.result;if(!db.objectStoreNames.contains('kv'))db.createObjectStore('kv');if(!db.objectStoreNames.contains('photos'))db.createObjectStore('photos',{keyPath:'id'});};
+      request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error||Error('Browser storage is unavailable.'));
+    }).catch(e=>{dbOpen=null;throw e;}));
+  }
+  function idb(store,mode,run){
+    return database().then(db=>new Promise((resolve,reject)=>{
+      const tx=db.transaction(store,mode),request=run(tx.objectStore(store));
+      tx.oncomplete=()=>resolve(request?request.result:undefined);tx.onerror=tx.onabort=()=>reject(tx.error||Error('Browser storage failed.'));
+    }));
+  }
+  // ---- Photos: each keeps a PNG (the preview as it looks) and the vector SVG, until they are downloaded ----
+  const photoStore={
+    all:()=>idb('photos','readonly',s=>s.getAll()).then(list=>(list||[]).filter(p=>p.app===APP).sort((a,b)=>a.takenAt-b.takenAt)),
+    put:photo=>idb('photos','readwrite',s=>s.put({id:photo.id,app:photo.app,takenAt:photo.takenAt,png:photo.png,svg:photo.svg,thumb:photo.thumb,view:photo.view})),
+    remove:ids=>idb('photos','readwrite',s=>{for(const id of ids)s.delete(id);})
+  };
+  async function thumbnail(png){
     try{
-      commit();const width=preferences.size;const png=await renderPNGBlob(width);const dataUrl=await blobToDataURL(png);
-      bulkImages.push({id:Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7),name:filename()+'-'+width+'px.png',dataUrl});
-      persist();
-      if(!storageOK){bulkImages.pop();updateBulkButton();notice('Not added: not enough browser storage for this image. Try a smaller PNG size.',true);return;}
-      updateBulkButton();notice('Added to bulk ('+bulkImages.length+' image'+(bulkImages.length===1?'':'s')+').');
-    }catch(e){notice('Could not add to bulk: '+e.message,true);}finally{button.disabled=false;button.textContent='Add to Bulk';}
+      const bitmap=await createImageBitmap(png),scale=Math.min(116/bitmap.height,300/bitmap.width,1),canvas=document.createElement('canvas');
+      canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));
+      canvas.getContext('2d').drawImage(bitmap,0,0,canvas.width,canvas.height);bitmap.close();
+      return await canvasPNG(canvas);
+    }catch(e){return null;}
+  }
+  function renderPhotos(){
+    const count=photos.length;
+    $('download-zip').textContent='Download zip ('+count+')';$('download-zip').disabled=!count;
+    $('photos').hidden=!count;$('photo-count').textContent=count;
+    $('photo-strip').replaceChildren(...photos.map((photo,i)=>{
+      const item=document.createElement('div');item.className='photo-thumb';
+      if(!photo.url)photo.url=URL.createObjectURL(photo.thumb||photo.png);
+      const image=document.createElement('img');image.src=photo.url;image.alt='Photo '+(i+1);
+      const bin=document.createElement('button');bin.type='button';bin.textContent='×';bin.title='Remove this photo';bin.setAttribute('aria-label','Remove photo '+(i+1));bin.dataset.photo=photo.id;
+      item.append(image,bin);return item;
+    }));
+  }
+  function dropPhotos(list){
+    const gone=new Set(list.map(p=>p.id));photos=photos.filter(p=>!gone.has(p.id));
+    for(const photo of list)if(photo.url)URL.revokeObjectURL(photo.url);
+    renderPhotos();return photoStore.remove([...gone]).catch(()=>{});
+  }
+  // The old "bulk" images (and those inside older project files) become photos with a PNG only.
+  async function adoptBulk(list){
+    for(const [i,item] of list.entries()){
+      const photo={id:String(item.id||newId()).slice(0,100),app:APP,takenAt:Date.now()+i,png:dataURLToBlob(item.dataUrl),svg:'',thumb:null,view:'record'};
+      if(photos.some(p=>p.id===photo.id))continue;photos.push(photo);try{await photoStore.put(photo);}catch(e){}
+    }
+    renderPhotos();
+  }
+  const validBulk=list=>(Array.isArray(list)?list:[]).slice(0,200).filter(b=>typeof b?.dataUrl==='string'&&/^data:image\/(png|jpeg|webp);base64,/i.test(b.dataUrl));
+  // Show or hide the photo strip; the choice is remembered on this device.
+  function showPhotos(open){$('photos-toggle').setAttribute('aria-expanded',String(open));$('photo-strip').hidden=!open;}
+  try{showPhotos(localStorage.getItem('blob-record-photos-open')!=='false');}catch(e){showPhotos(true);}
+  $('photos-toggle').addEventListener('click',()=>{const open=$('photos-toggle').getAttribute('aria-expanded')!=='true';showPhotos(open);try{localStorage.setItem('blob-record-photos-open',String(open));}catch(e){}});
+  $('photo-strip').addEventListener('click',event=>{
+    const bin=event.target.closest('button[data-photo]'),photo=bin&&photos.find(p=>p.id===bin.dataset.photo);
+    if(!photo)return;dropPhotos([photo]);notice('Photo removed.');
   });
-  $('download-bulk').addEventListener('click',async()=>{
-    if(!bulkImages.length)return;
-    const button=$('download-bulk');button.disabled=true;button.textContent='Zipping…';
+  $('take-photo').addEventListener('click',async()=>{
+    const button=$('take-photo');button.disabled=true;button.textContent='Taking…';
     try{
-      const pad=String(bulkImages.length).length;
-      const files=bulkImages.map((item,index)=>({name:'image-'+String(index+1).padStart(pad,'0')+'.png',blob:dataURLToBlob(item.dataUrl)}));
-      download(await buildZip(files),'blob-record-studio-bulk.zip');
-      notice('Downloading a zip of '+bulkImages.length+' image'+(bulkImages.length===1?'':'s')+'.');
-    }catch(e){notice('Could not build the zip: '+e.message,true);}finally{updateBulkButton();}
+      commit();
+      const png=await stagePNG(preferences.size),svgText=await svgExport();
+      const photo={id:newId(),app:APP,takenAt:Date.now(),png,svg:svgText,thumb:await thumbnail(png),view:'record'};
+      photos.push(photo);renderPhotos();
+      try{await photoStore.put(photo);}catch(e){notice('Photo '+photos.length+' taken, but it is kept only until this page closes: browser storage is unavailable.',true);return;}
+      notice('Photo '+photos.length+' taken. Download zip saves every photo as PNG + SVG.');
+    }catch(e){notice('Could not take the photo: '+e.message,true);}finally{button.disabled=false;button.textContent='Take photo';}
+  });
+  function photosName(){const d=new Date(),p=n=>String(n).padStart(2,'0');return 'blob-record-photos-'+d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate());}
+  $('download-zip').addEventListener('click',()=>{
+    const count=photos.length;if(!count)return;
+    $('zip-summary').textContent=count+' photo'+(count===1?'':'s')+', saved as '+(count+photos.filter(p=>p.svg).length)+' files (PNG + SVG). After the download the photos are cleared from the page, ready for new ones.';
+    $('zip-name').value=photosName();$('zip-dialog').showModal();$('zip-name').select();
+  });
+  $('zip-cancel').addEventListener('click',()=>$('zip-dialog').close());
+  $('zip-form').addEventListener('submit',async event=>{
+    event.preventDefault();
+    const name=safeName($('zip-name').value,photosName()),taken=[...photos];$('zip-dialog').close();
+    if(!taken.length)return;
+    const button=$('download-zip');button.disabled=true;button.textContent='Zipping…';
+    try{
+      const pad=Math.max(2,String(taken.length).length),files=[];
+      taken.forEach((photo,i)=>{const base=name+'-'+String(i+1).padStart(pad,'0');files.push({name:base+'.png',blob:photo.png});if(photo.svg)files.push({name:base+'.svg',blob:new Blob([photo.svg],{type:'image/svg+xml'})});});
+      download(await buildZip(files),name+'.zip');
+      await dropPhotos(taken);
+      notice('Downloading '+name+'.zip with '+taken.length+' photo'+(taken.length===1?'':'s')+'. Photos cleared, ready for new ones.');
+    }catch(e){notice('Could not build the zip: '+e.message,true);}finally{renderPhotos();}
   });
   function applyPreferences(prefs){
     if(['checker','light','dark','custom'].includes(prefs?.background))preferences.background=prefs.background;
@@ -2730,23 +3125,55 @@ body { font-size: 0.95em; }
     if([1024,2048,4096].includes(prefs?.size))preferences.size=prefs.size;
     if(typeof prefs?.includeBackground==='boolean')preferences.includeBackground=prefs.includeBackground;
   }
-  $('save-project').addEventListener('click',()=>{commit();download(new Blob([JSON.stringify(project(),null,2)],{type:'application/json'}),'blob-record-project.json');notice('Project backup download started.');});
-  $('load-project').addEventListener('click',()=>$('project-file').click());
+  $('project-name').addEventListener('input',()=>{preferences.project=$('project-name').value.slice(0,64);rememberSoon();});
+  $('save-project').addEventListener('click',async()=>{
+    commit();
+    const title=$('project-name').value.trim()||'My project';
+    preferences.project=title;$('project-name').value=title;persist();
+    const saved=await saveFile({...project(),name:title,savedAt:new Date().toISOString()},safeName(title,'project')+'.json');
+    notice(saved?'Project \u201c'+title+'\u201d saved with '+savedVersions.length+' preset'+(savedVersions.length===1?'':'s')+' as '+saved+'.':'Project not saved.');
+  });
+  // A project file replaces the settings and presets; a preset file is added to the presets and applied.
+  function openData(data,fallbackName){
+    if(data?.app!==APP)throw Error('Choose a Blob Record Studio project or preset file.');
+    if(data.kind==='preset'){
+      Object.assign(images,validImages(data.images));
+      const settings=validState(data.preset?.settings);let name=String(data.preset?.name||fallbackName||'Imported preset').slice(0,64),unique=name,number=2;
+      while(savedVersions.some(v=>v.name===unique))unique=name+' ('+(number++)+')';
+      const version={id:newId(),name:unique,settings};
+      savedVersions.push(version);preferences.selected='saved:'+version.id;preferences.name=unique;$('version-name').value=unique;
+      rebuildVersionMenu();changeTo(settings);
+      return 'Preset \u201c'+unique+'\u201d added and applied.';
+    }
+    if(![1,2].includes(data.version))throw Error('Choose a Blob Record Studio project or preset file.');
+    Object.assign(images,validImages(data.images));
+    const imported=validState(data.settings);
+    savedVersions=(Array.isArray(data.versions)?data.versions:[]).slice(0,1000).map(v=>({id:String(v.id).slice(0,100),name:String(v.name||'Imported preset').slice(0,64),settings:validState(v.settings)}));
+    adoptBulk(validBulk(data.bulk));
+    applyPreferences(data.preferences);
+    if(typeof data.preferences?.name==='string'){preferences.name=data.preferences.name.slice(0,64);$('version-name').value=preferences.name;}
+    preferences.selected=typeof data.preferences?.selected==='string'?data.preferences.selected:'custom';
+    const title=String(data.name||data.preferences?.project||fallbackName||'My project').slice(0,64);
+    preferences.project=title;$('project-name').value=title;
+    rebuildVersionMenu();changeTo(imported);
+    return storageOK?'Project \u201c'+title+'\u201d loaded with its '+savedVersions.length+' preset'+(savedVersions.length===1?'':'s')+'.':'Project loaded for this visit; it is too big to remember. Keep the project file.';
+  }
+  async function openFile(file){
+    if(file.size>80*1024*1024)throw Error('This file is too large.');
+    return openData(JSON.parse(await file.text()),file.name.replace(/\.json$/i,''));
+  }
+  $('load-project').addEventListener('click',async()=>{
+    if(typeof window.showOpenFilePicker!=='function'){$('project-file').click();return;}
+    const started=performance.now();let handle;
+    try{[handle]=await window.showOpenFilePicker({id:'blob-record-files',types:FILE_TYPES,multiple:false});}
+    catch(e){if(!(e.name==='AbortError'&&performance.now()-started>350))$('project-file').click();return;}
+    try{const text=await openFile(await handle.getFile());notice(text,!storageOK);}catch(e){notice('Could not load the file: '+e.message,true);}
+  });
   $('project-file').addEventListener('change',async()=>{
     try{
-      const file=$('project-file').files[0];if(!file)return;if(file.size>80*1024*1024)throw Error('This project is too large.');
-      const data=JSON.parse(await file.text());if(data.app!==APP||![1,2].includes(data.version))throw Error('Choose a Blob Record Studio project file.');
-      Object.assign(images,validImages(data.images));
-      const imported=validState(data.settings);const versions=Array.isArray(data.versions)?data.versions.slice(0,1000):[];
-      const incoming=versions.map(v=>({id:String(v.id).slice(0,100),name:String(v.name||'Imported version').slice(0,64),settings:validState(v.settings)}));
-      for(const version of incoming)if(!savedVersions.some(v=>v.id===version.id))savedVersions.push(version);
-      const incomingBulk=(Array.isArray(data.bulk)?data.bulk:[]).slice(0,200).filter(b=>typeof b?.dataUrl==='string'&&b.dataUrl.startsWith('data:image/'));
-      for(const b of incomingBulk)if(bulkImages.length<200)bulkImages.push({id:String(b.id||Date.now()+'-'+Math.random()).slice(0,100),name:String(b.name||'bulk-image.png').slice(0,120),dataUrl:b.dataUrl});
-      updateBulkButton();
-      preferences.selected='custom';if(typeof data.preferences?.name==='string'){preferences.name=data.preferences.name.slice(0,64);$('version-name').value=preferences.name;}
-      applyPreferences(data.preferences);
-      rebuildVersionMenu();changeTo(imported);notice(storageOK?'Project loaded. Existing saved versions were kept.':'Project loaded for this visit; it is too big to remember. Keep the project file.',!storageOK);
-    }catch(e){notice('Could not load project: '+e.message,true);}finally{$('project-file').value='';}
+      const file=$('project-file').files[0];if(!file)return;
+      const text=await openFile(file);notice(text,!storageOK);
+    }catch(e){notice('Could not load the file: '+e.message,true);}finally{$('project-file').value='';}
   });
   try{
     const saved=JSON.parse(localStorage.getItem(STORE)||'null');
@@ -2754,17 +3181,63 @@ body { font-size: 0.95em; }
       images=validImages(saved.images);
       state=validState(saved.settings);committed={...state};
       savedVersions=(Array.isArray(saved.versions)?saved.versions:[]).slice(0,1000).map(v=>({id:String(v.id).slice(0,100),name:String(v.name||'Saved version').slice(0,64),settings:validState(v.settings)}));
-      bulkImages=(Array.isArray(saved.bulk)?saved.bulk:[]).slice(0,200).filter(b=>typeof b?.dataUrl==='string'&&b.dataUrl.startsWith('data:image/')).map(b=>({id:String(b.id||Date.now()+'-'+Math.random()).slice(0,100),name:String(b.name||'bulk-image.png').slice(0,120),dataUrl:b.dataUrl}));
+      legacyBulk=validBulk(saved.bulk);
       applyPreferences(saved.preferences);
       if(typeof saved.preferences?.name==='string')preferences.name=saved.preferences.name.slice(0,64);
       if(typeof saved.preferences?.selected==='string')preferences.selected=saved.preferences.selected;
+      if(typeof saved.preferences?.project==='string')preferences.project=saved.preferences.project.slice(0,64);
       notice('Welcome back. Your last edits are loaded.');
     }
   }catch(e){storageOK=false;}
-  $('version-name').value=preferences.name;rebuildVersionMenu();updateBulkButton();paint();persist();
+  $('version-name').value=preferences.name;$('project-name').value=preferences.project;rebuildVersionMenu();renderPhotos();paint();persist();
   window.addEventListener('pagehide',persist);
+  // Photos wait in the browser's database until they are downloaded; the old "bulk" images move there once.
+  photoStore.all().then(async stored=>{
+    const known=new Set(photos.map(p=>p.id));photos=[...stored.filter(p=>!known.has(p.id)),...photos];
+    const bulk=legacyBulk;legacyBulk=[];await adoptBulk(bulk);if(bulk.length)persist();
+  }).catch(()=>{
+    for(const [i,item] of legacyBulk.entries())if(!photos.some(p=>p.id===item.id))photos.push({id:String(item.id||newId()),app:APP,takenAt:Date.now()+i,png:dataURLToBlob(item.dataUrl),svg:'',thumb:null,view:'record'});
+  }).finally(renderPhotos);
+  // The header badge: ONLINE on the GitHub Pages site, OFFLINE on this computer.
+  const ONLINE=/\.github\.io$/i.test(location.hostname);
+  $('mode-badge').textContent=ONLINE?'ONLINE':'OFFLINE';$('mode-badge').classList.toggle('online',ONLINE);
 })();
 </script>
 
+<script id="blob-studio-sliders">
+/* Keep the health-bar fill of each slider in step with its value. */
+(()=>{const app=document.getElementById('blob-app');if(!app)return;
+const sync=el=>{const min=+el.min||0,max=+el.max||100,p=max>min?(+el.value-min)/(max-min)*100:0;el.style.setProperty('--p',p+'%');};
+const all=()=>app.querySelectorAll('input[type="range"]').forEach(sync);
+document.addEventListener('input',e=>{if(e.target instanceof HTMLInputElement&&e.target.type==='range')sync(e.target);},true);
+all();setInterval(all,400);})();
+/* An error notice shows as a toast for a few seconds. */
+(()=>{const n=document.getElementById('notice');if(!n)return;let timer;
+new MutationObserver(()=>{clearTimeout(timer);if(n.classList.contains('error'))timer=setTimeout(()=>n.classList.remove('error'),7000);}).observe(n,{attributes:true,attributeFilter:['class'],childList:true,characterData:true,subtree:true});})();
+</script>
+<script>
+// Double-click any slider to put it back where it started.
+(()=>{
+  const originals=new WeakMap();
+  const remember=el=>{if(!originals.has(el))originals.set(el,el.getAttribute('value')??el.value);};
+  const scan=node=>{if(node.nodeType!==1)return;if(node.matches('input[type="range"]'))remember(node);node.querySelectorAll('input[type="range"]').forEach(remember);};
+  scan(document.documentElement);
+  new MutationObserver(list=>list.forEach(m=>m.addedNodes.forEach(scan))).observe(document.documentElement,{childList:true,subtree:true});
+  const setValue=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set;
+  document.addEventListener('dblclick',event=>{
+    if(event.defaultPrevented)return;
+    const t=event.target instanceof Element?event.target:null;
+    const input=t&&(t.matches('input[type="range"]')?t:t.closest('.slider-field')?.querySelector('input[type="range"]'));
+    if(!input||input.disabled)return;
+    event.preventDefault();
+    remember(input);
+    const value=originals.get(input);
+    if(input.value===String(value))return;
+    setValue.call(input,value);
+    input.dispatchEvent(new Event('input',{bubbles:true}));
+    input.dispatchEvent(new Event('change',{bubbles:true}));
+  });
+})();
+</script>
 </body>
 </html>
