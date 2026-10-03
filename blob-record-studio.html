@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src blob: data:; font-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
-<title>BLOB Record Studio</title>
+<title>BLOB Record Studio 3D</title>
 <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAQAAAABbAUdZAAAAW0lEQVR42mP8z8DAwMRALPHxPwPDP8fa/wznOA/bMxT8/8/LwHj/PxsDH/MPBqa8fywMDAyFh58zMP8++J3pCMt/AYb/3++wM/x/IMfOxCDAeIOJgSNBgZEUKwFcDhx+85ts9AAAAABJRU5ErkJggg==">
 <style>:root {
   color-scheme: light dark;
@@ -1032,7 +1032,7 @@ html>body{padding:0}</style>
 <body>
 <main id="blob-app">
   <header class="app-header">
-    <h1 class="brand" aria-label="BLOB Record Studio">
+    <h1 class="brand" aria-label="BLOB Record Studio 3D">
 <svg xmlns="http://www.w3.org/2000/svg" width="2800" height="900" viewBox="0 0 28 9" role="img" aria-labelledby="wordmark-title wordmark-description">
   <title id="wordmark-title">blob — pixel wordmark</title>
   <desc id="wordmark-description">The black lowercase blob pixel wordmark.</desc>
@@ -1053,11 +1053,13 @@ html>body{padding:0}</style>
     </g>
   </g>
 </svg>
-<span class="brand-divider"></span><span>record studio</span></h1>
-    <div class="header-right"><span class="offline-badge" id="mode-badge">OFFLINE</span></div>
+<span class="brand-divider"></span><span>record studio</span><span class="edition-chip">3D</span></h1>
+    <div class="header-right"><button type="button" id="toggle-3d" class="view-toggle" aria-pressed="false" title="Show the record in 3D"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.8 13.6 5v6L8 14.2 2.4 11V5Z M2.4 5 8 8.2 13.6 5 M8 8.2v6" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>3D</button><span class="offline-badge" id="mode-badge">OFFLINE</span></div>
   </header>
   <div class="workspace">
-    <aside class="settings-panel" aria-label="Record settings" tabindex="0">
+    <aside class="settings-panel" id="settings-panel" aria-label="Record settings" tabindex="0">
+      <button type="button" class="panel-toggle" id="toggle-options" aria-expanded="true" aria-controls="settings-panel" title="Hide options"><span class="panel-toggle-label">Options</span><span class="chev" aria-hidden="true"></span></button>
+      <div class="panel-rail" role="group" aria-label="What to show"><button type="button" data-mode="cover" aria-pressed="false" aria-label="Cover" title="Cover"><svg viewBox="0 0 24 22" aria-hidden="true"><rect class="i-sleeve" x="4" y="3" width="16" height="16"/></svg></button><button type="button" data-mode="record" aria-pressed="false" aria-label="Record" title="Record"><svg viewBox="0 0 24 22" aria-hidden="true"><circle class="i-disc" cx="12" cy="11" r="9.5"/><circle class="i-hole" cx="12" cy="11" r="1.8"/></svg></button><button type="button" data-mode="both" aria-pressed="true" aria-label="Cover + record" title="Cover + record"><svg viewBox="0 0 24 22" aria-hidden="true"><circle class="i-disc" cx="14.5" cy="11" r="8.5"/><circle class="i-hole" cx="14.5" cy="11" r="1.5"/><rect class="i-sleeve" x="1.5" y="2.5" width="15" height="17"/></svg></button><span class="rail-sep" data-layout-controls aria-hidden="true"></span><button type="button" class="rail-wide" data-choice="scene" data-option="slide" data-layout-controls aria-label="Sliding out of the sleeve" title="Sliding out" aria-pressed="false"><svg viewBox="0 0 36 28" aria-hidden="true"><circle class="i-disc" cx="21.5" cy="14" r="9.5"/><circle class="i-hole" cx="21.5" cy="14" r="1.6"/><rect class="i-sleeve" x="4" y="4" width="20" height="20" rx="1"/></svg></button><button type="button" class="rail-wide" data-choice="scene" data-option="side" data-layout-controls aria-label="Record beside the sleeve" title="Side by side" aria-pressed="false"><svg viewBox="0 0 36 28" aria-hidden="true"><circle class="i-disc" cx="11" cy="15.5" r="8.5"/><circle class="i-hole" cx="11" cy="15.5" r="1.5"/><rect class="i-sleeve" x="15" y="6" width="18" height="18" rx="1"/></svg></button><button type="button" class="rail-wide" data-choice="scene" data-option="flat" data-layout-controls aria-label="Flat lay from above" title="Flat lay" aria-pressed="false"><svg viewBox="0 0 36 28" aria-hidden="true"><rect class="i-sleeve" x="12" y="3" width="17" height="17" rx="1" transform="rotate(-12 20.5 11.5)"/><circle class="i-disc" cx="14" cy="17" r="8"/><circle class="i-hole" cx="14" cy="17" r="1.4"/></svg></button></div>
       <div class="mode-picker app-mode" role="group" aria-label="What to show"><button type="button" data-mode="cover" aria-pressed="false">Cover</button><button type="button" data-mode="record" aria-pressed="false">Record</button><button type="button" data-mode="both" aria-pressed="true">Cover + record</button></div>
       <section class="control-section layout-section" data-layout-controls aria-labelledby="scene-heading"><h2 id="scene-heading">Cover + record layout</h2>
         <div class="icon-choice three" role="group" aria-label="Scene">
@@ -1068,9 +1070,7 @@ html>body{padding:0}</style>
         <label class="slider-field"><span><span id="position-label">Slide out</span><output data-value="position">50%</output></span><input type="range" min="0" max="100" value="50" data-setting="position" aria-label="Slide out"></label>
       </section>
       <details class="control-menu" id="cover-menu" data-cover-controls open><summary>Cover options</summary><div class="menu-controls">
-        <section class="control-section" aria-labelledby="art-heading"><h2 id="art-heading">Cover art</h2>
-          <div class="art-row"><div id="art-thumb" class="art-thumb" role="img" aria-label="Front cover preview"><span>No front</span></div><div class="art-actions"><span class="sub-label">Front cover</span><button type="button" id="art-upload" class="button secondary">Upload front</button><button type="button" id="art-remove" class="button quiet" disabled>Remove</button></div></div>
-          <div class="art-row label-row"><div id="back-thumb" class="art-thumb" role="img" aria-label="Back cover preview"><span>No back</span></div><div class="art-actions"><span class="sub-label">Back cover</span><button type="button" id="back-upload" class="button secondary">Upload back</button><button type="button" id="back-remove" class="button quiet" disabled>Remove</button></div></div>
+        <section class="control-section" aria-labelledby="art-heading"><h2 id="art-heading">Cover</h2>
           <div class="field segment-field" data-show="closedView"><span>Show</span><div class="mode-picker three" role="group" aria-label="Side of the sleeve to show"><button type="button" data-choice="coverView" data-option="front" aria-pressed="true">Front</button><button type="button" data-choice="coverView" data-option="back" aria-pressed="false">Back</button><button type="button" data-choice="coverView" data-option="both" data-show="coverOnly" aria-pressed="false">Front + back</button></div></div>
           <div class="color-row"><label for="sleeve-color-btn">Sleeve color</label><div class="color-picker"><output data-color-value="sleeveColor"></output><button type="button" id="sleeve-color-btn" class="color-swatch-btn" data-color-for="sleeve-color" data-setting-key="sleeveColor" aria-label="Sleeve color"></button><input id="sleeve-color" type="color" value="#d8c4a4" data-setting="sleeveColor" class="color-input-hidden" tabindex="-1" aria-hidden="true"></div></div>
         </section>
@@ -1078,7 +1078,6 @@ html>body{padding:0}</style>
           <div class="mode-picker" role="group" aria-label="Cover type"><button type="button" data-choice="cover" data-option="single" aria-pressed="true">Normal</button><button type="button" data-choice="cover" data-option="gatefold" aria-pressed="false">Gatefold</button></div>
           <div data-show="gatefold">
             <div class="field segment-field"><span>Gatefold</span><div class="mode-picker" role="group" aria-label="Gatefold closed or open"><button type="button" data-choice="gateOpen" data-option="closed" aria-pressed="true">Closed</button><button type="button" data-choice="gateOpen" data-option="open" aria-pressed="false">Open</button></div></div>
-            <div class="art-row label-row"><div id="inside-thumb" class="art-thumb wide" role="img" aria-label="Inside spread preview"><span>No inside art</span></div><div class="art-actions"><span class="sub-label">Inside spread · 2:1</span><button type="button" id="inside-upload" class="button secondary">Upload inside</button><button type="button" id="inside-remove" class="button quiet" disabled>Remove</button></div></div>
             <div class="color-row"><label for="inside-color-btn">Inside color</label><div class="color-picker"><output data-color-value="insideColor"></output><button type="button" id="inside-color-btn" class="color-swatch-btn" data-color-for="inside-color" data-setting-key="insideColor" aria-label="Inside color"></button><input id="inside-color" type="color" value="#efe9df" data-setting="insideColor" class="color-input-hidden" tabindex="-1" aria-hidden="true"></div></div>
           </div>
           <label class="slider-field first-slider"><span>Gloss<output data-value="sleeveGloss">35%</output></span><input type="range" min="0" max="100" value="35" data-setting="sleeveGloss" aria-label="Sleeve gloss"></label>
@@ -1090,7 +1089,7 @@ html>body{padding:0}</style>
         <section class="control-section" aria-labelledby="vinyl-heading"><h2 id="vinyl-heading">Vinyl</h2>
           <div class="mode-picker" role="group" aria-label="Number of records"><button type="button" data-choice="discs" data-option="single" aria-pressed="true">Single</button><button type="button" data-choice="discs" data-option="double" aria-pressed="false">Double</button></div>
           <div class="field segment-field"><span>Side facing you</span><div class="mode-picker" role="group" aria-label="Record side shown"><button type="button" data-choice="recordSide" data-option="a" data-side-label="a" aria-pressed="true">Side A</button><button type="button" data-choice="recordSide" data-option="b" data-side-label="b" aria-pressed="false">Side B</button></div></div>
-          <div class="mode-picker four segment-gap" role="group" aria-label="Vinyl finish"><button type="button" data-choice="finish" data-option="solid" aria-pressed="true">Solid</button><button type="button" data-choice="finish" data-option="translucent" aria-pressed="false">Clear</button><button type="button" data-choice="finish" data-option="marble" aria-pressed="false">Marble</button><button type="button" data-choice="finish" data-option="splatter" aria-pressed="false">Splatter</button></div>
+          <div class="field segment-field"><span>Type and colors</span><div class="mode-picker four" role="group" aria-label="Vinyl type and colors"><button type="button" data-choice="finish" data-option="solid" aria-pressed="true">Solid</button><button type="button" data-choice="finish" data-option="translucent" aria-pressed="false">Clear</button><button type="button" data-choice="finish" data-option="marble" aria-pressed="false">Marble</button><button type="button" data-choice="finish" data-option="splatter" aria-pressed="false">Splatter</button></div></div>
           <div class="color-row"><label for="vinyl-color-btn">Vinyl color</label><div class="color-picker"><output data-color-value="vinylColor"></output><button type="button" id="vinyl-color-btn" class="color-swatch-btn" data-color-for="vinyl-color" data-setting-key="vinylColor" aria-label="Vinyl color"></button><input id="vinyl-color" type="color" value="#161616" data-setting="vinylColor" class="color-input-hidden" tabindex="-1" aria-hidden="true"></div></div>
           <div class="color-row" data-show="accent"><label for="accent-color-btn">Effect color</label><div class="color-picker"><output data-color-value="vinylColor2"></output><button type="button" id="accent-color-btn" class="color-swatch-btn" data-color-for="accent-color" data-setting-key="vinylColor2" aria-label="Marble or splatter color"></button><input id="accent-color" type="color" value="#f2d7c9" data-setting="vinylColor2" class="color-input-hidden" tabindex="-1" aria-hidden="true"></div></div>
           <div class="color-row" data-show="double"><label for="disc2-color-btn">Second record</label><div class="color-picker"><output data-color-value="disc2Color"></output><button type="button" id="disc2-color-btn" class="color-swatch-btn" data-color-for="disc2-color" data-setting-key="disc2Color" aria-label="Second record color"></button><input id="disc2-color" type="color" value="#b3342b" data-setting="disc2Color" class="color-input-hidden" tabindex="-1" aria-hidden="true"></div></div>
@@ -1100,34 +1099,49 @@ html>body{padding:0}</style>
           <label class="slider-field"><span>Sheen<output data-value="sheen">60%</output></span><input type="range" min="0" max="100" value="60" data-setting="sheen" aria-label="Sheen"></label>
         </section>
         <section class="control-section" aria-labelledby="label-heading"><h2 id="label-heading">Center label</h2>
-          <div class="mode-picker three" role="group" aria-label="Label artwork"><button type="button" data-choice="labelMode" data-option="color" aria-pressed="true">Color</button><button type="button" id="label-art-btn" data-choice="labelMode" data-option="art" aria-pressed="false">Cover art</button><button type="button" data-choice="labelMode" data-option="upload" aria-pressed="false">Upload</button></div>
-          <div class="label-grid" data-show="labelUpload">
-            <div class="label-cell"><button type="button" id="label-a-thumb" class="art-thumb round" aria-label="Upload the side A label"><span>A</span></button><span class="sub-label">Side A</span><button type="button" id="label-a-remove" class="button quiet" disabled>Remove</button></div>
-            <div class="label-cell"><button type="button" id="label-b-thumb" class="art-thumb round" aria-label="Upload the side B label"><span>B</span></button><span class="sub-label">Side B</span><button type="button" id="label-b-remove" class="button quiet" disabled>Remove</button></div>
-            <div class="label-cell" data-show="double"><button type="button" id="label-c-thumb" class="art-thumb round" aria-label="Upload the side C label"><span>C</span></button><span class="sub-label">Side C · record 2</span><button type="button" id="label-c-remove" class="button quiet" disabled>Remove</button></div>
-            <div class="label-cell" data-show="double"><button type="button" id="label-d-thumb" class="art-thumb round" aria-label="Upload the side D label"><span>D</span></button><span class="sub-label">Side D · record 2</span><button type="button" id="label-d-remove" class="button quiet" disabled>Remove</button></div>
-          </div>
+          <div class="mode-picker" role="group" aria-label="Label artwork"><button type="button" data-choice="labelMode" data-option="color" aria-pressed="true">Color</button><button type="button" data-choice="labelMode" data-option="upload" aria-pressed="false">Image</button></div>
+          <p class="control-note label-note" data-show="labelArtNote">Uses the labels from the Uploads panel. With none uploaded, the cover art is used (side B uses the back cover when there is one).</p>
           <div class="color-row" data-show="labelColor"><label for="label-color-btn">Label color</label><div class="color-picker"><output data-color-value="labelColor"></output><button type="button" id="label-color-btn" class="color-swatch-btn" data-color-for="label-color" data-setting-key="labelColor" aria-label="Label color"></button><input id="label-color" type="color" value="#e8d9c5" data-setting="labelColor" class="color-input-hidden" tabindex="-1" aria-hidden="true"></div></div>
           <label class="slider-field first-slider"><span>Label size<output data-value="labelSize">34%</output></span><input type="range" min="24" max="40" value="34" data-setting="labelSize" aria-label="Label size"></label>
         </section>
       </div></details>
-      <section class="control-section" aria-labelledby="backdrop-heading"><h2 id="backdrop-heading">Backdrop &amp; light</h2>
+      <details class="camera-menu light-menu" id="light-menu"><summary>Backdrop &amp; light</summary><div class="menu-controls">
         <div class="mode-picker three" role="group" aria-label="Backdrop"><button type="button" data-choice="backdrop" data-option="none" aria-pressed="false">Plain</button><button type="button" data-choice="backdrop" data-option="studio" aria-pressed="true">Studio</button><button type="button" data-choice="backdrop" data-option="wall" aria-pressed="false">Wall + floor</button></div>
+        <p class="control-note backdrop-note" data-show="noBackground">Pick a background color above the preview, or add a background image, to see the backdrop.</p>
         <div class="field segment-field"><span>Light from</span><div class="mode-picker three" role="group" aria-label="Light direction"><button type="button" data-choice="light" data-option="left" aria-pressed="true">Left</button><button type="button" data-choice="light" data-option="top" aria-pressed="false">Top</button><button type="button" data-choice="light" data-option="right" aria-pressed="false">Right</button></div></div>
         <label class="slider-field first-slider"><span>Depth<output data-value="depth">50%</output></span><input type="range" min="0" max="100" value="50" data-setting="depth" aria-label="Backdrop depth"></label>
         <label class="slider-field"><span>Shadow<output data-value="shadow">60%</output></span><input type="range" min="0" max="100" value="60" data-setting="shadow" aria-label="Shadow"></label>
-      </section>
+      </div></details>
+      <details class="camera-menu" id="place-menu" data-flat-only><summary>Record position</summary><div class="menu-controls">
+        <label class="slider-field first-slider"><span>Move sideways<output data-value="placeX">0%</output></span><input type="range" min="-200" max="200" value="0" data-setting="placeX" aria-label="Move the record left or right"></label>
+        <label class="slider-field"><span>Move up/down<output data-value="placeY">0%</output></span><input type="range" min="-200" max="200" value="0" data-setting="placeY" aria-label="Move the record up or down"></label>
+        <label class="slider-field"><span>Size<output data-value="placeZoom">100%</output></span><input type="range" min="30" max="300" value="100" data-setting="placeZoom" aria-label="Record size"></label>
+        <label class="slider-field"><span>Turn<output data-value="placeRot">0°</output></span><input type="range" min="-180" max="180" value="0" data-setting="placeRot" aria-label="Turn the record"></label>
+      </div></details>
+      <details class="camera-menu" id="camera-section" data-3d-only hidden open><summary>Camera options</summary><div class="menu-controls camera-options">
+        <div class="camera-presets" role="group" aria-label="Camera view"><button type="button" data-camera-preset="angle" aria-pressed="false" title="Three-quarter view">3/4 view</button><button type="button" data-camera-preset="front" aria-pressed="false" title="Seen from the front">Front</button><button type="button" data-camera-preset="top" aria-pressed="false" title="Looking down from above">Top</button><button type="button" data-camera-preset="left" aria-pressed="false" title="Seen from the left">Left</button><button type="button" data-camera-preset="right" aria-pressed="false" title="Seen from the right">Right</button><button type="button" data-camera-preset="back" aria-pressed="false" title="Seen from behind: the back cover and side B">Back</button></div>
+        <label class="slider-field"><span>Orbit<output data-camera-value="yaw">0°</output></span><input type="range" min="-180" max="180" value="0" data-camera="yaw" aria-label="Camera orbit, all the way around"></label>
+        <label class="slider-field"><span>Height<output data-camera-value="pitch">0°</output></span><input type="range" min="-20" max="90" value="0" data-camera="pitch" aria-label="Camera height angle"></label>
+        <label class="slider-field"><span>Zoom<output data-camera-value="zoom">100%</output></span><input type="range" min="40" max="400" value="100" data-camera="zoom" aria-label="Camera zoom"></label>
+        <label class="slider-field"><span>Field of view<output data-camera-value="fov">20°</output></span><input type="range" min="5" max="60" value="20" data-camera="fov" aria-label="Camera field of view"></label>
+        <label class="slider-field"><span>Move sideways<output data-camera-value="panX">0%</output></span><input type="range" min="-100" max="100" value="0" data-camera="panX" aria-label="Move the camera left or right"></label>
+        <label class="slider-field"><span>Move up/down<output data-camera-value="panY">0%</output></span><input type="range" min="-100" max="100" value="0" data-camera="panY" aria-label="Move the camera up or down"></label>
+        <p class="control-note" id="camera-note">A wide field of view gives strong perspective; a narrow one looks flatter. In the preview: drag to rotate, move with two fingers, pinch or scroll the mouse wheel to zoom.</p>
+        <button type="button" id="reset-camera" class="button secondary full">Reset camera</button>
+      </div></details>
       <input id="art-file" type="file" accept="image/*" hidden>
       <p id="notice" class="notice" role="status" aria-live="polite">Upload a cover to get started.</p>
     </aside>
     <section class="preview-panel" aria-label="Record preview and downloads" tabindex="0">
       <div class="preview-toolbar"><div class="history-actions"><button id="undo" class="button quiet" disabled aria-label="Undo last edit">Undo</button><button id="redo" class="button quiet" disabled aria-label="Redo last edit">Redo</button></div>
-        <div class="backdrops" role="group" aria-label="Preview background"><span class="background-label">Background color</span><button type="button" data-background="checker" class="swatch checker" aria-label="Transparent preview" aria-pressed="false"></button><button type="button" data-background="light" class="swatch light" aria-label="Light preview" aria-pressed="false"></button><button type="button" data-background="dark" class="swatch dark" aria-label="Dark preview" aria-pressed="false"></button><button type="button" data-background="custom" id="custom-bg-btn" class="swatch custom-bg" aria-label="Custom preview color" aria-pressed="true"></button><input id="custom-bg-color" type="color" value="#e6e2da" class="color-input-hidden" tabindex="-1" aria-hidden="true"><span class="bg-image-group"><button type="button" id="bg-image-btn" class="swatch image-bg" aria-label="Background image" title="Background image from your computer"></button><button type="button" id="bg-image-menu-btn" class="bg-menu-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="bg-image-menu" title="Background image options" aria-label="Background image options"></button></span><div id="bg-image-menu" class="bg-menu" role="group" aria-label="Background image options" hidden><label class="slider-field"><span>Blur<output data-value="bgBlur">30%</output></span><input type="range" min="0" max="100" value="30" data-setting="bgBlur" aria-label="Background blur"></label><label class="slider-field"><span>Zoom<output data-value="bgZoom">100%</output></span><input type="range" min="100" max="300" value="100" data-setting="bgZoom" aria-label="Background zoom"></label><label class="slider-field"><span>Horizontal<output data-value="bgX">0%</output></span><input type="range" min="-100" max="100" value="0" data-setting="bgX" aria-label="Background horizontal position"></label><label class="slider-field"><span>Vertical<output data-value="bgY">0%</output></span><input type="range" min="-100" max="100" value="0" data-setting="bgY" aria-label="Background vertical position"></label><div class="button-row"><button type="button" id="bg-upload" class="button secondary">Choose image</button><button type="button" id="bg-remove" class="button secondary" disabled>Remove</button></div></div></div>
+        <div class="backdrops" role="group" aria-label="Preview background"><span class="background-label">Background color</span><button type="button" data-background="checker" class="swatch checker" aria-label="Transparent preview" aria-pressed="false"></button><button type="button" data-background="light" class="swatch light" aria-label="Light preview" aria-pressed="false"></button><button type="button" data-background="dark" class="swatch dark" aria-label="Dark preview" aria-pressed="false"></button><button type="button" data-background="custom" id="custom-bg-btn" class="swatch custom-bg" aria-label="Custom preview color" aria-pressed="true"></button><input id="custom-bg-color" type="color" value="#e6e2da" class="color-input-hidden" tabindex="-1" aria-hidden="true"><span class="bg-image-group"><button type="button" id="bg-image-btn" class="swatch image-bg" aria-label="Background image" title="Background image from your computer"></button><button type="button" id="bg-image-menu-btn" class="bg-menu-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="bg-image-menu" title="Background image options" aria-label="Background image options"></button></span><div id="bg-image-menu" class="bg-menu" role="group" aria-label="Background image options" hidden><label class="slider-field"><span>Blur<output data-value="bgBlur">30%</output></span><input type="range" min="0" max="100" value="30" data-setting="bgBlur" aria-label="Background blur"></label><label class="slider-field"><span>Zoom<output data-value="bgZoom">100%</output></span><input type="range" min="100" max="300" value="100" data-setting="bgZoom" aria-label="Background zoom"></label><label class="slider-field"><span>Horizontal<output data-value="bgX">0%</output></span><input type="range" min="-100" max="100" value="0" data-setting="bgX" aria-label="Background horizontal position"></label><label class="slider-field"><span>Vertical<output data-value="bgY">0%</output></span><input type="range" min="-100" max="100" value="0" data-setting="bgY" aria-label="Background vertical position"></label><div class="button-row"><button type="button" id="bg-upload" class="button secondary">Choose image</button><button type="button" id="bg-remove" class="button secondary" disabled>Remove</button></div><p class="bg-menu-note bg-note">Tip: drag the preview to move the background.</p></div></div>
       </div>
-      <div id="stage" role="region" class="logo-stage" aria-label="Live record preview"></div>
-      <section class="download-panel" aria-label="Image downloads">
+      <div id="stage" role="region" class="logo-stage" aria-label="Live record preview"><div class="view3d-bar" id="view3d-bar" hidden><span id="view-hint">Drag to rotate · two fingers to move · pinch to zoom</span><button type="button" id="spin-view" class="button quiet" aria-pressed="false" title="Turn the camera slowly around the record">Spin</button><button type="button" id="reset-view" class="button quiet">Reset view</button></div></div>
+      <section class="download-panel" id="download-panel" aria-label="Image downloads">
+        <button type="button" class="panel-toggle" id="toggle-downloads" aria-expanded="true" aria-controls="download-panel" title="Hide downloads"><span class="panel-toggle-label">Downloads</span><span class="chev" aria-hidden="true"></span></button>
+        <div class="download-rail" role="group" aria-label="Quick downloads"><button type="button" class="rail-png" data-download-for="download-png" aria-label="Download PNG" title="Download PNG"><span>PNG</span></button><button type="button" data-download-for="download-svg" aria-label="Download SVG" title="Download SVG"><span>SVG</span></button><button type="button" data-download-for="take-photo" aria-label="Take photo" title="Take photo"><svg viewBox="0 0 24 22" aria-hidden="true"><path class="i-line" d="M2.5 6.5h5l2-3h5l2 3h5v12h-19z"/><circle class="i-line" cx="12" cy="12" r="3.6"/></svg></button><button type="button" data-download-for="download-zip" aria-label="Download zip" title="Download zip" disabled><svg viewBox="0 0 24 22" aria-hidden="true"><path class="i-line" d="M4.5 1.5h15v19h-15z"/><path class="i-line" d="M12 1.5v3m0 2v3m0 2v3"/><rect class="i-fill" x="10" y="14" width="4" height="4"/></svg><b class="rail-count" hidden></b></button></div>
         <div class="export-controls"><label class="field png-size"><select id="export-size" aria-label="PNG size"><option value="1024">1024 px</option><option value="2048">2048 px</option><option value="4096" selected>4096 px · HD</option></select></label><button id="download-png" class="button primary">Download PNG</button><button id="download-svg" class="button secondary">Download SVG</button><button type="button" id="take-photo" class="button secondary">Take photo</button><button type="button" id="download-zip" class="button secondary" disabled>Download zip (0)</button></div>
-        <div class="photos" id="photos" hidden><button type="button" class="photos-head" id="photos-toggle" aria-expanded="true" aria-controls="photo-strip"><span>Photos <b id="photo-count">0</b></span></button><div class="photo-strip" id="photo-strip"></div></div>
+        <div class="photos" id="photos" hidden><button type="button" class="photos-head" id="photos-toggle" aria-expanded="true" aria-controls="photo-strip"><span>Photos <b id="photo-count">0</b></span><span>PNG + SVG each · cleared after download</span></button><div class="photo-strip" id="photo-strip"></div></div>
         <details class="file-menu" id="file-menu"><summary>Presets &amp; project</summary>
         <div class="field version-field"><span id="version-label">Preset</span><div class="version-picker" id="version-picker"><button type="button" id="version-button" class="version-button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="version-label version-current"><span id="version-current">Classic black</span></button><ul id="version-list" class="version-list" role="listbox" aria-labelledby="version-label" hidden></ul><select id="version-select" hidden aria-hidden="true" tabindex="-1"><option value="custom">Custom edits</option><optgroup label="Built-in"><option value="classic">Classic black</option><option value="clear">Clear vinyl</option><option value="marble">Marble</option><option value="splatter">Splatter</option></optgroup></select></div></div>
         <div class="file-tools">
@@ -1143,6 +1157,25 @@ html>body{padding:0}</style>
         </details>
       </section>
     </section>
+    <aside class="upload-panel" id="upload-panel" aria-label="Uploads" tabindex="0">
+      <button type="button" class="panel-toggle" id="toggle-uploads" aria-expanded="true" aria-controls="upload-panel" title="Hide uploads"><span class="panel-toggle-label">Uploads</span><span class="chev" aria-hidden="true"></span></button>
+      <div class="panel-rail" role="group" aria-label="Upload images"><button type="button" data-upload-for="art-upload" data-thumb="art-thumb" aria-label="Upload front cover" title="Upload front cover"><svg viewBox="0 0 24 22" aria-hidden="true"><rect class="i-sleeve" x="4" y="3" width="16" height="16"/><text x="12" y="15">F</text></svg></button><button type="button" data-upload-for="back-upload" data-thumb="back-thumb" aria-label="Upload back cover" title="Upload back cover"><svg viewBox="0 0 24 22" aria-hidden="true"><rect class="i-sleeve" x="4" y="3" width="16" height="16"/><text x="12" y="15">B</text></svg></button><button type="button" data-upload-for="inside-upload" data-thumb="inside-thumb" data-show="gatefold" aria-label="Upload inside spread" title="Upload inside spread"><svg viewBox="0 0 24 22" aria-hidden="true"><rect class="i-sleeve" x="1.5" y="5" width="21" height="12"/><path class="i-line" d="M12 5v12"/></svg></button><span class="rail-sep" aria-hidden="true"></span><button type="button" data-upload-for="label-a-thumb" data-thumb="label-a-thumb" aria-label="Upload side A label" title="Upload side A label"><svg viewBox="0 0 24 22" aria-hidden="true"><circle class="i-line" cx="12" cy="11" r="9"/><text x="12" y="15">A</text></svg></button><button type="button" data-upload-for="label-b-thumb" data-thumb="label-b-thumb" aria-label="Upload side B label" title="Upload side B label"><svg viewBox="0 0 24 22" aria-hidden="true"><circle class="i-line" cx="12" cy="11" r="9"/><text x="12" y="15">B</text></svg></button><button type="button" data-upload-for="label-c-thumb" data-thumb="label-c-thumb" data-show="double" aria-label="Upload side C label" title="Upload side C label"><svg viewBox="0 0 24 22" aria-hidden="true"><circle class="i-line" cx="12" cy="11" r="9"/><text x="12" y="15">C</text></svg></button><button type="button" data-upload-for="label-d-thumb" data-thumb="label-d-thumb" data-show="double" aria-label="Upload side D label" title="Upload side D label"><svg viewBox="0 0 24 22" aria-hidden="true"><circle class="i-line" cx="12" cy="11" r="9"/><text x="12" y="15">D</text></svg></button></div>
+      <section class="control-section" aria-labelledby="up-cover-heading"><h2 id="up-cover-heading">Cover art</h2>
+          <div class="art-row"><div id="art-thumb" class="art-thumb" role="img" aria-label="Front cover preview"><span>No front</span></div><div class="art-actions"><span class="sub-label">Front cover</span><button type="button" id="art-upload" class="button secondary">Upload front</button><button type="button" id="art-remove" class="button quiet" disabled>Remove</button></div></div>
+          <div class="art-row label-row"><div id="back-thumb" class="art-thumb" role="img" aria-label="Back cover preview"><span>No back</span></div><div class="art-actions"><span class="sub-label">Back cover</span><button type="button" id="back-upload" class="button secondary">Upload back</button><button type="button" id="back-remove" class="button quiet" disabled>Remove</button></div></div>
+          <div data-show="gatefold">
+            <div class="art-row label-row"><div id="inside-thumb" class="art-thumb wide" role="img" aria-label="Inside spread preview"><span>No inside art</span></div><div class="art-actions"><span class="sub-label">Inside spread · 2:1</span><button type="button" id="inside-upload" class="button secondary">Upload inside</button><button type="button" id="inside-remove" class="button quiet" disabled>Remove</button></div></div>
+          </div>
+      </section>
+      <section class="control-section" aria-labelledby="up-label-heading"><h2 id="up-label-heading">Center labels</h2>
+          <div class="label-grid">
+            <div class="label-cell"><button type="button" id="label-a-thumb" class="art-thumb round" aria-label="Upload the side A label"><span>A</span></button><span class="sub-label">Side A</span><button type="button" id="label-a-remove" class="button quiet" disabled>Remove</button></div>
+            <div class="label-cell"><button type="button" id="label-b-thumb" class="art-thumb round" aria-label="Upload the side B label"><span>B</span></button><span class="sub-label">Side B</span><button type="button" id="label-b-remove" class="button quiet" disabled>Remove</button></div>
+            <div class="label-cell" data-show="double"><button type="button" id="label-c-thumb" class="art-thumb round" aria-label="Upload the side C label"><span>C</span></button><span class="sub-label">Side C · record 2</span><button type="button" id="label-c-remove" class="button quiet" disabled>Remove</button></div>
+            <div class="label-cell" data-show="double"><button type="button" id="label-d-thumb" class="art-thumb round" aria-label="Upload the side D label"><span>D</span></button><span class="sub-label">Side D · record 2</span><button type="button" id="label-d-remove" class="button quiet" disabled>Remove</button></div>
+          </div>
+      </section>
+    </aside>
   </div>
   <dialog class="app-dialog" id="zip-dialog" aria-labelledby="zip-title"><form method="dialog" id="zip-form">
     <h3 id="zip-title">Download photos</h3>
@@ -1156,7 +1189,8 @@ html>body{padding:0}</style>
     <div class="color-sv" id="color-sv"><div class="color-sv-thumb" id="color-sv-thumb"></div></div>
     <div class="color-hue" id="color-hue"><div class="color-hue-thumb" id="color-hue-thumb"></div></div>
     <div class="color-hex-row"><span class="color-hex-swatch" id="color-hex-swatch"></span><input id="color-hex-input" type="text" maxlength="7" aria-label="Hex color value" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
-      </div>
+    <p class="color-sheet-hint">Hover over the preview and click to pick a color from it.</p>
+  </div>
   <div id="pick-loupe" class="pick-loupe" hidden aria-hidden="true"><span id="pick-loupe-swatch"></span><output id="pick-loupe-value"></output></div>
 </main>
 <style>
@@ -1185,7 +1219,7 @@ html>body{padding:0}</style>
 #blob-app .control-note {font-size:11px;color:var(--quiet);}
 #blob-app .backdrop-note {margin-top:8px;}
 #blob-app .bg-note {margin:-6px 0 16px;}
-#blob-app .logo-stage.has-bg:not(.picking) {cursor:grab;}
+#blob-app .logo-stage.has-bg:not(.picking),#blob-app .logo-stage:not(.picking) #subject {cursor:grab;}
 #blob-app .logo-stage.panning {cursor:grabbing!important;}
 #blob-app .icon-choice {display:grid;gap:6px;margin-bottom:18px;}
 #blob-app .icon-choice.three {grid-template-columns:repeat(3,1fr);}
@@ -1222,7 +1256,7 @@ html>body{padding:0}</style>
 #blob-app .art-row + .control-note {margin-top:10px;}
 #blob-app .logo-stage.dropping {outline:2px dashed #30342c;outline-offset:-8px;}
 #blob-app .color-row {display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;font-size:13px;}
-#blob-app .color-picker {display:flex;align-items:center;gap:10px;}
+#blob-app .color-picker {position:relative;display:flex;align-items:center;gap:10px;}
 #blob-app .color-picker output {font-size:11px;font-family:Consolas,monospace;color:var(--quiet);}
 #blob-app .color-swatch-btn {appearance:none;-webkit-appearance:none;width:33px;height:29px;padding:0;border:1px solid var(--line);border-radius:6px;cursor:pointer;}
 #blob-app .color-input-hidden {position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;opacity:0;overflow:hidden;pointer-events:none;}
@@ -1831,6 +1865,36 @@ textarea.form-control {
 body { font-size: 0.95em; }
 /* ── end tweak ── */
 </style>
+<style id="record-3d">
+/* 3D view: header toggle, camera options, the WebGL preview and its hint bar. */
+#blob-app .view-toggle {display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 11px 0 9px;border:1px solid #d6d7d0;border-radius:7px;background:#fff;color:#30342c;font-size:12px;font-weight:600;letter-spacing:.04em;transition:background .12s,border-color .12s;}
+#blob-app .view-toggle svg {width:16px;height:16px;display:block;}
+#blob-app .view-toggle:hover:not(:disabled) {border-color:#30342c;}
+#blob-app .view-toggle[aria-pressed="true"] {background:#30342c;border-color:#30342c;color:#fff;}
+#blob-app .view-toggle:disabled {opacity:.45;cursor:not-allowed;}
+#blob-app .logo-stage {position:relative;}
+#blob-app .logo-stage > canvas {position:absolute;left:0;top:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab;}
+#blob-app .logo-stage.dragging > canvas {cursor:grabbing;}
+#blob-app .logo-stage.picking > canvas {cursor:crosshair;}
+#blob-app .camera-menu {border-top:1px solid var(--line);margin-top:23px;padding-top:20px;}
+#blob-app .camera-menu > summary {list-style:none;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;font-size:12px;line-height:1.4;letter-spacing:.06em;text-transform:uppercase;font-weight:600;color:#686b60;}
+#blob-app .camera-menu > summary::-webkit-details-marker {display:none;}
+#blob-app .camera-menu > summary::after {content:"";width:7px;height:7px;margin-right:4px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:translateY(-2px) rotate(45deg);transition:transform .15s;}
+#blob-app .camera-menu[open] > summary::after {transform:translateY(2px) rotate(-135deg);}
+#blob-app .camera-menu > summary:hover {color:var(--ink);}
+#blob-app .camera-menu > summary:focus-visible {outline:3px solid #82896e;outline-offset:3px;border-radius:3px;}
+#blob-app .camera-menu .menu-controls {padding-top:20px;}
+#blob-app .camera-presets {display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:18px;}
+#blob-app .camera-presets button {height:34px;border:1px solid #d6d7d0;border-radius:8px;background:#fff;font-size:12px;padding:0 4px;transition:border-color .12s,background .12s;}
+#blob-app .camera-presets button:hover:not([aria-pressed="true"]) {border-color:#111;}
+#blob-app .camera-presets button[aria-pressed="true"] {background:#111;border-color:#111;color:#fff;}
+#blob-app .camera-options .button {margin-top:14px;}
+#blob-app .view3d-bar {position:absolute;right:10px;bottom:10px;z-index:2;display:flex;align-items:center;gap:6px;padding:3px 3px 3px 12px;border-radius:9px;background:rgba(255,255,255,.82);border:1px solid rgba(0,0,0,.06);font-size:11px;color:#606457;}
+#blob-app .view3d-bar .button.quiet {min-height:26px;padding:4px 9px;font-size:11px;}
+#blob-app .view3d-bar .button.quiet[aria-pressed="true"] {background:var(--dmg-dark,#30342c);color:#fff;}
+#blob-app .view3d-bar[hidden],#blob-app [data-3d-only][hidden],#blob-app [data-flat-only][hidden],#blob-app .view3d-bar > [hidden] {display:none!important;}
+@media(max-width:660px) {#blob-app .view3d-bar > span {display:none;}#blob-app .view3d-bar {padding:3px;}}
+</style>
 <style id="blob-studio-theme">
 /* ── BLOB Record Studio · Blob Studio theme (shared with BLOB Logo Studio) ──
    Base: the Blob Studio launcher (paper, white panels, ink actions).
@@ -1908,7 +1972,8 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
 
 /* Segments and choices: DMG green marks what's active */
 #blob-app .mode-picker {border:2px solid var(--pixel-ink);border-radius:0;background:var(--well);padding:3px;}
-#blob-app .mode-picker button {border-radius:0;padding:8px 3px 7px;}
+#blob-app .mode-picker button {border-radius:0;padding:8px 3px 7px;min-width:0;white-space:normal;}
+#blob-app .mode-picker.four button {padding:8px 1px 7px;font-size:8px;letter-spacing:.04em;}
 #blob-app .mode-picker button:hover:not([aria-pressed="true"]) {background:#dfe6c8;}
 #blob-app .mode-picker button[aria-pressed="true"] {background:var(--dmg-dark);color:var(--on-dmg);box-shadow:inset 2px 2px 0 var(--dmg-mid);}
 #blob-app .icon-choice button,#blob-app .camera-presets button {border:2px solid var(--pixel-ink);border-radius:0;}
@@ -1976,6 +2041,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
 #blob-app :is(.save-section,.project-tools) .button {min-width:0;padding-left:6px;padding-right:6px;letter-spacing:.04em;}
 #blob-app .save-section .button-row,#blob-app .project-tools > div:last-child {padding-right:2px;}
 #blob-app .camera-menu {border-bottom:2px dotted #cfd1c7;padding-bottom:17px;}
+#blob-app .light-menu + .camera-menu {border-top:0;margin-top:0;}
 #blob-app .save-section .storage-row {display:flex;gap:10px;margin:-4px 0 12px;font-size:10.45px;color:var(--quiet);}
 #blob-app .storage-row .text-button {white-space:nowrap;}
 #blob-app #notice.error {position:fixed;left:50%;top:auto;bottom:20px;width:auto;height:auto;margin:0;overflow:visible;clip:auto;white-space:normal;transform:translateX(-50%);z-index:80;max-width:min(520px,calc(100vw - 32px));padding:10px 14px;background:var(--panel);border:2px solid var(--pixel-ink);box-shadow:4px 4px 0 var(--danger,#a43c31);color:var(--danger,#a43c31);}
@@ -2100,13 +2166,126 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   #blob-app .file-group {flex-wrap:wrap;}
   #blob-app .file-group .field,#blob-app .file-group .button-row {flex:1 1 100%;}
 }
+
+/* Uploads panel on the right + collapsible options/uploads/downloads */
+#blob-app .workspace {--left:310px;--right:230px;grid-template-columns:var(--left) minmax(0,1fr) var(--right);}
+@media(min-width:1500px) {#blob-app .workspace {--left:320px;--right:250px;}}
+@media(max-width:1100px) {#blob-app .workspace {--left:290px;--right:190px;}}
+#blob-app.options-hidden .workspace {--left:48px;}
+#blob-app.uploads-hidden .workspace {--right:48px;}
+#blob-app .upload-panel {min-width:0;overflow-y:auto;overscroll-behavior-y:contain;scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:var(--dmg-mid) transparent;padding:var(--pp);background:var(--panel);border:2px solid var(--pixel-ink);box-shadow:var(--shadow-ink);}
+#blob-app .upload-panel:focus-visible {outline:2px solid #82896e;outline-offset:2px;}
+#blob-app .upload-panel .control-section {margin-top:16px;padding-top:16px;border-top:2px dotted #cfd1c7;}
+#blob-app .upload-panel #toggle-uploads + .panel-rail + .control-section {margin-top:0;}
+#blob-app .upload-panel .control-section[hidden],#blob-app .upload-panel [data-show][hidden] {display:none;}
+#blob-app .upload-panel .art-row {flex-direction:column;align-items:stretch;gap:8px;}
+#blob-app .upload-panel .art-row + .art-row,#blob-app .upload-panel [data-show="gatefold"] {margin-top:16px;}
+#blob-app .upload-panel .art-thumb {width:100%;height:110px;}
+#blob-app .upload-panel .art-thumb.wide {width:100%;height:80px;}
+#blob-app .upload-panel .art-row .art-thumb.has-art {background-size:contain;}
+#blob-app .upload-panel .label-grid {margin-top:0;}
+#blob-app .upload-panel .label-cell .art-thumb {width:64px;height:64px;}
+#blob-app .upload-panel .control-note {margin-top:12px;}
+/* Panel headers with an arrow */
+#blob-app .panel-toggle-label {font-family:var(--pixel-font);font-size:10px;line-height:1.2;letter-spacing:.1em;text-transform:uppercase;font-weight:400;margin:0;color:inherit;-webkit-font-smoothing:none;}
+#blob-app .panel-toggle {display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;padding:4px 2px;margin:0 0 12px;border:0;background:none;cursor:pointer;color:var(--pixel-ink);}
+#blob-app .panel-toggle:hover {color:var(--dmg-dark);}
+#blob-app .panel-toggle .chev {width:8px;height:8px;flex:none;border-right:3px solid currentColor;border-bottom:3px solid currentColor;transition:transform .15s;}
+#blob-app #toggle-options .chev {transform:rotate(135deg);margin-left:4px;}
+#blob-app #toggle-uploads .chev {transform:rotate(-45deg);margin-right:4px;}
+#blob-app #toggle-downloads .chev {transform:translateY(-2px) rotate(45deg);margin-right:4px;}
+#blob-app .download-panel #toggle-downloads {margin-bottom:10px;}
+/* Collapsed side panels become a thin rail: arrow + icon shortcuts */
+#blob-app .panel-rail {display:none;}
+#blob-app.options-hidden .settings-panel,#blob-app.uploads-hidden .upload-panel {padding:8px 5px;overflow:hidden auto;scrollbar-width:none;}
+#blob-app.options-hidden .settings-panel > :not(#toggle-options):not(.panel-rail),
+#blob-app.uploads-hidden .upload-panel > :not(#toggle-uploads):not(.panel-rail) {display:none!important;}
+#blob-app.options-hidden #toggle-options,#blob-app.uploads-hidden #toggle-uploads {justify-content:center;padding:8px 0;margin-bottom:8px;}
+#blob-app.options-hidden #toggle-options,#blob-app.uploads-hidden #toggle-uploads {flex-direction:column-reverse;gap:10px;}
+#blob-app.options-hidden #toggle-options .panel-toggle-label,#blob-app.uploads-hidden #toggle-uploads .panel-toggle-label {writing-mode:vertical-rl;letter-spacing:.14em;}
+#blob-app.options-hidden #toggle-options .chev {transform:rotate(-45deg);margin:0 4px 0 0;}
+#blob-app.uploads-hidden #toggle-uploads .chev {transform:rotate(135deg);margin:0 0 0 4px;}
+#blob-app.options-hidden .settings-panel .panel-rail,#blob-app.uploads-hidden .upload-panel .panel-rail {display:flex;flex-direction:column;align-items:center;gap:6px;padding-top:8px;border-top:2px dotted #cfd1c7;}
+#blob-app .panel-rail button {--btn-bg:var(--panel);position:relative;display:flex;align-items:center;justify-content:center;width:34px;height:34px;flex:none;padding:0;border:2px solid var(--pixel-ink);border-radius:0;background:var(--panel);color:var(--pixel-ink);cursor:pointer;}
+#blob-app .panel-rail button[hidden] {display:none;}
+#blob-app .panel-rail button:hover:not([aria-pressed="true"]) {--btn-bg:#eef3dc;background:#eef3dc;}
+#blob-app .panel-rail button[aria-pressed="true"] {--btn-bg:var(--dmg-dark);background:var(--dmg-dark);color:var(--on-dmg);}
+#blob-app .panel-rail svg {width:24px;height:24px;overflow:visible;}
+#blob-app .panel-rail .i-disc {fill:currentColor;}
+#blob-app .panel-rail .i-hole {fill:var(--btn-bg);}
+#blob-app .panel-rail .i-sleeve {fill:var(--btn-bg);stroke:currentColor;stroke-width:1.8;}
+#blob-app .panel-rail .i-line {fill:none;stroke:currentColor;stroke-width:1.8;}
+#blob-app .panel-rail text {font-family:var(--pixel-font);font-size:11px;fill:currentColor;text-anchor:middle;}
+#blob-app .panel-rail .rail-sep {width:24px;height:0;margin:2px 0;border-top:2px dotted #cfd1c7;}
+#blob-app .panel-rail .rail-sep[hidden] {display:none;}
+#blob-app .panel-rail button.has-art::after {content:"";position:absolute;right:-4px;top:-4px;width:8px;height:8px;background:var(--signal,#b6ff1a);border:2px solid var(--pixel-ink);}
+#blob-app .panel-rail button.rail-wide svg {width:30px;height:24px;}
+#blob-app .panel-rail button.rail-wide {width:38px;}
+#blob-app .panel-rail .i-fill,#blob-app .download-rail .i-fill {fill:currentColor;}
+#blob-app .download-rail {display:none;}
+#blob-app.downloads-hidden .download-panel {display:flex;align-items:center;gap:10px;}
+#blob-app.downloads-hidden .download-panel #toggle-downloads {flex:1;min-width:0;}
+#blob-app.downloads-hidden .download-panel .download-rail {display:flex!important;gap:6px;order:-1;}
+#blob-app .download-rail button {position:relative;display:flex;align-items:center;justify-content:center;min-width:40px;height:32px;padding:0 6px;border:2px solid var(--pixel-ink);border-radius:0;background:var(--panel);color:var(--pixel-ink);cursor:pointer;box-shadow:2px 2px 0 var(--pixel-ink);}
+#blob-app .download-rail button span {font-family:var(--pixel-font);font-size:10px;letter-spacing:.1em;-webkit-font-smoothing:none;}
+#blob-app .download-rail button.rail-png {background:var(--signal,#b6ff1a);}
+#blob-app .download-rail button:hover:not(:disabled) {filter:brightness(.94);}
+#blob-app .download-rail button:disabled {opacity:.4;cursor:default;box-shadow:none;}
+#blob-app .download-rail svg {width:22px;height:20px;}
+#blob-app .download-rail .i-line {fill:none;stroke:currentColor;stroke-width:1.8;}
+#blob-app .download-rail .rail-count {position:absolute;right:-7px;top:-7px;min-width:16px;height:16px;padding:0 3px;font:10px/16px var(--pixel-font);background:var(--dmg-dark);color:var(--on-dmg,#fff);text-align:center;}
+#blob-app .download-rail .rail-count[hidden] {display:none;}
+/* Desktop: segment buttons share space by label length so long labels stay on one line */
+@media(min-width:661px) {#blob-app .settings-panel .mode-picker button {flex:1 1 auto;}}
+/* Downloads hidden: only the header bar stays */
+#blob-app.downloads-hidden .download-panel > :not(#toggle-downloads):not(.download-rail) {display:none!important;}
+#blob-app.downloads-hidden .download-panel #toggle-downloads {margin:0;}
+#blob-app.downloads-hidden #toggle-downloads .chev {transform:translateY(2px) rotate(-135deg);}
+@media(min-width:661px) {#blob-app .upload-panel {min-height:0;height:100%;}}
+/* Keep the preview the biggest thing in the middle column: downloads take at most 40% and scroll inside */
+@media(min-width:661px) {
+  #blob-app .preview-panel {grid-template-rows:auto minmax(0,1fr) fit-content(40%);}
+  #blob-app .download-panel {min-height:0;overflow-y:auto;overscroll-behavior-y:contain;scrollbar-width:thin;scrollbar-color:var(--dmg-mid) transparent;}
+}
+@media(max-width:660px) {
+  #blob-app .upload-panel {order:3;width:100%;margin-top:16px;overflow-y:visible;}
+  #blob-app .upload-panel .art-row {flex-direction:row;align-items:center;}
+  #blob-app .upload-panel .art-thumb {width:84px;height:84px;}
+  #blob-app .upload-panel .art-thumb.wide {width:112px;height:56px;}
+  #blob-app .panel-toggle {display:none;}
+  #blob-app.options-hidden .settings-panel,#blob-app.uploads-hidden .upload-panel {padding:var(--pp);overflow-y:visible;}
+  #blob-app.options-hidden .settings-panel > :not(#toggle-options):not(.panel-rail),
+  #blob-app.uploads-hidden .upload-panel > :not(#toggle-uploads):not(.panel-rail),
+  #blob-app.downloads-hidden .download-panel > :not(#toggle-downloads) {display:revert!important;}
+  #blob-app.downloads-hidden .download-panel {display:block;}
+  #blob-app.downloads-hidden .download-panel .download-rail {display:none!important;}
+  #blob-app.options-hidden .settings-panel .panel-rail,#blob-app.uploads-hidden .upload-panel .panel-rail {display:none;}
+  /* Phone order: toolbar, preview (pinned to the top while scrolling), uploads, options, downloads */
+  #blob-app .logo-stage {position:sticky;top:0;z-index:5;}
+  #blob-app .upload-panel {order:3;}
+  #blob-app .settings-panel {order:4;}
+  #blob-app .download-panel {order:5;}
+  #blob-app .upload-panel .panel-rail + .control-section:not([hidden]) {margin-top:0;padding-top:0;border-top:0;}
+  /* Phone: center the header, toolbar and button groups */
+  #blob-app .app-header {justify-content:center;text-align:center;}
+  #blob-app .brand {justify-content:center;width:100%;}
+  #blob-app .header-right {margin:0 auto;justify-content:center;}
+  #blob-app .preview-toolbar {justify-content:center;}
+  #blob-app .history-actions,#blob-app .backdrops {justify-content:center;flex-wrap:wrap;}
+  #blob-app .history-actions {width:100%;display:flex;}
+  #blob-app .button,#blob-app .text-button {text-align:center;justify-content:center;}
+  #blob-app .upload-panel .art-actions {align-items:center;text-align:center;}
+  #blob-app .label-cell {align-items:center;text-align:center;}
+}
 </style>
 <script>
 (() => {
   'use strict';
   const $=id=>document.getElementById(id);
   const root=$('blob-app');
-  const STORE='blob-record-studio-project-v1',APP='blob-record-studio',NS='http://www.w3.org/2000/svg';
+  // Own storage slot and photo shelf so the 3D studio and the flat studio don't overwrite each other;
+  // the first visit starts from the flat studio's saved work. Project and preset files stay shared.
+  const STORE='blob-record-studio-3d-project-v1',LEGACY_STORE='blob-record-studio-project-v1',APP='blob-record-studio',PHOTO_APP='blob-record-studio-3d',NS='http://www.w3.org/2000/svg';
   // Sleeve side S; a 12" record is a little smaller than its 12⅜" sleeve.
   const S=1200,D=S*.96,R=D/2;
   const looks={
@@ -2115,18 +2294,18 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     marble:{finish:'marble',vinylColor:'#7a1f2b',vinylColor2:'#f3dccd',clarity:70,grooves:45,sheen:60,labelColor:'#f3dccd'},
     splatter:{finish:'splatter',vinylColor:'#f1ece2',vinylColor2:'#1b1b1b',clarity:70,grooves:45,sheen:55,labelColor:'#1b1b1b'}
   };
-  const defaults={mode:'both',scene:'slide',cover:'single',discs:'single',position:50,...looks.classic,disc2Color:'#b3342b',patternSeed:7,labelMode:'color',labelSize:34,sleeveColor:'#d8c4a4',sleeveGloss:35,texture:20,wear:0,backdrop:'studio',light:'left',depth:50,shadow:60,coverView:'front',gateOpen:'closed',insideColor:'#efe9df',recordSide:'a',bgBlur:30,bgZoom:100,bgX:0,bgY:0,artId:null,backArtId:null,insideArtId:null,bgArtId:null,labelAId:null,labelBId:null,labelCId:null,labelDId:null};
+  const defaults={mode:'both',scene:'slide',cover:'single',discs:'single',position:50,...looks.classic,disc2Color:'#b3342b',patternSeed:7,labelMode:'color',labelSize:34,sleeveColor:'#d8c4a4',sleeveGloss:35,texture:20,wear:0,backdrop:'studio',light:'left',depth:50,shadow:60,coverView:'front',gateOpen:'closed',insideColor:'#efe9df',recordSide:'a',bgBlur:30,bgZoom:100,bgX:0,bgY:0,artId:null,backArtId:null,insideArtId:null,bgArtId:null,labelAId:null,labelBId:null,labelCId:null,labelDId:null,placeX:0,placeY:0,placeZoom:100,placeRot:0};
   const artKeys=['artId','backArtId','insideArtId','bgArtId','labelAId','labelBId','labelCId','labelDId'];
   const legacyArtKeys={labelAId:'labelArtId',labelCId:'label2ArtId'};
-  const resetValues={position:50,clarity:70,grooves:70,sheen:60,labelSize:34,sleeveGloss:35,texture:20,wear:0,depth:50,shadow:60,bgBlur:30,bgZoom:100,bgX:0,bgY:0};
+  const resetValues={position:50,clarity:70,grooves:70,sheen:60,labelSize:34,sleeveGloss:35,texture:20,wear:0,depth:50,shadow:60,bgBlur:30,bgZoom:100,bgX:0,bgY:0,placeX:0,placeY:0,placeZoom:100,placeRot:0};
   let state={...defaults}, committed={...defaults}, undoStack=[], redoStack=[], savedVersions=[], photos=[], legacyBulk=[], saveTimer=null;
   // Uploaded images live outside the settings so undo and versions only carry a short id.
   let images={};
-  let preferences={background:'custom',customBackground:'#e6e2da',size:4096,name:'My record',project:'My project',selected:'classic',includeBackground:true};
+  let preferences={background:'custom',customBackground:'#e6e2da',size:4096,name:'My record',project:'My project',selected:'classic',includeBackground:true,view3d:false,camera:{yaw:-24,pitch:10,zoom:1,fov:20,panX:0,panY:0},cameraFlat:{yaw:-20,pitch:52,zoom:1,fov:20,panX:0,panY:0}};
   let storageOK=true;
   const inputList=[...root.querySelectorAll('[data-setting]')];
   const img=(id,x,y,w,h=w)=>'<image id="'+id+'" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" preserveAspectRatio="xMidYMid slice"/>';
-  $('stage').innerHTML='<svg xmlns="'+NS+'" role="img" aria-labelledby="record-title record-desc"><title id="record-title">Vinyl record</title><desc id="record-desc">A vinyl record and its sleeve.</desc><defs>'+img('cover-art',-S/2,-S/2,S)+img('back-art',-S/2,-S/2,S)+img('inside-art',-S,-S/2,2*S,S)+img('bg-art',0,0,1,1)+img('disc-0',-R,-R,D)+img('disc-1',-R,-R,D)+'</defs><g id="scene"></g></svg>';
+  $('stage').insertAdjacentHTML('afterbegin','<svg xmlns="'+NS+'" role="img" aria-labelledby="record-title record-desc"><title id="record-title">Vinyl record</title><desc id="record-desc">A vinyl record and its sleeve.</desc><defs>'+img('cover-art',-S/2,-S/2,S)+img('back-art',-S/2,-S/2,S)+img('inside-art',-S,-S/2,2*S,S)+img('bg-art',0,0,1,1)+img('disc-0',-R,-R,D)+img('disc-1',-R,-R,D)+'</defs><g id="scene"></g></svg>');
   const svg=$('stage').querySelector('svg'),sceneEl=svg.querySelector('#scene');
   const round=n=>String(Math.round(n*100)/100);
   const hexParts=hex=>{let s=hex.slice(1);if(s.length===3)s=[...s].map(c=>c+c).join('');return [0,2,4].map(i=>parseInt(s.slice(i,i+2),16));};
@@ -2144,9 +2323,9 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     if(!value||typeof value!=='object'||Array.isArray(value))throw Error('This file does not contain record settings.');
     const next={...defaults};
     for(const name of ['vinylColor','vinylColor2','disc2Color','labelColor','sleeveColor','insideColor'])if(/^#[0-9a-f]{6}$/i.test(value[name]||''))next[name]=value[name].toLowerCase();
-    const ranges={position:[0,100],clarity:[0,100],grooves:[0,100],sheen:[0,100],labelSize:[24,40],sleeveGloss:[0,100],texture:[0,100],wear:[0,100],depth:[0,100],shadow:[0,100],bgBlur:[0,100],bgZoom:[100,300],bgX:[-100,100],bgY:[-100,100],patternSeed:[1,99999]};
+    const ranges={position:[0,100],clarity:[0,100],grooves:[0,100],sheen:[0,100],labelSize:[24,40],sleeveGloss:[0,100],texture:[0,100],wear:[0,100],depth:[0,100],shadow:[0,100],bgBlur:[0,100],bgZoom:[100,300],bgX:[-100,100],bgY:[-100,100],placeX:[-200,200],placeY:[-200,200],placeZoom:[30,300],placeRot:[-180,180],patternSeed:[1,99999]};
     for(const [name,[min,max]] of Object.entries(ranges))if(typeof value[name]==='number'&&Number.isFinite(value[name]))next[name]=Math.round(Math.max(min,Math.min(max,value[name])));
-    for(const [name,values] of Object.entries({mode:['cover','record','both'],scene:['slide','side','flat'],cover:['single','gatefold'],discs:['single','double'],finish:['solid','translucent','marble','splatter'],labelMode:['color','art','upload'],backdrop:['none','studio','wall'],light:['left','top','right'],coverView:['front','back','both'],gateOpen:['closed','open'],recordSide:['a','b']}))if(values.includes(value[name]))next[name]=value[name];
+    for(const [name,values] of Object.entries({mode:['cover','record','both'],scene:['slide','side','flat'],cover:['single','gatefold'],discs:['single','double'],finish:['solid','translucent','marble','splatter'],labelMode:['color','upload'],backdrop:['none','studio','wall'],light:['left','top','right'],coverView:['front','back','both'],gateOpen:['closed','open'],recordSide:['a','b']}))if(values.includes(value[name]))next[name]=value[name];else if(name==='labelMode'&&value[name]==='art')next[name]='upload';
     for(const key of artKeys){const id=value[key]??value[legacyArtKeys[key]];next[key]=typeof id==='string'&&images[id]?id:null;}
     return next;
   }
@@ -2163,6 +2342,16 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     }
   }
   function rememberSoon(){clearTimeout(saveTimer);saveTimer=setTimeout(persist,180);}
+  // Camera moves are saved once the view has been still for a moment: saving writes the whole project,
+  // artwork included, which would stall a drag or a spin halfway.
+  function rememberCamera(){
+    clearTimeout(saveTimer);
+    saveTimer=setTimeout(function wait(){
+      if(spinning||touches.size||camGliding()){saveTimer=setTimeout(wait,400);return;}
+      if(window.requestIdleCallback)requestIdleCallback(persist,{timeout:1500});else persist();
+    },900);
+  }
+  window.addEventListener('pagehide',()=>{if(saveTimer)persist();});
   function rebuildVersionMenu(){
     $('version-select').querySelectorAll('optgroup[data-saved]').forEach(el=>el.remove());
     if(savedVersions.length){const group=document.createElement('optgroup');group.dataset.saved='';group.label='Your presets';for(const version of savedVersions){const option=document.createElement('option');option.value='saved:'+version.id;option.textContent=version.name;group.appendChild(option);}$('version-select').appendChild(group);}
@@ -2247,7 +2436,8 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     const ctx=canvas.getContext('2d',{willReadFrequently:true}),Rp=N/2,lr=o.labelSize/100,lrp=lr*Rp;
     const albedo=o.finish==='marble'||o.finish==='splatter'?albedoMap(o,N):null,{tex,smooth}=grooveTable(N,lr);
     const out=ctx.createImageData(N,N),px=out.data;
-    const ang=LIGHT_ANGLE[o.light]*Math.PI/180,lx=Math.cos(ang),ly=Math.sin(ang);
+    // `flat` paints the bare surface for the 3D view, which lights the grooves itself.
+    const ang=LIGHT_ANGLE[o.light]*Math.PI/180,lx=o.flat?0:Math.cos(ang),ly=o.flat?0:Math.sin(ang);
     const c1=hexParts(o.color),c2=hexParts(o.color2),clear=o.finish==='translucent',a0=clear?1-o.clarity/100*.85:1;
     const hiAmt=(.35+.4*(1-luminance(o.color)))*o.sheen/100,gAmp=o.grooves/100,rim=.975,inner=lrp-2,outer2=(Rp+1)*(Rp+1);
     for(let y=0;y<N;y++){const dy=y+.5-Rp;for(let x=0;x<N;x++){
@@ -2275,8 +2465,8 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     const art=o.labelImg&&imgEls[o.labelImg];
     if(art&&art.naturalWidth){const k=Math.max(2*lrp/art.naturalWidth,2*lrp/art.naturalHeight),w=art.naturalWidth*k,h=art.naturalHeight*k;ctx.drawImage(art,Rp-w/2,Rp-h/2,w,h);}
     let g=ctx.createRadialGradient(Rp,Rp,lrp*.2,Rp,Rp,lrp);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(.85,'rgba(0,0,0,.03)');g.addColorStop(1,'rgba(0,0,0,.14)');ctx.fillStyle=g;ctx.fillRect(0,0,N,N);
-    g=ctx.createLinearGradient(Rp+lx*lrp,Rp+ly*lrp,Rp-lx*lrp,Rp-ly*lrp);g.addColorStop(0,'rgba(255,255,255,.08)');g.addColorStop(1,'rgba(0,0,0,.07)');ctx.fillStyle=g;ctx.fillRect(0,0,N,N);
-    if(ctx.createConicGradient){const s=o.sheen/100;g=ctx.createConicGradient(ang,Rp,Rp);[[0,.13],[.07,0],[.43,0],[.5,.08],[.57,0],[.93,0],[1,.13]].forEach(([t,v])=>g.addColorStop(t,'rgba(255,255,255,'+v*s+')'));ctx.fillStyle=g;ctx.fillRect(0,0,N,N);}
+    if(!o.flat){g=ctx.createLinearGradient(Rp+lx*lrp,Rp+ly*lrp,Rp-lx*lrp,Rp-ly*lrp);g.addColorStop(0,'rgba(255,255,255,.08)');g.addColorStop(1,'rgba(0,0,0,.07)');ctx.fillStyle=g;ctx.fillRect(0,0,N,N);}
+    if(ctx.createConicGradient&&!o.flat){const s=o.sheen/100;g=ctx.createConicGradient(ang,Rp,Rp);[[0,.13],[.07,0],[.43,0],[.5,.08],[.57,0],[.93,0],[1,.13]].forEach(([t,v])=>g.addColorStop(t,'rgba(255,255,255,'+v*s+')'));ctx.fillStyle=g;ctx.fillRect(0,0,N,N);}
     ctx.restore();
     ctx.lineWidth=N*.0025;ctx.strokeStyle='rgba(0,0,0,.3)';ctx.beginPath();ctx.arc(Rp,Rp,lrp-ctx.lineWidth/2,0,Math.PI*2);ctx.stroke();
     ctx.lineWidth=N*.0015;ctx.strokeStyle='rgba(0,0,0,.1)';ctx.beginPath();ctx.arc(Rp,Rp,lrp*.3,0,Math.PI*2);ctx.stroke();
@@ -2291,10 +2481,11 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   function sideLetter(st,i){return (i===0?'AB':'CD')[st.recordSide==='b'?1:0];}
   function labelFor(st,i){
     const letter=sideLetter(st,i),has=id=>id&&images[id];
-    if(st.labelMode==='art'){const back=st.recordSide==='b'&&has(st.backArtId)?st.backArtId:null;return back||(has(st.artId)?st.artId:null);}
     if(st.labelMode!=='upload')return null;
     for(const l of [letter,...LABEL_FALLBACK[letter]])if(has(st['label'+l+'Id']))return st['label'+l+'Id'];
-    return null;
+    // No label uploaded at all: show the cover art (side B prefers the back cover).
+    if('ABCD'.split('').some(l=>has(st['label'+l+'Id'])))return null;
+    const back=st.recordSide==='b'&&has(st.backArtId)?st.backArtId:null;return back||(has(st.artId)?st.artId:null);
   }
   function discSpec(st,i){
     return {color:i===1?st.disc2Color:st.vinylColor,color2:st.vinylColor2,finish:st.finish,clarity:st.clarity,grooves:st.grooves,sheen:st.sheen,seed:st.patternSeed+i*97,mirror:st.recordSide==='b',labelSize:st.labelSize,labelColor:st.labelColor,labelImg:labelFor(st,i),light:st.light};
@@ -2439,6 +2630,23 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     for(const e of {left:['bottom','right'],top:['bottom'],right:['bottom','left']}[st.light])g+=rect(...edges[e],'fill="#000" fill-opacity=".18"');
     return g+all('fill="none" stroke="#000" stroke-opacity=".16" stroke-width="'+round(S*.0015)+'"')+'</g>';
   }
+  // ---- Placement (flat view) ----
+  // The sleeve and records can be moved, resized and turned inside the photo. Moves are in percent of half
+  // the frame's height, around the frame's centre; the backdrop and background photo stay put.
+  function placeTransform(st,frame){
+    const cx=frame[0]+frame[2]/2,cy=frame[1]+frame[3]/2,u=frame[3]/2;
+    if(!st.placeX&&!st.placeY&&st.placeZoom===100&&!st.placeRot)return '';
+    return 'translate('+round(cx+st.placeX/100*u)+' '+round(cy-st.placeY/100*u)+') rotate('+round(st.placeRot)+') scale('+round(st.placeZoom/100)+') translate('+round(-cx)+' '+round(-cy)+')';
+  }
+  // The artwork box after placement (what SVG downloads crop to).
+  function placedBox(box,st,frame){
+    if(!st.placeX&&!st.placeY&&st.placeZoom===100&&!st.placeRot)return box;
+    const cx=frame[0]+frame[2]/2,cy=frame[1]+frame[3]/2,u=frame[3]/2,k=st.placeZoom/100,a=st.placeRot*Math.PI/180,c=Math.cos(a),sn=Math.sin(a);
+    const pts=[[box[0],box[1]],[box[0]+box[2],box[1]],[box[0],box[1]+box[3]],[box[0]+box[2],box[1]+box[3]]].map(([x,y])=>{const dx=(x-cx)*k,dy=(y-cy)*k;return [cx+st.placeX/100*u+dx*c-dy*sn,cy-st.placeY/100*u+dx*sn+dy*c];});
+    const xs=pts.map(q=>q[0]),ys=pts.map(q=>q[1]),x0=Math.min(...xs),y0=Math.min(...ys);
+    return [x0,y0,Math.max(...xs)-x0,Math.max(...ys)-y0];
+  }
+  const placeMoved=st=>!!(st.placeX||st.placeY||st.placeZoom!==100||st.placeRot);
   function sceneMarkup(st,frame,L){
     const bg=previewBackground(),dir=lightDir(st),sh=st.shadow/100,dp=st.depth/100,flat=L.floorY===null,wall=st.backdrop==='wall'&&!flat&&bg;
     const shadowColor=bg?mix(bg,'#000000',.82):'#000000';
@@ -2479,15 +2687,550 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
       }else if(st.backdrop!=='none')body+=rect('url(#bd-light)')+rect('url(#bd-vignette)');
       body+='</g>';
     }
+    body+='<g id="subject" transform="'+placeTransform(st,frame)+'">';
     if(L.floorY!==null&&(wall||st.backdrop==='wall'&&photo||st.backdrop==='studio'&&(bg||photo))){
       // Contact shadows where the sleeve and records meet the floor.
       for(const item of L.items){const cx=item.cx,w=item.type==='sleeve'?item.w/2:R*.35;
         body+='<ellipse cx="'+round(cx+dir*S*.02)+'" cy="'+round(L.floorY)+'" rx="'+round(w*1.02)+'" ry="'+round(S*.03)+'" fill="'+shadowColor+'" fill-opacity="'+round(.22*sh)+'" filter="url(#soft-blur)"/><ellipse cx="'+round(cx)+'" cy="'+round(L.floorY)+'" rx="'+round(w*.98)+'" ry="'+round(S*.008)+'" fill="'+shadowColor+'" fill-opacity="'+round(.5*sh)+'" filter="url(#tight-blur)"/>';}
     }
     for(const item of L.items)body+=item.type==='sleeve'?sleeveMarkup(item,st):'<g transform="translate('+round(item.cx)+' '+round(item.cy)+')" filter="url(#shadow)"><use href="#disc-'+item.i+'"/></g>';
-    return '<defs>'+defs+'</defs>'+body;
+    return '<defs>'+defs+'</defs>'+body+'</g>';
   }
-  function fmt(key){const v=state[key];return key==='position'&&state.scene==='flat'?Math.round((v-50)/50*25)+'°':v+'%';}
+  // ---- 3D view --------------------------------------------------------------------------
+  // A small WebGL renderer. The sleeve and the records are built as real geometry from the same
+  // layout() as the flat picture: world units are the scene's, y points up and z toward the viewer.
+  // Upright scenes stand on a floor at the layout's floorY; the flat lay lies on the floor. The
+  // records wear the same painted surface as the flat ones minus its baked sheen: the grooves are
+  // lit live as circular grooves (anisotropic highlights), which gives the bow-tie as the record turns.
+  const BOARD=S*.003,DISC_T=S*.005,FOLD=12*Math.PI/180,SHADOW_RES=1024;
+  const CAMERA_LIMITS={yaw:[-180,180],pitch:[-20,90],zoom:[.4,4],fov:[5,60],panX:[-100,100],panY:[-100,100]};
+  const CAMERA_PRESETS={
+    upright:{angle:{yaw:-24,pitch:10},front:{yaw:0,pitch:0},top:{yaw:0,pitch:55},left:{yaw:38,pitch:8},right:{yaw:-38,pitch:8},back:{yaw:180,pitch:6}},
+    flat:{angle:{yaw:-20,pitch:52},front:{yaw:0,pitch:30},top:{yaw:0,pitch:90},left:{yaw:40,pitch:42},right:{yaw:-40,pitch:42},back:{yaw:180,pitch:42}}
+  };
+  // The flat lay keeps its own camera, so switching scenes doesn't leave a flat record seen edge-on.
+  const cameraKind=st=>st.mode==='both'&&st.scene==='flat'?'flat':'upright';
+  const cameraKey=()=>cameraKind(state)==='flat'?'cameraFlat':'camera';
+  const cameraDefault=kind=>({...CAMERA_PRESETS[kind].angle,zoom:1,fov:20,panX:0,panY:0});
+  const wrapYaw=y=>((y+180)%360+360)%360-180;
+  const norm=v=>{const l=Math.hypot(...v)||1;return v.map(a=>a/l);};
+  const rgbf=hex=>hexParts(hex).map(v=>v/255);
+  // Key light per "Light from"; shadows fall from a steeper light so they stay close like the flat ones.
+  const KEY_LIGHT={left:norm([-.6,.66,.46]),top:norm([-.12,.9,.42]),right:norm([.6,.66,.46])};
+  const canvas3d=document.createElement('canvas');canvas3d.id='stage-3d';canvas3d.hidden=true;
+  canvas3d.setAttribute('role','img');canvas3d.setAttribute('aria-label','3D record preview. Drag to rotate, scroll to zoom, double-click to reset the view.');
+  $('stage').appendChild(canvas3d);
+  let gl=null,gl3d=null,frame3d=null,drawQueued=false;
+  const M4={
+    ident(){const m=new Float32Array(16);m[0]=m[5]=m[10]=m[15]=1;return m;},
+    mul(...list){return list.reduce((a,b)=>{const o=new Float32Array(16);for(let c=0;c<4;c++)for(let r=0;r<4;r++){let s=0;for(let k=0;k<4;k++)s+=a[k*4+r]*b[c*4+k];o[c*4+r]=s;}return o;});},
+    translate(x,y,z){const m=M4.ident();m[12]=x;m[13]=y;m[14]=z;return m;},
+    scale(x,y,z){const m=M4.ident();m[0]=x;m[5]=y;m[10]=z;return m;},
+    rotX(a){const m=M4.ident(),c=Math.cos(a),s=Math.sin(a);m[5]=c;m[6]=s;m[9]=-s;m[10]=c;return m;},
+    rotY(a){const m=M4.ident(),c=Math.cos(a),s=Math.sin(a);m[0]=c;m[2]=-s;m[8]=s;m[10]=c;return m;},
+    rotZ(a){const m=M4.ident(),c=Math.cos(a),s=Math.sin(a);m[0]=c;m[1]=s;m[4]=-s;m[5]=c;return m;},
+    perspective(fov,aspect,near,far){const f=1/Math.tan(fov/2),m=new Float32Array(16);m[0]=f/aspect;m[5]=f;m[10]=(far+near)/(near-far);m[11]=-1;m[14]=2*far*near/(near-far);return m;},
+    apply(m,[x,y,z]){return [m[0]*x+m[4]*y+m[8]*z+m[12],m[1]*x+m[5]*y+m[9]*z+m[13],m[2]*x+m[6]*y+m[10]*z+m[14]];},
+    dir(m,[x,y,z]){return [m[0]*x+m[4]*y+m[8]*z,m[1]*x+m[5]*y+m[9]*z,m[2]*x+m[6]*y+m[10]*z];},
+    upper(m){return new Float32Array([m[0],m[1],m[2],m[4],m[5],m[6],m[8],m[9],m[10]]);},
+    // Inverse transpose of the upper 3×3, so normals stay correct under non-uniform scaling.
+    normal(m){
+      const x=(r,c)=>m[c*4+r],cof=(r,c)=>{const rs=[0,1,2].filter(v=>v!==r),cs=[0,1,2].filter(v=>v!==c);return ((r+c)%2?-1:1)*(x(rs[0],cs[0])*x(rs[1],cs[1])-x(rs[0],cs[1])*x(rs[1],cs[0]));};
+      const det=x(0,0)*cof(0,0)+x(0,1)*cof(0,1)+x(0,2)*cof(0,2),o=new Float32Array(9);
+      for(let r=0;r<3;r++)for(let c=0;c<3;c++)o[c*3+r]=cof(r,c)/det;return o;
+    }
+  };
+  const VERTEX_SHADER=`
+    attribute vec3 aPos;attribute vec3 aNrm;attribute vec2 aUV;
+    uniform mat4 uModel,uView,uProj;uniform mat3 uNormal;uniform float uScreen;
+    varying vec3 vN;varying vec3 vP;varying vec3 vW;varying vec2 vUV;varying vec2 vLocal;
+    void main(){
+      vUV=aUV;vLocal=aPos.xy;
+      if(uScreen>.5){vN=vec3(0.,0.,1.);vP=vec3(0.);vW=vec3(0.);gl_Position=vec4(aPos.xy*2.,.99999,1.);return;}
+      vec4 w=uModel*vec4(aPos,1.);vW=w.xyz;
+      vec4 v=uView*w;vP=v.xyz;vN=uNormal*aNrm;
+      gl_Position=uProj*v;
+    }`;
+  const FRAGMENT_SHADER=`
+    precision highp float;
+    varying vec3 vN;varying vec3 vP;varying vec3 vW;varying vec2 vUV;varying vec2 vLocal;
+    uniform float uKind,uUseTex,uGloss,uSheen,uAniso,uClear,uAlpha,uLabel,uShadowK,uDepth,uFloorY,uFloorMul,uWallFade,uBackdrop,uLightX,uAspect;
+    uniform vec3 uColor,uL1,uL2,uUp,uShadowColor;
+    uniform vec4 uUVRect,uShadowRect;
+    uniform vec2 uViewport;
+    uniform mat3 uTan;
+    uniform sampler2D uTex,uGroove,uShadowTex;
+    // A photo studio seen in a reflection, by how far the reflected ray points up.
+    float studio(float y){
+      float floorLight=.06+.14*smoothstep(-.6,0.,y);
+      float strip=smoothstep(.02,.16,y)*(1.-smoothstep(.3,.46,y));
+      return clamp(floorLight+.95*strip+.2*smoothstep(.1,.5,y)+.8*smoothstep(.55,.9,y),0.,1.);
+    }
+    // Soft floor shadow: r is cast along the light, g is the contact shadow right under things.
+    float shadowAt(vec3 w){
+      vec2 uv=(w.xz-uShadowRect.xy)*uShadowRect.z+.5;
+      vec2 e=smoothstep(0.,.08,uv)*smoothstep(0.,.08,1.-uv);
+      vec4 s=texture2D(uShadowTex,clamp(uv,0.,1.));
+      return clamp(.5*s.r+.7*s.g,0.,1.)*e.x*e.y*uShadowK;
+    }
+    // The flat backdrop's studio light and vignette, in screen space.
+    vec3 studioLight(vec3 c,vec2 s){
+      vec2 q=(s-vec2(.5-uLightX*.22,.7))*vec2(uAspect,1.);
+      c+=vec3(.22*uDepth)*(1.-smoothstep(0.,.6,length(q)/(.95*max(uAspect,1.))))*uBackdrop;
+      float v=length((s-.5)*vec2(uAspect,1.))/(length(vec2(uAspect,1.))*.62);
+      return c*(1.-.38*uDepth*smoothstep(.45,1.,v)*uBackdrop);
+    }
+    void main(){
+      vec2 uv=uUVRect.xy+vUV*uUVRect.zw,screen=gl_FragCoord.xy/uViewport;
+      if(uKind>4.5){gl_FragColor=vec4(studioLight(texture2D(uTex,uv).rgb,screen),1.);return;}
+      if(uKind>3.5){float a=shadowAt(vW);gl_FragColor=vec4(uShadowColor*a,a);return;}
+      vec3 N=normalize(vN);if(!gl_FrontFacing)N=-N;
+      vec3 V=normalize(-vP);
+      float d1=max(dot(N,uL1),0.),d2=max(dot(N,uL2),0.);
+      float ry=dot(reflect(-V,N),uUp),env=studio(ry),fres=pow(1.-max(dot(N,V),0.),4.);
+      if(uKind>2.5){
+        // Backdrop sweep in the background colour: a darker floor for the wall set, the wall darkening upwards.
+        float h=max(vW.y-uFloorY,0.);
+        vec3 c=uColor*(.86+.14*d1)*mix(uFloorMul,1.,smoothstep(0.,uShadowRect.w*.004,h));
+        c*=1.-uWallFade*.22*uDepth*smoothstep(0.,uShadowRect.w*1.2,h);
+        c=studioLight(c,screen);
+        c=mix(c,uShadowColor,shadowAt(vW)*(1.-smoothstep(0.,uShadowRect.w*.05,h)));
+        gl_FragColor=vec4(c,1.);return;
+      }
+      vec4 base=uUseTex>.5?texture2D(uTex,uv):vec4(uColor,1.);
+      if(uKind<.5){
+        // Card sleeve: matt print with a gloss coat that reflects the studio.
+        vec3 c=base.rgb*(.5+.5*d1+.18*d2)*(.8+.2*smoothstep(-.8,.4,dot(N,uUp)));
+        float spec=pow(max(dot(N,normalize(uL1+V)),0.),60.)+.35*pow(max(dot(N,normalize(uL2+V)),0.),40.);
+        c+=vec3(uGloss)*(.35*spec+.45*fres*env+.05*env);
+        gl_FragColor=vec4(clamp(c,0.,1.),1.);return;
+      }
+      if(uKind<1.5){
+        // Record edge.
+        vec3 c=uColor*(.45+.45*d1+.15*d2);
+        float spec=pow(max(dot(N,normalize(uL1+V)),0.),80.)+.4*pow(max(dot(N,normalize(uL2+V)),0.),60.);
+        float h=uSheen*(.9*spec+.5*fres*env+.08*env);
+        float a=clamp(uAlpha+uClear*h,0.,1.);
+        gl_FragColor=vec4(clamp(c+h,0.,1.)*a,a);return;
+      }
+      // Record face: the painted surface, then the paper label or the lit grooves.
+      if(base.a<.02)discard;
+      float r=length(vLocal),a=base.a;vec3 c;
+      if(r<uLabel){
+        c=base.rgb*(.55+.45*d1+.15*d2)+vec3(.12*uSheen)*pow(max(dot(N,normalize(uL1+V)),0.),30.);a=1.;
+      }else{
+        // Circular grooves reflect across their direction: bright where the groove runs square to the half-vector.
+        vec3 T=normalize(uTan*vec3(-vLocal.y,vLocal.x,0.));
+        float g=texture2D(uGroove,vec2(r,.5)).r*2.;
+        vec3 H1=normalize(uL1+V),H2=normalize(uL2+V);
+        float t1=dot(T,H1),t2=dot(T,H2);
+        float aniso=(pow(max(1.-t1*t1,0.),uAniso)*step(0.,dot(N,uL1))+.45*pow(max(1.-t2*t2,0.),uAniso)*step(0.,dot(N,uL2)))*g;
+        float h=uSheen*(aniso+.35*fres*env+.05*env*g);
+        c=base.rgb*(.62+.3*d1+.12*d2)+vec3(h);
+        a=clamp(a+uClear*h,0.,1.);
+      }
+      gl_FragColor=vec4(clamp(c,0.,1.)*a,a);
+    }`;
+  // Shadow casters seen from above, squashed onto the floor: along the light (r) and straight down (g).
+  const SHADOW_VERTEX=`
+    attribute vec3 aPos;uniform mat4 uModel;uniform vec3 uLightDir;uniform float uFloorY,uVertical,uContact;uniform vec4 uShadowRect;
+    varying float vV;
+    void main(){
+      vec4 w=uModel*vec4(aPos,1.);float h=max(w.y-uFloorY,0.);vec3 p=w.xyz;
+      if(uVertical<.5)p-=uLightDir*(h/max(uLightDir.y,.25));
+      vV=uVertical>.5?exp(-h/uContact):1.;
+      gl_Position=vec4((p.xz-uShadowRect.xy)*uShadowRect.z*2.,0.,1.);
+    }`;
+  const SHADOW_FRAGMENT=`precision mediump float;varying float vV;uniform vec2 uChan;uniform float uOpacity;void main(){gl_FragColor=vec4(uChan*vV*uOpacity,0.,1.);}`;
+  const BLUR_VERTEX=`attribute vec3 aPos;varying vec2 vT;void main(){vT=aPos.xy+.5;gl_Position=vec4(aPos.xy*2.,0.,1.);}`;
+  const BLUR_FRAGMENT=`
+    precision mediump float;varying vec2 vT;uniform sampler2D uSrc;uniform vec2 uStepR,uStepG;
+    void main(){
+      vec2 acc=vec2(0.);float total=0.;
+      for(int i=-6;i<=6;i++){float f=float(i),w=exp(-f*f/18.);acc.x+=texture2D(uSrc,vT+uStepR*f).r*w;acc.y+=texture2D(uSrc,vT+uStepG*f).g*w;total+=w;}
+      gl_FragColor=vec4(acc/total,0.,1.);
+    }`;
+  function init3d(){
+    if(gl3d)return true;
+    if(gl3d===false)return false;
+    try{
+      gl=canvas3d.getContext('webgl',{alpha:true,antialias:true,premultipliedAlpha:true,preserveDrawingBuffer:true});
+      if(!gl)throw Error('WebGL is unavailable.');
+      const shader=(type,source)=>{const s=gl.createShader(type);gl.shaderSource(s,source);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw Error(gl.getShaderInfoLog(s));return s;};
+      const program=(vs,fs,names)=>{
+        const p=gl.createProgram();gl.attachShader(p,shader(gl.VERTEX_SHADER,vs));gl.attachShader(p,shader(gl.FRAGMENT_SHADER,fs));
+        ['aPos','aNrm','aUV'].forEach((name,i)=>gl.bindAttribLocation(p,i,name));
+        gl.linkProgram(p);if(!gl.getProgramParameter(p,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(p));
+        const u={program:p};for(const name of names)u[name]=gl.getUniformLocation(p,name);return u;
+      };
+      const main=program(VERTEX_SHADER,FRAGMENT_SHADER,['uModel','uView','uProj','uNormal','uScreen','uKind','uUseTex','uGloss','uSheen','uAniso','uClear','uAlpha','uLabel','uShadowK','uDepth','uFloorY','uFloorMul','uWallFade','uBackdrop','uLightX','uAspect','uColor','uL1','uL2','uUp','uShadowColor','uUVRect','uShadowRect','uViewport','uTan','uTex','uGroove','uShadowTex']);
+      const shadow=program(SHADOW_VERTEX,SHADOW_FRAGMENT,['uModel','uLightDir','uFloorY','uVertical','uContact','uShadowRect','uChan','uOpacity']);
+      const blur=program(BLUR_VERTEX,BLUR_FRAGMENT,['uSrc','uStepR','uStepG']);
+      gl.useProgram(main.program);gl.uniform1i(main.uTex,0);gl.uniform1i(main.uGroove,1);gl.uniform1i(main.uShadowTex,2);
+      gl.useProgram(blur.program);gl.uniform1i(blur.uSrc,0);
+      // Interleaved position, normal and uv; every mesh uses all three.
+      const mesh=(v,idx)=>{const vbo=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,vbo);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(v),gl.STATIC_DRAW);const ibo=gl.createBuffer();gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,ibo);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(idx),gl.STATIC_DRAW);return {vbo,ibo,count:idx.length};};
+      const meshes={quad:mesh([-.5,-.5,0,0,0,1,0,1,.5,-.5,0,0,0,1,1,1,.5,.5,0,0,0,1,1,0,-.5,.5,0,0,0,1,0,0],[0,1,2,0,2,3])};
+      // A unit disc (the record faces), the record's rounded edge at full size, and a half-round spine.
+      const K=192,dv=[0,0,0,0,0,1,.5,.5],di=[];
+      for(let k=0;k<=K;k++){const a=k/K*Math.PI*2,c=Math.cos(a),s=Math.sin(a);dv.push(c,s,0,0,0,1,.5+.5*c,.5-.5*s);if(k)di.push(0,k,k+1);}
+      meshes.disc=mesh(dv,di);
+      const P=8,R0=R-DISC_T/2,rv=[],ri=[];
+      for(let k=0;k<=K;k++){const a=k/K*Math.PI*2,c=Math.cos(a),s=Math.sin(a);for(let p=0;p<=P;p++){const b=-Math.PI/2+p/P*Math.PI,r=R0+DISC_T/2*Math.cos(b);rv.push(c*r,s*r,DISC_T/2*Math.sin(b),c*Math.cos(b),s*Math.cos(b),Math.sin(b),k/K,p/P);}}
+      for(let k=0;k<K;k++)for(let p=0;p<P;p++){const a=k*(P+1)+p,b=a+P+1;ri.push(a,b,b+1,a,b+1,a+1);}
+      meshes.rim=mesh(rv,ri);
+      const sv=[],si=[],Q=12;
+      for(let q=0;q<=Q;q++){const a=Math.PI/2+q/Q*Math.PI,c=Math.cos(a),s=Math.sin(a);sv.push(c,-.5,s,c,0,s,q/Q,1,c,.5,s,c,0,s,q/Q,0);if(q<Q)si.push(2*q,2*q+2,2*q+3,2*q,2*q+3,2*q+1);}
+      meshes.spine=mesh(sv,si);
+      for(let i=0;i<3;i++)gl.enableVertexAttribArray(i);
+      // Two render targets for the floor shadow: drawn into one, blurred across and back.
+      const target=()=>{const tex=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tex);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,SHADOW_RES,SHADOW_RES,0,gl.RGBA,gl.UNSIGNED_BYTE,null);
+        [[gl.TEXTURE_MIN_FILTER,gl.LINEAR],[gl.TEXTURE_MAG_FILTER,gl.LINEAR],[gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE],[gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE]].forEach(([k,v])=>gl.texParameteri(gl.TEXTURE_2D,k,v));
+        const fb=gl.createFramebuffer();gl.bindFramebuffer(gl.FRAMEBUFFER,fb);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,tex,0);return {tex,fb};};
+      const fbo=[target(),target()];gl.bindFramebuffer(gl.FRAMEBUFFER,null);
+      // Every texture unit starts with a white pixel so unused samplers stay valid.
+      const white=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,white);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,1,1,0,gl.RGBA,gl.UNSIGNED_BYTE,new Uint8Array([255,255,255,255]));
+      for(let i=0;i<3;i++){gl.activeTexture(gl.TEXTURE0+i);gl.bindTexture(gl.TEXTURE_2D,white);}
+      gl3d={main,shadow,blur,meshes,fbo,sweep:null,minmax:gl.getExtension('EXT_blend_minmax'),aniso:gl.getExtension('EXT_texture_filter_anisotropic')||gl.getExtension('WEBKIT_EXT_texture_filter_anisotropic'),maxTex:gl.getParameter(gl.MAX_TEXTURE_SIZE)};
+      canvas3d.addEventListener('webglcontextlost',event=>{event.preventDefault();gl3d=false;preferences.view3d=false;paint();notice('The 3D view stopped working. Reload the page to try again.',true);});
+      return true;
+    }catch(e){gl3d=false;$('toggle-3d').disabled=true;$('toggle-3d').title='3D needs WebGL, which is unavailable in this browser.';return false;}
+  }
+  const is3d=()=>preferences.view3d&&!!gl3d;
+  // ---- Textures: cached by what they show, the least recently used ones let go.
+  const texCache=new Map();let texUsed=new Set();
+  function uploadTexture(source,mip=true){
+    const tex=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tex);
+    gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,false);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,source);
+    if(mip){gl.generateMipmap(gl.TEXTURE_2D);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR_MIPMAP_LINEAR);if(gl3d.aniso)gl.texParameterf(gl.TEXTURE_2D,gl3d.aniso.TEXTURE_MAX_ANISOTROPY_EXT,Math.min(8,gl.getParameter(gl3d.aniso.MAX_TEXTURE_MAX_ANISOTROPY_EXT)));}
+    else gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+    return tex;
+  }
+  function cachedTexture(key,make,mip=true){
+    texUsed.add(key);
+    let tex=texCache.get(key);
+    if(tex)texCache.delete(key);else tex=uploadTexture(make(),mip);
+    texCache.set(key,tex);return tex;
+  }
+  function trimTextures(){for(const key of [...texCache.keys()]){if(texCache.size<=10)break;if(!texUsed.has(key)){gl.deleteTexture(texCache.get(key));texCache.delete(key);}}}
+  let grainTile=null,blotchTile=null;
+  // Paper grain: fine light and dark specks, like the flat sleeve's turbulence filters.
+  function grain(){
+    if(grainTile)return grainTile;
+    const c=document.createElement('canvas');c.width=c.height=256;const ctx=c.getContext('2d'),d=ctx.createImageData(256,256),rand=rng(99);
+    for(let i=0;i<d.data.length;i+=4){const v=rand(),light=v>.5?255:0;d.data[i]=d.data[i+1]=d.data[i+2]=light;d.data[i+3]=Math.abs(v-.5)*2*150;}
+    ctx.putImageData(d,0,0);return grainTile=c;
+  }
+  // Patchy mask for the ring and edge wear.
+  function blotches(){
+    if(blotchTile)return blotchTile;
+    const c=document.createElement('canvas');c.width=c.height=24;const ctx=c.getContext('2d'),d=ctx.createImageData(24,24),rand=rng(3);
+    for(let i=0;i<d.data.length;i+=4){d.data[i]=d.data[i+1]=d.data[i+2]=255;d.data[i+3]=Math.max(0,Math.min(1,2.6*rand()-.95))*255;}
+    ctx.putImageData(d,0,0);return blotchTile=c;
+  }
+  // A printed side of the sleeve: colour, artwork cropped to fill, paper grain and wear.
+  function sleeveTexture(kind,st){
+    const artId={front:st.artId,back:st.backArtId,inside:st.insideArtId}[kind],pic=artId&&images[artId]&&imageReady(artId)?imgEls[artId]:null;
+    const base=kind==='inside'?st.insideColor:st.sleeveColor,wear=kind==='inside'?0:st.wear;
+    if(!pic&&!st.texture&&!wear)return null;
+    const w=Math.min(pic?2048:1024,gl3d.maxTex),h=kind==='inside'?w/2:w;
+    return cachedTexture(['sleeve',kind,base,pic?artId:'',st.texture,wear,w].join('|'),()=>{
+      const c=document.createElement('canvas');c.width=w;c.height=h;const ctx=c.getContext('2d');
+      ctx.fillStyle=base;ctx.fillRect(0,0,w,h);
+      if(pic){const k=Math.max(w/pic.naturalWidth,h/pic.naturalHeight),iw=pic.naturalWidth*k,ih=pic.naturalHeight*k;ctx.drawImage(pic,(w-iw)/2,(h-ih)/2,iw,ih);}
+      if(st.texture){ctx.save();ctx.globalAlpha=st.texture/100*.55;ctx.fillStyle=ctx.createPattern(grain(),'repeat');ctx.fillRect(0,0,w,h);ctx.restore();}
+      if(wear){
+        const m=document.createElement('canvas');m.width=w;m.height=h;const mc=m.getContext('2d');
+        mc.filter='blur('+Math.round(w*.01)+'px)';mc.strokeStyle='#fff';
+        mc.lineWidth=w*.04;mc.beginPath();mc.arc(w/2,h/2,w*R*.96/S,0,Math.PI*2);mc.stroke();
+        mc.lineWidth=w*.012;mc.strokeRect(w*.006,w*.006,w*.988,w*.988);
+        mc.filter='none';mc.globalCompositeOperation='destination-in';mc.drawImage(blotches(),0,0,w,h);
+        ctx.globalAlpha=wear/100*.6;ctx.drawImage(m,0,0);ctx.globalAlpha=1;
+      }
+      return c;
+    });
+  }
+  // Record faces: quick at 1024 px while editing, 2048 px once the edits settle (and for downloads).
+  const pendingHi=new Map();let hiTimer=null,hiWanted='';
+  const faceSpec=(st,i,other)=>({...discSpec(other?{...st,recordSide:st.recordSide==='b'?'a':'b'}:st,i),sheen:0,light:'top',flat:true});
+  function discTexture(spec,hi){
+    const ready=!spec.labelImg||imageReady(spec.labelImg),key='disc|'+JSON.stringify(spec)+'|'+ready,full=key+'|hi';
+    if(hi||texCache.has(full))return cachedTexture(full,()=>renderDisc(spec,Math.min(2048,gl3d.maxTex)));
+    pendingHi.set(full,spec);
+    return cachedTexture(key,()=>renderDisc(spec,1024));
+  }
+  function upgradeHi(){
+    hiTimer=null;
+    if(spinning||touches.size||camGliding()){hiTimer=setTimeout(upgradeHi,300);return;}
+    const next=[...pendingHi].find(([key])=>!texCache.has(key));
+    if(!next||!gl3d){pendingHi.clear();return;}
+    const [key,spec]=next;pendingHi.delete(key);
+    texCache.set(key,uploadTexture(renderDisc(spec,Math.min(2048,gl3d.maxTex))));request3d();
+    if(pendingHi.size)hiTimer=setTimeout(upgradeHi,40);
+  }
+  // How strongly each ring of the record catches the light: smooth gaps between tracks, the run-out.
+  function grooveTexture(st){
+    const lr=st.labelSize/100,amp=st.grooves/100;
+    return cachedTexture('groove|'+lr+'|'+amp,()=>{
+      const {tex,smooth}=grooveTable(2048,lr),N=1024,c=document.createElement('canvas');c.width=N;c.height=1;
+      const ctx=c.getContext('2d'),data=ctx.createImageData(N,1);
+      for(let i=0;i<N;i++){const r=(i+.5)/N,ri=Math.min(tex.length-1,Math.floor(r*1024)),v=r<lr?0:r>.975?.3:smooth[ri]?.22:1+(tex[ri]-.5)*1.6*amp,b=Math.round(Math.max(0,Math.min(1,v/2))*255);data.data.set([b,b,b,255],i*4);}
+      ctx.putImageData(data,0,0);return c;
+    },false);
+  }
+  // The background photo, softened by Background blur (on a square canvas; the shader keeps its shape).
+  function photoTexture(st){
+    const id=st.bgArtId,pic=imgEls[id];
+    return cachedTexture(['photo',id,st.bgBlur].join('|'),()=>{
+      const N=Math.min(2048,gl3d.maxTex),c=document.createElement('canvas');c.width=c.height=N;const ctx=c.getContext('2d'),b=st.bgBlur/100*.009*N;
+      ctx.drawImage(pic,0,0,N,N);
+      if(b>.3){ctx.filter='blur('+b.toFixed(1)+'px)';const m=b*3;ctx.drawImage(pic,-m,-m,N+2*m,N+2*m);ctx.filter='none';}
+      return c;
+    });
+  }
+  // ---- Scene geometry ----
+  // Box faces are unit quads placed by a matrix; each face gets its own look (or none when hidden).
+  const FACES={pz:M4.translate(0,0,.5),nz:M4.mul(M4.translate(0,0,-.5),M4.rotY(Math.PI)),px:M4.mul(M4.translate(.5,0,0),M4.rotY(Math.PI/2)),nx:M4.mul(M4.translate(-.5,0,0),M4.rotY(-Math.PI/2)),py:M4.mul(M4.translate(0,.5,0),M4.rotX(-Math.PI/2)),ny:M4.mul(M4.translate(0,-.5,0),M4.rotX(Math.PI/2))};
+  function box(out,M,[x,y,z],[w,h,d],looks){const base=M4.mul(M,M4.translate(x,y,z),M4.scale(w,h,d));for(const [face,mat] of Object.entries(looks))if(mat)out.push({mesh:'quad',model:M4.mul(base,FACES[face]),mat});}
+  // One pocket of card: front and back boards, closed at the spine, top and bottom, open on the
+  // far side. `spine` is -1 for a spine on the left (seen from the front), +1 on the right.
+  function pocket(out,M,spine,front,back,T,gap,edge,inner){
+    const z=gap/2+BOARD/2,open=spine<0?'px':'nx';
+    box(out,M,[0,0,z],[S,S,BOARD],{pz:front,nz:inner,px:edge,nx:edge,py:edge,ny:edge});
+    box(out,M,[0,0,-z],[S,S,BOARD],{nz:back,pz:inner,px:edge,nx:edge,py:edge,ny:edge});
+    box(out,M,[0,S/2-BOARD/2,0],[S,BOARD,gap],{py:edge,ny:inner,[open]:inner});
+    box(out,M,[0,-S/2+BOARD/2,0],[S,BOARD,gap],{ny:edge,py:inner,[open]:inner});
+    box(out,M,[spine*(S/2-BOARD/2),0,0],[BOARD,S,gap],{[open]:inner});
+    out.push({mesh:'spine',model:M4.mul(M,M4.translate(spine*S/2,0,0),M4.scale(-spine*BOARD*1.6,S,T/2)),mat:edge});
+  }
+  function overlapsSleeve(d,sl){
+    const a=-sl.rot*Math.PI/180,dx=d.cx-sl.cx,dy=d.cy-sl.cy,lx=dx*Math.cos(a)-dy*Math.sin(a),ly=dx*Math.sin(a)+dy*Math.cos(a);
+    // Any overlap counts: a record only just over the edge would otherwise lie on the floor through the sleeve.
+    return Math.hypot(Math.max(Math.abs(lx)-sl.w/2,0),Math.max(Math.abs(ly)-S/2,0))<R;
+  }
+  function addDisc(items,casters,M,st,i,hi){
+    const clear=st.finish==='translucent',color=i===1?st.disc2Color:st.vinylColor;
+    const sheen=(.35+.4*(1-luminance(color)))*st.sheen/100*1.5,label=st.labelSize/100;
+    const vinyl={kind:2,groove:grooveTexture(st),sheen,label,clear,aniso:28};
+    const R0=R-DISC_T/2,edge=st.finish==='marble'?mix(color,st.vinylColor2,.35):color;
+    items.push({mesh:'disc',model:M4.mul(M,M4.translate(0,0,DISC_T/2),M4.scale(R0,R0,1)),mat:{...vinyl,tex:discTexture(faceSpec(st,i,false),hi)},transparent:clear});
+    items.push({mesh:'disc',model:M4.mul(M,M4.translate(0,0,-DISC_T/2),M4.rotY(Math.PI),M4.scale(R0,R0,1)),mat:{...vinyl,tex:discTexture(faceSpec(st,i,true),hi)},transparent:clear});
+    items.push({mesh:'rim',model:M,mat:{kind:1,color:rgbf(edge),alpha:clear?Math.min(1,1-st.clarity/100*.85+.3):1,sheen,clear},transparent:clear});
+    casters.push({mesh:'disc',model:M4.mul(M,M4.scale(R0,R0,1)),opacity:clear?.35+.4*(1-st.clarity/100):1});
+  }
+  // Everything to draw: sleeves and records placed like the flat layout, the shadow casters, the
+  // camera target and the floor height.
+  function build3d(st,hi){
+    texUsed=new Set();pendingHi.clear();
+    const L=layout(st),flatLay=L.floorY===null,toWorld=flatLay?M4.rotX(-Math.PI/2):M4.ident();
+    const items=[],casters=[],sleeves=[],double=st.discs==='double',gap=BOARD*.8+(double?2:1)*DISC_T*1.25,T=gap+2*BOARD;
+    const gloss=st.sleeveGloss/100,edge={kind:0,color:rgbf(mix(st.sleeveColor,'#000000',.12)),gloss:gloss*.6},inner={kind:0,color:rgbf(mix(st.sleeveColor,'#000000',.6)),gloss:0};
+    const look=kind=>{const tex=sleeveTexture(kind,st);return tex?{kind:0,tex,gloss}:{kind:0,color:rgbf(kind==='inside'?st.insideColor:st.sleeveColor),gloss};};
+    const open=st.cover==='gatefold'&&st.gateOpen==='open',theta=flatLay?0:FOLD;
+    for(const sl of L.items){
+      if(sl.type!=='sleeve')continue;
+      const inside=sl.face==='inside',closedGate=sl.gatefold&&!inside,flip=sl.face==='back';
+      const zmin=closedGate?-T/2-BOARD*1.9:-T/2,zmax=T/2,out=[];
+      const M=M4.mul(toWorld,M4.translate(sl.cx,-sl.cy,flatLay?(flip?zmax:-zmin):0),M4.rotZ(-sl.rot*Math.PI/180),flip?M4.rotY(Math.PI):M4.ident());
+      if(inside){
+        // Opened gatefold: two pockets hinged at the spine, folded slightly towards the viewer.
+        // Seen from behind, the left panel carries the front cover and the right one the back.
+        const spread=look('inside');
+        pocket(out,M4.mul(M,M4.rotY(theta),M4.translate(-S/2,0,0)),1,{...spread,rect:[0,0,.5,1]},look('front'),T,gap,edge,inner);
+        pocket(out,M4.mul(M,M4.rotY(-theta),M4.translate(S/2,0,0)),-1,{...spread,rect:[.5,0,.5,1]},look('back'),T,gap,edge,inner);
+      }else{
+        pocket(out,M,-1,look('front'),closedGate?inner:look('back'),T,gap,edge,inner);
+        if(closedGate){
+          // Closed gatefold: the second panel lies behind the pocket, joined by a wider spine.
+          box(out,M,[0,0,-T/2-BOARD*1.4],[S,S,BOARD],{nz:look('back'),pz:inner,px:edge,nx:edge,py:edge,ny:edge});
+          out.push({mesh:'spine',model:M4.mul(M,M4.translate(-S/2,0,(zmin+zmax)/2),M4.scale(BOARD*2.2,S,(zmax-zmin)/2)),mat:edge});
+        }
+      }
+      items.push(...out);for(const o of out)casters.push({mesh:o.mesh,model:o.model,opacity:1});
+      sleeves.push({sl,height:zmax-zmin,near:flip?-zmax:zmin});
+    }
+    // Records: in the pocket while sliding out, behind the sleeve side by side, stacked on a flat lay.
+    const tops=[],behind=sleeves.length?Math.min(...sleeves.map(s=>s.near)):0;
+    for(const d of L.items.filter(it=>it.type==='disc').sort((a,b)=>b.i-a.i)){
+      let z=0,dx=0,dy=0,pre=M4.ident();
+      if(flatLay){
+        let h=0;for(const s of sleeves)if(overlapsSleeve(d,s.sl))h=Math.max(h,s.height);
+        for(const t of tops)if(Math.hypot(t.cx-d.cx,t.cy-d.cy)<D)h=Math.max(h,t.top);
+        z=h+DISC_T/2+.3;tops.push({cx:d.cx,cy:d.cy,top:z+DISC_T/2});
+      }else if(st.mode==='both'&&st.scene==='slide'){
+        // Each record of an opened gatefold has a pocket of its own; two in one sleeve sit side by side.
+        z=double&&!open?(d.i===0?1:-1)*DISC_T*.62:0;
+        // Two records in a normal sleeve: the flat picture keeps the back one peeking out, but in 3D
+        // it would stick out of a closed sleeve, so it only leads the front one once they slide.
+        if(double&&!open&&d.i===1){const off=st.position/100*D*.9,dir=Math.sign(d.cx)||1;dx=dir*(off*1.3+Math.min(off,D*.06))-d.cx;}
+        // Records rest on the pocket's bottom board rather than cutting through it.
+        dy=BOARD;
+        if(open)pre=M4.rotY(d.cx>0?-theta:theta);
+      }else if(st.mode==='both'&&st.scene==='side')z=behind-DISC_T*.7-S*.004-d.i*DISC_T*1.8;
+      else z=-d.i*S*.03;
+      addDisc(items,casters,M4.mul(toWorld,pre,M4.translate(d.cx+dx,-d.cy+dy,z)),st,d.i,hi);
+    }
+    const target=M4.apply(toWorld,[frame3d.cx,-frame3d.cy,0]);
+    return {items,casters,target,floorY:flatLay?0:-L.floorY};
+  }
+  // A backdrop sweep: floor curving up into a wall behind the scene. It turns with the camera so
+  // the wall always stays behind the records; a tight curve reads as a wall and a floor.
+  function sweepMesh(rc,wd){
+    const key=Math.round(rc)+'|'+Math.round(wd);
+    if(gl3d.sweep?.key===key)return gl3d.sweep;
+    if(gl3d.sweep){gl.deleteBuffer(gl3d.sweep.vbo);gl.deleteBuffer(gl3d.sweep.ibo);}
+    const W=S*40,F=S*40,H=S*40,pts=[[F,0,0,1],[-wd+rc,0,0,1]],v=[],idx=[];
+    for(let k=1;k<=16;k++){const a=k/16*Math.PI/2;pts.push([-wd+rc-rc*Math.sin(a),rc-rc*Math.cos(a),Math.sin(a),Math.cos(a)]);}
+    pts.push([-wd,H,1,0]);
+    pts.forEach(([z,y,nz,ny],i)=>{v.push(-W,y,z,0,ny,nz,0,i/pts.length,W,y,z,0,ny,nz,1,i/pts.length);if(i)idx.push(2*i-2,2*i-1,2*i+1,2*i-2,2*i+1,2*i);});
+    const vbo=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,vbo);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(v),gl.STATIC_DRAW);
+    const ibo=gl.createBuffer();gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,ibo);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(idx),gl.STATIC_DRAW);
+    return gl3d.sweep={key,vbo,ibo,count:idx.length};
+  }
+  function drawMesh(mesh){
+    const m=typeof mesh==='string'?gl3d.meshes[mesh]:mesh;
+    gl.bindBuffer(gl.ARRAY_BUFFER,m.vbo);
+    gl.vertexAttribPointer(0,3,gl.FLOAT,false,32,0);gl.vertexAttribPointer(1,3,gl.FLOAT,false,32,12);gl.vertexAttribPointer(2,2,gl.FLOAT,false,32,24);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,m.ibo);gl.drawElements(gl.TRIANGLES,m.count,gl.UNSIGNED_SHORT,0);
+  }
+  function renderShadows(casters,floorY,dir,rect){
+    const {shadow:u,blur:b,fbo,minmax}=gl3d;
+    gl.bindFramebuffer(gl.FRAMEBUFFER,fbo[0].fb);gl.viewport(0,0,SHADOW_RES,SHADOW_RES);
+    gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.disable(gl.DEPTH_TEST);gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE);
+    // Overlapping parts shouldn't add up: keep the darkest (MAX) where the browser allows it.
+    gl.blendEquation(minmax?minmax.MAX_EXT:gl.FUNC_ADD);
+    gl.useProgram(u.program);gl.uniform3fv(u.uLightDir,dir);gl.uniform1f(u.uFloorY,floorY);gl.uniform1f(u.uContact,S*.035);gl.uniform4fv(u.uShadowRect,rect);
+    for(const [chan,vertical] of [[[1,0],0],[[0,1],1]]){
+      gl.uniform2fv(u.uChan,chan);gl.uniform1f(u.uVertical,vertical);
+      for(const c of casters){gl.uniformMatrix4fv(u.uModel,false,c.model);gl.uniform1f(u.uOpacity,c.opacity);drawMesh(c.mesh);}
+    }
+    gl.blendEquation(gl.FUNC_ADD);gl.disable(gl.BLEND);
+    // Gaussian blur, across then down: wide for the cast shadow, tight for the contact shadow.
+    gl.useProgram(b.program);gl.activeTexture(gl.TEXTURE0);
+    const k=rect[2],soft=S*.045/3*k,tight=S*.012/3*k;
+    for(const [from,to,dx,dy] of [[0,1,1,0],[1,0,0,1]]){
+      gl.bindFramebuffer(gl.FRAMEBUFFER,fbo[to].fb);gl.bindTexture(gl.TEXTURE_2D,fbo[from].tex);
+      gl.uniform2f(b.uStepR,dx*soft,dy*soft);gl.uniform2f(b.uStepG,dx*tight,dy*tight);drawMesh('quad');
+    }
+    gl.enable(gl.DEPTH_TEST);gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);
+  }
+  function useLook(u,m){
+    gl.uniform1f(u.uKind,m.kind);gl.uniform1f(u.uUseTex,m.tex?1:0);
+    if(m.tex){gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,m.tex);}
+    if(m.groove){gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,m.groove);}
+    gl.uniform4fv(u.uUVRect,m.rect||[0,0,1,1]);gl.uniform3fv(u.uColor,m.color||[1,1,1]);
+    gl.uniform1f(u.uGloss,m.gloss||0);gl.uniform1f(u.uSheen,m.sheen||0);gl.uniform1f(u.uClear,m.clear?1:0);gl.uniform1f(u.uAlpha,m.alpha??1);gl.uniform1f(u.uLabel,m.label||0);gl.uniform1f(u.uAniso,m.aniso||1);
+  }
+  function draw3d(width,height,viewHalfH,hi){
+    const st=state,scene=build3d(st,hi),c=drawCam||preferences[cameraKey()],u=gl3d.main;
+    const t=Math.tan(c.fov*Math.PI/360),dist=viewHalfH/c.zoom/t,yaw=c.yaw*Math.PI/180,pitch=c.pitch*Math.PI/180,tg=scene.target,pan=[c.panX/100*viewHalfH,c.panY/100*viewHalfH];
+    const view=M4.mul(M4.translate(-pan[0],-pan[1],-dist),M4.rotX(pitch),M4.rotY(yaw),M4.translate(-tg[0],-tg[1],-tg[2]));
+    const eye=M4.apply(M4.mul(M4.translate(...tg),M4.rotY(-yaw),M4.rotX(-pitch)),[pan[0],pan[1],dist]);
+    const bg=previewBackground(),photo=!!(images[st.bgArtId]&&imageReady(st.bgArtId)),floorY=scene.floorY,onFloor=eye[1]>floorY+1;
+    const sweep=onFloor&&!!bg&&!photo&&st.backdrop!=='none',shadowK=onFloor?st.shadow/100:0;
+    // The lights travel round with the camera like a photographer's, so every side of the record is lit
+    // and the floor shadow keeps its place in the picture; turning still moves the highlights.
+    const turn=M4.rotY(-yaw),around=d=>norm(M4.dir(turn,d)),k0=KEY_LIGHT[st.light];
+    const key=around(k0),fill=around([-k0[0]*1.3,.3,.9]),shadowDir=around([k0[0]*.55,1,k0[2]*.35]);
+    const extent=Math.max(frame3d.halfW,frame3d.halfH)*2.2+S*.5,rect=[tg[0],tg[2],1/(2*extent),S];
+    if(shadowK>0)renderShadows(scene.casters,floorY,shadowDir,rect);
+    gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.viewport(0,0,width,height);
+    gl.enable(gl.DEPTH_TEST);gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);gl.disable(gl.CULL_FACE);
+    const clear=bg&&!photo?rgbf(bg):null;
+    gl.clearColor(...(clear?[...clear,1]:[0,0,0,0]));gl.depthMask(true);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+    gl.useProgram(u.program);
+    gl.uniformMatrix4fv(u.uProj,false,M4.perspective(c.fov*Math.PI/180,width/height,dist/30,dist+S*80));
+    gl.uniformMatrix4fv(u.uView,false,view);
+    const toView=d=>norm(M4.dir(view,d));
+    gl.uniform3fv(u.uUp,toView([0,1,0]));gl.uniform3fv(u.uL1,toView(key));gl.uniform3fv(u.uL2,toView(fill));
+    gl.uniform2f(u.uViewport,width,height);gl.uniform1f(u.uAspect,width/height);gl.uniform1f(u.uLightX,lightDir(st));
+    gl.uniform1f(u.uDepth,st.depth/100);gl.uniform1f(u.uBackdrop,st.backdrop!=='none'?1:0);gl.uniform1f(u.uShadowK,shadowK);gl.uniform4fv(u.uShadowRect,rect);gl.uniform1f(u.uFloorY,floorY);
+    gl.uniform3fv(u.uShadowColor,rgbf(bg?mix(bg,'#000000',.82):'#000000'));
+    gl.activeTexture(gl.TEXTURE2);gl.bindTexture(gl.TEXTURE_2D,gl3d.fbo[0].tex);
+    const draw=(mesh,model,look)=>{
+      gl.uniformMatrix4fv(u.uModel,false,model);const mv=M4.mul(view,model);
+      gl.uniformMatrix3fv(u.uNormal,false,M4.normal(mv));if(look.kind===2)gl.uniformMatrix3fv(u.uTan,false,M4.upper(mv));
+      useLook(u,look);drawMesh(mesh);
+    };
+    // Background: the photo filling the view, or the backdrop sweep, then the shadow on the floor.
+    gl.uniform1f(u.uScreen,0);
+    if(photo){
+      const pic=imgEls[st.bgArtId],ia=pic.naturalWidth/pic.naturalHeight,a=width/height,z=st.bgZoom/100;
+      let fx=a>ia?1:a/ia,fy=a>ia?ia/a:1;fx/=z;fy/=z;
+      const cx=.5-st.bgX/100*(1-fx)/2,cy=.5-st.bgY/100*(1-fy)/2;
+      gl.depthMask(false);gl.uniform1f(u.uScreen,1);draw('quad',M4.ident(),{kind:5,tex:photoTexture(st),rect:[cx-fx/2,cy-fy/2,fx,fy]});gl.uniform1f(u.uScreen,0);gl.depthMask(true);
+    }
+    const ground=M4.translate(tg[0],floorY,tg[2]);
+    if(sweep){
+      // The floor stays flat under everything in the frame, whichever way the camera faces.
+      const studioSet=st.backdrop==='studio',rc=studioSet?S*1.4:S*.02,wd=Math.hypot(frame3d.halfW,frame3d.halfH)+rc;
+      gl.uniform1f(u.uFloorMul,studioSet?1:1-(.02+.06*st.depth/100));gl.uniform1f(u.uWallFade,studioSet?0:1);
+      draw(sweepMesh(rc,wd),M4.mul(ground,M4.rotY(-yaw)),{kind:3,color:rgbf(bg)});
+    }else if(shadowK>0){
+      gl.depthMask(false);draw('quad',M4.mul(ground,M4.rotX(-Math.PI/2),M4.scale(extent*2,extent*2,1)),{kind:4});gl.depthMask(true);
+    }
+    // The sleeve and opaque records, then see-through records from the back to the front.
+    const depthOf=it=>M4.apply(M4.mul(view,it.model),[0,0,0])[2];
+    for(const it of scene.items)if(!it.transparent)draw(it.mesh,it.model,it.mat);
+    for(const it of scene.items.filter(it=>it.transparent).sort((a,b)=>depthOf(a)-depthOf(b)))draw(it.mesh,it.model,it.mat);
+    trimTextures();
+    // Sharper record faces once nothing has changed for a moment.
+    const wanted=[...pendingHi.keys()].filter(k=>!texCache.has(k)).join();
+    if(wanted!==hiWanted){hiWanted=wanted;clearTimeout(hiTimer);hiTimer=wanted?setTimeout(upgradeHi,450):null;}
+  }
+  // Fit the steady preview frame inside the stage padding, like the flat SVG preview does.
+  function fitHalfH(w,h,pad){const f=frame3d,scale=Math.min((w-2*pad)/(2*f.halfW),(h-2*pad)/(2*f.halfH));return h/2/Math.max(scale,1e-6);}
+  const stagePad=()=>parseFloat(getComputedStyle($('stage')).paddingTop)||0;
+  // The preview camera glides after the requested one (exponential smoothing per frame), so drags,
+  // wheel steps, sliders and presets all move smoothly; downloads use the requested camera exactly.
+  const CAM_GLIDE_MS=55;let shownCam={},drawCam=null,glideLast=0,camUIQueued=false;
+  const camEps={yaw:.01,pitch:.01,fov:.01,panX:.01,panY:.01};
+  function glideCamera(){
+    const key=cameraKey(),target=preferences[key];let cur=shownCam[key];
+    const now=performance.now(),dt=glideLast?Math.min(50,now-glideLast):16;
+    if(!cur){shownCam[key]={...target};glideLast=0;return false;}
+    const a=1-Math.exp(-dt/CAM_GLIDE_MS);let moving=false;
+    for(const k of Object.keys(camEps)){
+      const diff=k==='yaw'?((target.yaw-cur.yaw)%360+540)%360-180:target[k]-cur[k];
+      if(Math.abs(diff)<camEps[k])cur[k]=target[k];else{cur[k]+=diff*a;moving=true;}
+    }
+    const lz=Math.log(target.zoom/cur.zoom);
+    if(Math.abs(lz)<1e-4)cur.zoom=target.zoom;else{cur.zoom*=Math.exp(lz*a);moving=true;}
+    glideLast=moving?now:0;return moving;
+  }
+  const camGliding=()=>{const key=cameraKey(),c=shownCam[key],t=preferences[key];return !!c&&Object.keys(camEps).some(k=>c[k]!==t[k])||!!c&&c.zoom!==t.zoom;};
+  function renderPreview3d(){
+    drawQueued=false;
+    if(!is3d()||!frame3d){shownCam={};glideLast=0;return;}
+    const r=canvas3d.getBoundingClientRect();if(!r.width||!r.height)return;
+    const dpr=Math.min(2,window.devicePixelRatio||1),w=Math.round(r.width*dpr),h=Math.round(r.height*dpr);
+    if(canvas3d.width!==w||canvas3d.height!==h){canvas3d.width=w;canvas3d.height=h;}
+    const moving=glideCamera();drawCam=shownCam[cameraKey()];
+    try{draw3d(w,h,fitHalfH(r.width,r.height,stagePad()),false);}finally{drawCam=null;}
+    pickDirty=true;
+    // Slider and preset feedback once per frame, not once per pointer event.
+    if(camUIQueued){camUIQueued=false;syncCameraControls();}
+    if(moving)request3d();
+  }
+  function request3d(){if(!drawQueued){drawQueued=true;requestAnimationFrame(renderPreview3d);}}
+  // Downloads and photos: the preview window as the camera sees it, at the chosen width, sharp record faces.
+  async function png3d(width){
+    const r=canvas3d.getBoundingClientRect();if(!r.width||!r.height)throw Error('the preview is not visible.');
+    const max=Math.min(...gl.getParameter(gl.MAX_VIEWPORT_DIMS),gl.getParameter(gl.MAX_RENDERBUFFER_SIZE));
+    let w=width,h=Math.round(width*r.height/r.width);if(w>max||h>max){const k=max/Math.max(w,h);w=Math.floor(w*k);h=Math.floor(h*k);}
+    canvas3d.width=w;canvas3d.height=h;
+    try{
+      draw3d(gl.drawingBufferWidth,gl.drawingBufferHeight,fitHalfH(r.width,r.height,stagePad()),true);
+      return await new Promise((resolve,reject)=>canvas3d.toBlob(blob=>blob?resolve(blob):reject(Error('PNG creation failed.')),'image/png'));
+    }finally{canvas3d.width=canvas3d.height=1;renderPreview3d();}
+  }
+  function validCamera(value,kind){
+    const next=cameraDefault(kind);
+    for(const [name,[min,max]] of Object.entries(CAMERA_LIMITS))if(typeof value?.[name]==='number'&&Number.isFinite(value[name]))next[name]=Math.max(min,Math.min(max,value[name]));
+    return next;
+  }
+  function fmt(key){const v=state[key];return key==='position'&&state.scene==='flat'?Math.round((v-50)/50*25)+'°':key==='placeRot'?v+'°':v+'%';}
   const slots={artId:{thumb:'art-thumb',upload:'art-upload',remove:'art-remove',words:['Upload front','Replace front']},backArtId:{thumb:'back-thumb',upload:'back-upload',remove:'back-remove',words:['Upload back','Replace back']},insideArtId:{thumb:'inside-thumb',upload:'inside-upload',remove:'inside-remove',words:['Upload inside','Replace inside']},bgArtId:{thumb:'bg-image-btn',upload:'bg-upload',remove:'bg-remove',words:['Choose image','Change image']},...Object.fromEntries('ABCD'.split('').map(l=>['label'+l+'Id',{thumb:'label-'+l.toLowerCase()+'-thumb',upload:'label-'+l.toLowerCase()+'-thumb',remove:'label-'+l.toLowerCase()+'-remove'}]))};
   const shownThumb={};
   let exportBox=[0,0,S,S];
@@ -2502,18 +3245,17 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     for(const [key,slot] of Object.entries(slots)){
       const id=state[key]&&images[state[key]]?state[key]:null;
       if(shownThumb[key]!==id){$(slot.thumb).style.backgroundImage=id?'url("'+images[id]+'")':'';shownThumb[key]=id;}
-      $(slot.thumb).classList.toggle('has-art',!!id);$(slot.remove).disabled=!id;if(slot.words)$(slot.upload).textContent=slot.words[id?1:0];
+      $(slot.thumb).classList.toggle('has-art',!!id);root.querySelectorAll('[data-thumb="'+slot.thumb+'"]').forEach(el=>el.classList.toggle('has-art',!!id));$(slot.remove).disabled=!id;if(slot.words)$(slot.upload).textContent=slot.words[id?1:0];
     }
     updateDiscs(state);
     const L=layout(state);exportBox=L.box;
     // The preview frame covers the slider's whole range, so moving it moves the record instead of
     // rescaling the view. On phones the frame hugs the artwork so it fills the small preview.
     const frame=isMobileViewport()||state.mode!=='both'?L.box:union(L.box,layout(state,0).box,layout(state,100).box);
-    lastFrame=frame;placeBackground(frame);
+    lastFrame=frame;exportBox=placedBox(L.box,state,frame);placeBackground(frame);
     sceneEl.innerHTML=sceneMarkup(state,frame,L);
     svg.setAttribute('viewBox',frame.map(round).join(' '));
-    $('label-art-btn').disabled=!art;$('label-art-btn').title=art?'Use the cover art on the label':'Upload a cover first';
-    const shown={...state,labelMode:state.labelMode==='art'&&!art?'color':state.labelMode,coverView:state.coverView==='both'&&state.mode!=='cover'?'front':state.coverView};
+    const shown={...state,coverView:state.coverView==='both'&&state.mode!=='cover'?'front':state.coverView};
     root.querySelectorAll('[data-choice]').forEach(el=>el.setAttribute('aria-pressed',String(shown[el.dataset.choice]===el.dataset.option)));
     root.querySelectorAll('[data-mode]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.mode===state.mode)));
     root.dataset.mode=state.mode;
@@ -2522,7 +3264,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     root.querySelectorAll('[data-record-controls]').forEach(el=>el.hidden=state.mode==='cover');
     root.querySelectorAll('[data-layout-controls]').forEach(el=>el.hidden=state.mode!=='both');
     const effect=['marble','splatter'].includes(state.finish);
-    const show={accent:effect,pattern:effect,clarity:state.finish==='translucent',double:state.discs==='double',labelUpload:state.labelMode==='upload',gatefold:state.cover==='gatefold',closedView:!(state.cover==='gatefold'&&state.gateOpen==='open'),coverOnly:state.mode==='cover',labelColor:state.labelMode==='color'||state.labelMode==='art'&&!art,labelArtNote:state.labelMode==='art'&&art,noBackground:!previewBackground()&&!images[state.bgArtId],bgImage:!!images[state.bgArtId]};
+    const show={accent:effect,pattern:effect,clarity:state.finish==='translucent',double:state.discs==='double',labelUpload:state.labelMode==='upload',gatefold:state.cover==='gatefold',closedView:!(state.cover==='gatefold'&&state.gateOpen==='open'),coverOnly:state.mode==='cover',labelColor:state.labelMode==='color'||!labelFor(state,0),labelArtNote:state.labelMode==='upload',noBackground:!previewBackground()&&!images[state.bgArtId],bgImage:!!images[state.bgArtId]};
     const double=state.discs==='double';
     root.querySelectorAll('[data-side-label]').forEach(el=>el.textContent=el.dataset.sideLabel==='a'?(double?'Sides A + C':'Side A'):(double?'Sides B + D':'Side B'));
     root.querySelectorAll('[data-show]').forEach(el=>el.hidden=!show[el.dataset.show]);
@@ -2542,6 +3284,18 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     $('export-size').value=preferences.size;
     $('version-select').value=preferences.selected;
     updateVersionButton();
+    // 3D view: the same steady frame as the flat preview sets the camera's framing.
+    frame3d={cx:frame[0]+frame[2]/2,cy:frame[1]+frame[3]/2,halfW:frame[2]/2,halfH:frame[3]/2};
+    if(preferences.view3d&&!init3d())preferences.view3d=false;
+    const on3d=is3d();
+    svg.style.display=on3d?'none':'';canvas3d.hidden=!on3d;$('view3d-bar').hidden=false;$('spin-view').hidden=!on3d;
+    $('view-hint').textContent=on3d?'Drag to rotate · two fingers to move · pinch to zoom':'Drag the record to move it · scroll to resize · Shift + drag to turn';
+    if(!on3d){$('reset-view').disabled=!placeMoved(state);$('reset-view').textContent='Reset position';}else{$('reset-view').disabled=false;$('reset-view').textContent='Reset view';}
+    root.querySelectorAll('[data-flat-only]').forEach(el=>el.hidden=on3d);
+    root.querySelectorAll('[data-3d-only]').forEach(el=>el.hidden=!on3d);
+    $('toggle-3d').setAttribute('aria-pressed',String(on3d));if(!$('toggle-3d').disabled)$('toggle-3d').title=on3d?'Back to the flat view':'Show the record in 3D';
+    root.querySelector('.bg-note').textContent=on3d?'In 3D, dragging the preview turns the camera; move the background with the sliders.':'Tip: drag the record to move it; drag around it to move the background.';
+    if(on3d){syncCameraControls();request3d();}
   }
   function commit(){if(!same(state,committed)){undoStack.push({...committed});if(undoStack.length>80)undoStack.shift();redoStack=[];committed={...state};}paint();persist();}
   function changeTo(next){state=validState(next);commit();}
@@ -2637,6 +3391,12 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   let pickCanvas=null,pickLoading=false,pickAt=null;
   function buildPickSnapshot(){
     if(pickLoading)return;pickLoading=true;pickDirty=false;
+    if(is3d()){
+      // The 3D canvas keeps its last frame, so it can be copied straight into the picker's canvas.
+      const r=canvas3d.getBoundingClientRect(),c=document.createElement('canvas');c.width=canvas3d.width;c.height=canvas3d.height;
+      const ctx=c.getContext('2d',{willReadFrequently:true});ctx.drawImage(canvas3d,0,0);
+      pickCanvas={ctx,w:c.width,h:c.height,dpr:c.width/Math.max(1,r.width)};pickLoading=false;if(pickAt)showPick(pickAt);return;
+    }
     const r=svg.getBoundingClientRect(),dpr=Math.min(2,window.devicePixelRatio||1),w=Math.max(1,Math.round(r.width*dpr)),h=Math.max(1,Math.round(r.height*dpr));
     const copy=svg.cloneNode(true);copy.setAttribute('xmlns','http://www.w3.org/2000/svg');copy.setAttribute('width',w);copy.setAttribute('height',h);
     const url=URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(copy)],{type:'image/svg+xml;charset=utf-8'}));
@@ -2648,7 +3408,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   function previewBackground(){return {light:'#ffffff',dark:'#292c28',custom:preferences.customBackground}[preferences.background]||null;}
   function colorAt(x,y){
     const bg=previewBackground();if(!pickCanvas)return null;
-    const r=svg.getBoundingClientRect(),px=Math.floor((x-r.left)*pickCanvas.dpr),py=Math.floor((y-r.top)*pickCanvas.dpr);
+    const r=(is3d()?canvas3d:svg).getBoundingClientRect(),px=Math.floor((x-r.left)*pickCanvas.dpr),py=Math.floor((y-r.top)*pickCanvas.dpr);
     if(px<0||py<0||px>=pickCanvas.w||py>=pickCanvas.h)return bg;
     const [R,G,B,A]=pickCanvas.ctx.getImageData(px,py,1,1).data;
     if(A<8)return bg;
@@ -2674,7 +3434,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   // Drag the preview to move the background photo. While dragging only the photo moves; the
   // full repaint and undo step happen on release.
   stageEl.addEventListener('pointerdown',event=>{
-    if(!$('color-sheet').hidden||!images[state.bgArtId]||event.button!==0||!bgPan)return;
+    if(is3d()||!$('color-sheet').hidden||!images[state.bgArtId]||event.button!==0||!bgPan||event.target.closest('#subject,.view3d-bar')||event.shiftKey||event.pointerType==='touch')return;
     event.preventDefault();stageEl.setPointerCapture(event.pointerId);stageEl.classList.add('panning');
     const start={x:event.clientX,y:event.clientY,bx:state.bgX,by:state.bgY};let moved=false;
     const axis=(from,deltaPx,max)=>max>0?Math.max(-100,Math.min(100,Math.round(from+deltaPx*bgPan.unitsPerPx/max*100))):0;
@@ -2703,6 +3463,151 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     if(!hex){notice('That spot is transparent. Pick a spot on the record or choose a solid preview background.');return;}
     setSheetColor(hex);notice('Picked '+hex.toUpperCase()+' from the preview.');
   });
+  // ---- 3D camera ----
+  // Every camera change goes through here: clamp, update the Camera controls, redraw and remember.
+  function setCamera(changes){
+    const key=cameraKey(),next={...preferences[key],...changes};
+    if('yaw' in changes)next.yaw=wrapYaw(next.yaw);
+    preferences[key]=validCamera(next,cameraKind(state));
+    request3d();camUIQueued=true;rememberCamera();
+  }
+  function syncCameraControls(){
+    const c=preferences[cameraKey()],views=CAMERA_PRESETS[cameraKind(state)];
+    const shown={yaw:Math.round(c.yaw),pitch:Math.round(c.pitch),zoom:Math.round(c.zoom*100),fov:Math.round(c.fov),panX:Math.round(c.panX),panY:Math.round(c.panY)};
+    root.querySelectorAll('[data-camera]').forEach(el=>el.value=shown[el.dataset.camera]);
+    root.querySelectorAll('[data-camera-value]').forEach(el=>el.textContent=shown[el.dataset.cameraValue]+(['zoom','panX','panY'].includes(el.dataset.cameraValue)?'%':'°'));
+    root.querySelectorAll('[data-camera-preset]').forEach(el=>{const p=views[el.dataset.cameraPreset];el.setAttribute('aria-pressed',String(shown.yaw===Math.round(wrapYaw(p.yaw))&&shown.pitch===p.pitch&&!shown.panX&&!shown.panY));});
+  }
+  // Screen pixels → move percent: 100% is half the frame's height at 100% zoom.
+  const pixelsToPan=px=>px/Math.max(1,canvas3d.getBoundingClientRect().height/2)*100/preferences[cameraKey()].zoom;
+  function resetView(){if(!is3d()){resetPlacement();return;}setSpin(false);setCamera(cameraDefault(cameraKind(state)));notice('Camera reset.');}
+  root.querySelectorAll('[data-camera]').forEach(input=>{
+    const key=input.dataset.camera,line=input.closest('.slider-field');
+    input.addEventListener('input',()=>{if(key==='yaw')setSpin(false);setCamera({[key]:Number(input.value)/(key==='zoom'?100:1)});});
+    line.title='Double-click or press Delete to reset';
+    input.setAttribute('aria-keyshortcuts','Delete');
+    const reset=event=>{event.preventDefault();setCamera({[key]:cameraDefault(cameraKind(state))[key]});};
+    line.addEventListener('dblclick',reset);
+    input.addEventListener('keydown',event=>{if(event.key==='Delete'||event.key==='Backspace')reset(event);});
+  });
+  root.querySelectorAll('[data-camera-preset]').forEach(button=>button.addEventListener('click',()=>{setSpin(false);setCamera({...CAMERA_PRESETS[cameraKind(state)][button.dataset.cameraPreset],panX:0,panY:0});notice(button.title+'.');}));
+  $('reset-view').addEventListener('click',resetView);
+  $('reset-camera').addEventListener('click',resetView);
+  new ResizeObserver(()=>{if(is3d())request3d();}).observe($('stage'));
+  // Spin: the camera turns slowly around the record until it is stopped or grabbed.
+  let spinning=false,spinLast=0;
+  function spinStep(now){
+    if(!spinning)return;
+    if(!is3d()){setSpin(false);return;}
+    const dt=spinLast?Math.min(100,now-spinLast):16;spinLast=now;
+    setCamera({yaw:preferences[cameraKey()].yaw+dt*.02});requestAnimationFrame(spinStep);
+  }
+  function setSpin(on){
+    if(on===spinning)return;
+    spinning=on;spinLast=0;$('spin-view').setAttribute('aria-pressed',String(on));$('spin-view').textContent=on?'Stop':'Spin';
+    if(on)requestAnimationFrame(spinStep);
+  }
+  $('spin-view').addEventListener('click',()=>setSpin(!spinning));
+  $('toggle-3d').addEventListener('click',()=>{
+    if(!preferences.view3d&&!init3d()){notice('3D needs WebGL, which is unavailable in this browser.',true);return;}
+    preferences.view3d=!preferences.view3d;if(!preferences.view3d)setSpin(false);shownCam={};glideLast=0;
+    paint();persist();
+    notice(preferences.view3d?'3D view on. Drag the preview to turn the camera; every setting shapes the 3D record.':'Back to the flat view.');
+  });
+  // Flat view: drag the record to move it (anywhere when there is no background photo), Shift + drag to
+  // turn it, two fingers to move and pinch to resize, mouse wheel or trackpad pinch to resize, trackpad
+  // scroll to move, double-click to reset. While a gesture runs only the group's transform changes;
+  // the repaint and undo step follow on release.
+  function resetPlacement(){changeTo({...state,placeX:0,placeY:0,placeZoom:100,placeRot:0});notice('Record position reset.');}
+  const placeClamp=(v,[a,b])=>Math.max(a,Math.min(b,Math.round(v)));
+  function setPlacement(changes){
+    const lim={placeX:[-200,200],placeY:[-200,200],placeZoom:[30,300],placeRot:[-180,180]};
+    for(const [k,v] of Object.entries(changes))state[k]=placeClamp(k==='placeRot'?((v+540)%360)-180:v,lim[k]);
+    const g=svg.querySelector('#subject');if(g&&lastFrame)g.setAttribute('transform',placeTransform(state,lastFrame));
+    $('reset-view').disabled=!placeMoved(state);
+    for(const input of inputList)if(input.dataset.setting.startsWith('place'))input.value=state[input.dataset.setting];
+    root.querySelectorAll('[data-value^="place"]').forEach(el=>el.textContent=fmt(el.dataset.value));
+  }
+  // Screen pixels → placement percent (100% is half the frame's height).
+  function pxToPlace(px){const vb=svg.viewBox.baseVal,r=svg.getBoundingClientRect(),k=Math.min(r.width/vb.width,r.height/vb.height);return k&&lastFrame?px/k/(lastFrame[3]/2)*100:0;}
+  let placeGesture=null,placeTimer=null;const placeTouches=new Map();
+  const placeFingers=()=>{const [a,b]=[...placeTouches.values()];return {x:(a.x+b.x)/2,y:(a.y+b.y)/2,d:Math.hypot(a.x-b.x,a.y-b.y)};};
+  function placeStart(){const f=placeTouches.size===2?placeFingers():[...placeTouches.values()][0];return {...f,x0:state.placeX,y0:state.placeY,z0:state.placeZoom,r0:state.placeRot};}
+  stageEl.addEventListener('pointerdown',event=>{
+    if(is3d()||!$('color-sheet').hidden||event.button>0||event.target.closest('.view3d-bar'))return;
+    if(images[state.bgArtId]&&!event.target.closest('#subject')&&!event.shiftKey&&event.pointerType!=='touch'&&!placeTouches.size)return;
+    event.preventDefault();try{stageEl.setPointerCapture(event.pointerId);}catch(e){}
+    placeTouches.set(event.pointerId,{x:event.clientX,y:event.clientY});
+    placeGesture={...placeStart(),turn:event.shiftKey||event.altKey};stageEl.classList.add('panning');
+  });
+  stageEl.addEventListener('pointermove',event=>{
+    if(!placeTouches.has(event.pointerId)||!placeGesture)return;
+    placeTouches.set(event.pointerId,{x:event.clientX,y:event.clientY});
+    const g=placeGesture;
+    if(placeTouches.size===2){const f=placeFingers();setPlacement({placeX:g.x0+pxToPlace(f.x-g.x),placeY:g.y0-pxToPlace(f.y-g.y),placeZoom:g.z0*(g.d>0?f.d/g.d:1)});}
+    else if(g.turn)setPlacement({placeRot:g.r0+(event.clientX-g.x)*.4});
+    else setPlacement({placeX:g.x0+pxToPlace(event.clientX-g.x),placeY:g.y0-pxToPlace(event.clientY-g.y)});
+  });
+  const placeEnd=event=>{
+    if(!placeTouches.delete(event.pointerId))return;
+    // Lifting one of two fingers carries on moving with the other, from where it is now.
+    if(placeTouches.size){placeGesture={...placeStart(),turn:false};return;}
+    placeGesture=null;stageEl.classList.remove('panning');
+    if(!same(state,committed)){preferences.selected='custom';commit();notice('Record moved.');}
+  };
+  stageEl.addEventListener('pointerup',placeEnd);stageEl.addEventListener('pointercancel',placeEnd);
+  stageEl.addEventListener('wheel',event=>{
+    if(is3d()||!$('color-sheet').hidden)return;
+    event.preventDefault();
+    const lines=event.deltaMode===1?40:event.deltaMode===2?400:1,dx=event.deltaX*lines,dy=event.deltaY*lines;
+    // Trackpad pinches arrive as ctrl+wheel; a mouse wheel scrolls in whole notches with no sideways part.
+    const mouseWheel=event.deltaMode!==0||(dx===0&&Math.abs(dy)>=50&&Number.isInteger(dy));
+    if(event.shiftKey&&mouseWheel)setPlacement({placeRot:state.placeRot+Math.sign(dy||dx)*5});
+    else if(event.ctrlKey||mouseWheel)setPlacement({placeZoom:state.placeZoom*Math.exp(-dy*(event.ctrlKey?.01:.0015))});
+    else setPlacement({placeX:state.placeX-pxToPlace(dx),placeY:state.placeY+pxToPlace(dy)});
+    clearTimeout(placeTimer);placeTimer=setTimeout(()=>{if(!same(state,committed)){preferences.selected='custom';commit();}},300);
+  },{passive:false});
+  stageEl.addEventListener('dblclick',event=>{if(!is3d()&&$('color-sheet').hidden&&!event.target.closest('.view3d-bar')&&placeMoved(state))resetPlacement();});
+  // Drag to rotate, two fingers to move, pinch or mouse wheel to zoom, double-click to reset.
+  // The colour picker takes the stage while it is open.
+  let orbit=null,pinch=null;const touches=new Map();
+  const twoFingers=()=>{const [a,b]=[...touches.values()];return {x:(a.x+b.x)/2,y:(a.y+b.y)/2,d:Math.hypot(a.x-b.x,a.y-b.y)};};
+  stageEl.addEventListener('pointerdown',event=>{
+    if(!is3d()||!$('color-sheet').hidden||event.button>0||event.target.closest('.view3d-bar'))return;
+    event.preventDefault();try{stageEl.setPointerCapture(event.pointerId);}catch(e){}
+    setSpin(false);
+    touches.set(event.pointerId,{x:event.clientX,y:event.clientY});
+    const c=preferences[cameraKey()];
+    if(touches.size===2){orbit=null;pinch={...twoFingers(),panX:c.panX,panY:c.panY,zoom:c.zoom};}
+    else if(touches.size===1)orbit={id:event.pointerId,x:event.clientX,y:event.clientY,yaw:c.yaw,pitch:c.pitch};
+    stageEl.classList.add('dragging');
+  });
+  stageEl.addEventListener('pointermove',event=>{
+    if(!touches.has(event.pointerId))return;
+    touches.set(event.pointerId,{x:event.clientX,y:event.clientY});
+    if(pinch&&touches.size===2){
+      const f=twoFingers(),zoom=pinch.zoom*(pinch.d>0?f.d/pinch.d:1);
+      setCamera({zoom,panX:pinch.panX-pixelsToPan(f.x-pinch.x),panY:pinch.panY+pixelsToPan(f.y-pinch.y)});
+    }else if(orbit&&event.pointerId===orbit.id)setCamera({yaw:orbit.yaw+(event.clientX-orbit.x)*.4,pitch:orbit.pitch+(event.clientY-orbit.y)*.35});
+  });
+  const endGesture=event=>{
+    if(!touches.delete(event.pointerId))return;
+    pinch=null;orbit=null;
+    // Lifting one of two fingers carries on turning with the other, from where it is now.
+    if(touches.size===1){const [[id,p]]=[...touches],c=preferences[cameraKey()];orbit={id,x:p.x,y:p.y,yaw:c.yaw,pitch:c.pitch};}
+    if(!touches.size)stageEl.classList.remove('dragging');
+  };
+  stageEl.addEventListener('pointerup',endGesture);stageEl.addEventListener('pointercancel',endGesture);
+  stageEl.addEventListener('wheel',event=>{
+    if(!is3d()||!$('color-sheet').hidden)return;
+    event.preventDefault();
+    const lines=event.deltaMode===1?40:event.deltaMode===2?400:1,dx=event.deltaX*lines,dy=event.deltaY*lines,c=preferences[cameraKey()];
+    // Trackpad pinches arrive as ctrl+wheel; a mouse wheel scrolls in whole notches with no sideways part.
+    const mouseWheel=event.deltaMode!==0||(dx===0&&Math.abs(dy)>=50&&Number.isInteger(dy));
+    if(event.ctrlKey||mouseWheel)setCamera({zoom:c.zoom*Math.exp(-dy*(event.ctrlKey?.01:.0015))});
+    else setCamera({panX:c.panX+pixelsToPan(dx),panY:c.panY-pixelsToPan(dy)});
+  },{passive:false});
+  stageEl.addEventListener('dblclick',event=>{if(is3d()&&$('color-sheet').hidden&&!event.target.closest('.view3d-bar'))resetView();});
   document.addEventListener('scroll',placeColorSheet,true);
   // The window stays open while other swatches are clicked; any other click outside it closes it.
   document.addEventListener('pointerdown',event=>{
@@ -2758,7 +3663,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   });
   root.querySelectorAll('.slider-field').forEach(line=>{
     const input=line.querySelector('input[type="range"]');
-    if(!input)return;
+    if(!input||!input.dataset.setting)return;
     const key=input.dataset.setting,value=resetValues[key];
     line.title='Double-click or press Delete to reset';
     input.setAttribute('aria-keyshortcuts','Delete');
@@ -2965,7 +3870,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     if(!includeBackdrop()){copy.querySelector('#backdrop')?.remove();copy.querySelector('#bg-art')?.remove();}
     return '<?xml version="1.0" encoding="UTF-8"?>\n'+new XMLSerializer().serializeToString(copy);
   }
-  $('download-svg').addEventListener('click',async()=>{try{commit();download(new Blob([await svgExport()],{type:'image/svg+xml;charset=utf-8'}),filename()+'.svg');notice('SVG download started.');}catch(e){notice('Could not export SVG: '+e.message,true);}});
+  $('download-svg').addEventListener('click',async()=>{try{commit();download(new Blob([await svgExport()],{type:'image/svg+xml;charset=utf-8'}),filename()+'.svg');notice(is3d()?'SVG download started. SVG is the flat vector version of the record.':'SVG download started.');}catch(e){notice('Could not export SVG: '+e.message,true);}});
   const canvasPNG=canvas=>new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(Error('PNG creation failed.')),'image/png'));
   // PNG downloads and photos capture the preview window itself, edge to edge, at the chosen width.
   function stageBox(){
@@ -2990,7 +3895,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     const button=$('download-png');button.disabled=true;button.textContent='Preparing PNG…';
     try{
       commit();const width=preferences.size,name=filename();
-      const png=await stagePNG(width);
+      const png=is3d()?await png3d(width):await stagePNG(width);
       download(png,name+'-'+width+'px.png');notice((includeBackdrop()?'PNG with its background':'Transparent PNG')+' download started.');
     }catch(e){notice('Could not export PNG: '+e.message,true);}finally{button.disabled=false;button.textContent='Download PNG';}
   });
@@ -3042,7 +3947,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   }
   // ---- Photos: each keeps a PNG (the preview as it looks) and the vector SVG, until they are downloaded ----
   const photoStore={
-    all:()=>idb('photos','readonly',s=>s.getAll()).then(list=>(list||[]).filter(p=>p.app===APP).sort((a,b)=>a.takenAt-b.takenAt)),
+    all:()=>idb('photos','readonly',s=>s.getAll()).then(list=>(list||[]).filter(p=>p.app===PHOTO_APP).sort((a,b)=>a.takenAt-b.takenAt)),
     put:photo=>idb('photos','readwrite',s=>s.put({id:photo.id,app:photo.app,takenAt:photo.takenAt,png:photo.png,svg:photo.svg,thumb:photo.thumb,view:photo.view})),
     remove:ids=>idb('photos','readwrite',s=>{for(const id of ids)s.delete(id);})
   };
@@ -3074,7 +3979,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   // The old "bulk" images (and those inside older project files) become photos with a PNG only.
   async function adoptBulk(list){
     for(const [i,item] of list.entries()){
-      const photo={id:String(item.id||newId()).slice(0,100),app:APP,takenAt:Date.now()+i,png:dataURLToBlob(item.dataUrl),svg:'',thumb:null,view:'record'};
+      const photo={id:String(item.id||newId()).slice(0,100),app:PHOTO_APP,takenAt:Date.now()+i,png:dataURLToBlob(item.dataUrl),svg:'',thumb:null,view:'record'};
       if(photos.some(p=>p.id===photo.id))continue;photos.push(photo);try{await photoStore.put(photo);}catch(e){}
     }
     renderPhotos();
@@ -3084,6 +3989,23 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   function showPhotos(open){$('photos-toggle').setAttribute('aria-expanded',String(open));$('photo-strip').hidden=!open;}
   try{showPhotos(localStorage.getItem('blob-record-photos-open')!=='false');}catch(e){showPhotos(true);}
   $('photos-toggle').addEventListener('click',()=>{const open=$('photos-toggle').getAttribute('aria-expanded')!=='true';showPhotos(open);try{localStorage.setItem('blob-record-photos-open',String(open));}catch(e){}});
+  // Hide or show the side panels and the download bar.
+  function showPanel(key,open){const btn=$('toggle-'+key),words=(open?'Hide ':'Show ')+key;root.classList.toggle(key+'-hidden',!open);btn.setAttribute('aria-expanded',String(open));btn.title=words;btn.setAttribute('aria-label',words);}
+  // Every visit opens with Uploads showing and Options and Downloads tucked away.
+  const PANEL_OPEN={options:false,uploads:true,downloads:false};
+  for(const key of Object.keys(PANEL_OPEN)){
+    showPanel(key,PANEL_OPEN[key]);
+    $('toggle-'+key).addEventListener('click',()=>showPanel(key,$('toggle-'+key).getAttribute('aria-expanded')!=='true'));
+  }
+  // Rail shortcuts open the same file picker as the full upload buttons.
+  root.querySelectorAll('[data-upload-for]').forEach(btn=>btn.addEventListener('click',()=>$(btn.dataset.uploadFor).click()));
+  // Quick download icons press the real buttons and mirror their enabled state and zip count.
+  root.querySelectorAll('[data-download-for]').forEach(btn=>{
+    const target=$(btn.dataset.downloadFor),count=btn.querySelector('.rail-count');
+    const sync=()=>{btn.disabled=target.disabled;if(count){const n=(target.textContent.match(/\d+/)||['0'])[0];count.textContent=n;count.hidden=n==='0';btn.title=target.textContent;}};
+    btn.addEventListener('click',()=>target.click());
+    new MutationObserver(sync).observe(target,{attributes:true,attributeFilter:['disabled'],childList:true,characterData:true,subtree:true});sync();
+  });
   $('photo-strip').addEventListener('click',event=>{
     const bin=event.target.closest('button[data-photo]'),photo=bin&&photos.find(p=>p.id===bin.dataset.photo);
     if(!photo)return;dropPhotos([photo]);notice('Photo removed.');
@@ -3092,11 +4014,12 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     const button=$('take-photo');button.disabled=true;button.textContent='Taking…';
     try{
       commit();
-      const png=await stagePNG(preferences.size),svgText=await svgExport();
-      const photo={id:newId(),app:APP,takenAt:Date.now(),png,svg:svgText,thumb:await thumbnail(png),view:'record'};
+      // A 3D photo is the PNG only: the SVG can only hold the flat picture.
+      const on3d=is3d(),png=on3d?await png3d(preferences.size):await stagePNG(preferences.size),svgText=on3d?'':await svgExport();
+      const photo={id:newId(),app:PHOTO_APP,takenAt:Date.now(),png,svg:svgText,thumb:await thumbnail(png),view:on3d?'3d':'record'};
       photos.push(photo);renderPhotos();
       try{await photoStore.put(photo);}catch(e){notice('Photo '+photos.length+' taken, but it is kept only until this page closes: browser storage is unavailable.',true);return;}
-      notice('Photo '+photos.length+' taken. Download zip saves every photo as PNG + SVG.');
+      notice('Photo '+photos.length+' taken. '+(on3d?'3D photos are saved as PNG only.':'Download zip saves every photo as PNG + SVG.'));
     }catch(e){notice('Could not take the photo: '+e.message,true);}finally{button.disabled=false;button.textContent='Take photo';}
   });
   function photosName(){const d=new Date(),p=n=>String(n).padStart(2,'0');return 'blob-record-photos-'+d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate());}
@@ -3124,6 +4047,9 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     if(/^#[0-9a-f]{6}$/i.test(prefs?.customBackground||''))preferences.customBackground=prefs.customBackground.toLowerCase();
     if([1024,2048,4096].includes(prefs?.size))preferences.size=prefs.size;
     if(typeof prefs?.includeBackground==='boolean')preferences.includeBackground=prefs.includeBackground;
+    if(typeof prefs?.view3d==='boolean')preferences.view3d=prefs.view3d;
+    if(prefs?.camera)preferences.camera=validCamera(prefs.camera,'upright');
+    if(prefs?.cameraFlat)preferences.cameraFlat=validCamera(prefs.cameraFlat,'flat');
   }
   $('project-name').addEventListener('input',()=>{preferences.project=$('project-name').value.slice(0,64);rememberSoon();});
   $('save-project').addEventListener('click',async()=>{
@@ -3176,12 +4102,13 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     }catch(e){notice('Could not load the file: '+e.message,true);}finally{$('project-file').value='';}
   });
   try{
-    const saved=JSON.parse(localStorage.getItem(STORE)||'null');
+    const own=localStorage.getItem(STORE),saved=JSON.parse(own||localStorage.getItem(LEGACY_STORE)||'null');
     if(saved?.app===APP&&[1,2].includes(saved.version)){
       images=validImages(saved.images);
       state=validState(saved.settings);committed={...state};
       savedVersions=(Array.isArray(saved.versions)?saved.versions:[]).slice(0,1000).map(v=>({id:String(v.id).slice(0,100),name:String(v.name||'Saved version').slice(0,64),settings:validState(v.settings)}));
-      legacyBulk=validBulk(saved.bulk);
+      // The flat studio's old photos stay with the flat studio.
+      if(own)legacyBulk=validBulk(saved.bulk);
       applyPreferences(saved.preferences);
       if(typeof saved.preferences?.name==='string')preferences.name=saved.preferences.name.slice(0,64);
       if(typeof saved.preferences?.selected==='string')preferences.selected=saved.preferences.selected;
@@ -3196,7 +4123,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     const known=new Set(photos.map(p=>p.id));photos=[...stored.filter(p=>!known.has(p.id)),...photos];
     const bulk=legacyBulk;legacyBulk=[];await adoptBulk(bulk);if(bulk.length)persist();
   }).catch(()=>{
-    for(const [i,item] of legacyBulk.entries())if(!photos.some(p=>p.id===item.id))photos.push({id:String(item.id||newId()),app:APP,takenAt:Date.now()+i,png:dataURLToBlob(item.dataUrl),svg:'',thumb:null,view:'record'});
+    for(const [i,item] of legacyBulk.entries())if(!photos.some(p=>p.id===item.id))photos.push({id:String(item.id||newId()),app:PHOTO_APP,takenAt:Date.now()+i,png:dataURLToBlob(item.dataUrl),svg:'',thumb:null,view:'record'});
   }).finally(renderPhotos);
   // The header badge: ONLINE on the GitHub Pages site, OFFLINE on this computer.
   const ONLINE=/\.github\.io$/i.test(location.hostname);
