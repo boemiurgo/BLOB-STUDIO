@@ -2302,6 +2302,8 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   #blob-app .button,#blob-app .text-button {text-align:center;justify-content:center;}
   #blob-app .upload-panel .art-actions {align-items:center;text-align:center;}
   #blob-app .label-cell {align-items:center;text-align:center;}
+  /* Phone: the page is the only scroller; panels that trap the swipe would stop it scrolling */
+  #blob-app .settings-panel,#blob-app .upload-panel,#blob-app .download-panel {overflow:visible!important;overscroll-behavior:auto!important;max-height:none;height:auto;}
 }
 </style>
 <script>
