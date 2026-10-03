@@ -2244,11 +2244,19 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
 #blob-app .preview-toolbar #toggle-background {display:flex;width:auto;margin:0;padding:4px 2px;}
 #blob-app #toggle-background .chev {transform:translateY(2px) rotate(-135deg);}
 #blob-app.background-hidden #toggle-background .chev {transform:translateY(-2px) rotate(45deg);}
-#blob-app .background-body {flex:1 1 100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0 28px;max-height:42vh;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--dmg-mid) transparent;padding:12px 4px 18px;border-top:2px dotted #cfd1c7;}
+#blob-app .background-body {flex:1 1 100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:0 24px;max-height:28vh;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--dmg-mid) transparent;padding:8px 2px 6px;border-top:2px dotted #cfd1c7;}
 #blob-app .background-body .bg-section {margin:0;padding:0;border:0;}
 #blob-app .background-body .bg-section[hidden] {display:none;}
-#blob-app .background-body .bg-section h2 {margin-bottom:12px;}
-#blob-app .background-body .field {margin-top:12px;}
+#blob-app .background-body .bg-section h2 {margin:0 0 6px;}
+/* Compact layout: pickers span the row, sliders sit two by two */
+#blob-app .background-body .menu-controls {display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;align-items:end;padding:0;}
+#blob-app .background-body .menu-controls > .mode-picker,#blob-app .background-body .menu-controls > .camera-presets,#blob-app .background-body .menu-controls > .control-note {grid-column:1/-1;}
+#blob-app .background-body .field,#blob-app .background-body .slider-field {margin:0;}
+#blob-app .background-body .mode-picker button {padding:4px 3px 3px;}
+#blob-app .background-body .camera-presets {grid-template-columns:repeat(6,1fr);gap:4px;margin:0;}
+#blob-app .background-body .camera-presets button {padding:4px 2px;min-height:0;}
+#blob-app .background-body #camera-note {display:none;}
+#blob-app .background-body #reset-camera {margin:0;padding-top:4px;padding-bottom:4px;}
 #blob-app.background-hidden .background-body {display:none;}
 #blob-app .header-right .history-actions {display:flex;flex-wrap:nowrap;gap:2px;}
 @media(min-width:661px) {#blob-app .preview-toolbar .backdrops {margin-left:auto;}}
