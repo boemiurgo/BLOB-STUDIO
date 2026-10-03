@@ -2251,7 +2251,8 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
 #blob-app.downloads-hidden .download-panel #toggle-downloads {margin:0;}
 #blob-app.downloads-hidden #toggle-downloads .chev {transform:translateY(2px) rotate(-135deg);}
 /* Background panel: the toolbar's Background header opens backdrop, light and camera controls below it */
-#blob-app .preview-toolbar #toggle-lights {display:flex;width:auto;margin:0 16px 0 0;padding:4px 2px;}
+#blob-app .preview-toolbar #toggle-lights {display:flex;flex:1 1 auto;justify-content:flex-start;width:auto;align-self:stretch;margin:0 16px 0 0;padding:4px 2px;}
+#blob-app .preview-toolbar #toggle-lights .chev {margin-left:8px;}
 #blob-app #toggle-lights .chev {transform:translateY(2px) rotate(-135deg);}
 #blob-app.lights-hidden #toggle-lights .chev {transform:translateY(-2px) rotate(45deg);}
 #blob-app .background-body {flex:1 1 100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:0 24px;max-height:28vh;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--dmg-mid) transparent;padding:8px 2px 6px;border-top:2px dotted #cfd1c7;}
@@ -2290,6 +2291,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   /* Phone: Lights & camera in one column, camera views three per row */
   #blob-app .background-body {grid-template-columns:minmax(0,1fr);gap:12px;max-height:45vh;}
   #blob-app .background-body .camera-presets {grid-template-columns:repeat(3,1fr);}
+  #blob-app .preview-toolbar #toggle-lights {flex-basis:100%;justify-content:center;margin:0;}
   #blob-app.options-hidden .settings-panel .panel-rail,#blob-app.uploads-hidden .upload-panel .panel-rail {display:none;}
   /* Phone order: toolbar, preview (pinned to the top while scrolling), uploads, options, downloads */
   #blob-app .logo-stage {position:sticky;top:0;z-index:5;}
@@ -3805,7 +3807,8 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   $('undo').addEventListener('click',()=>{if(!undoStack.length)return;redoStack.push({...state});state=undoStack.pop();committed={...state};preferences.selected='custom';paint();persist();notice('Previous edit restored.');});
   $('redo').addEventListener('click',()=>{if(!redoStack.length)return;undoStack.push({...state});state=redoStack.pop();committed={...state};preferences.selected='custom';paint();persist();notice('Edit restored.');});
   document.addEventListener('keydown',event=>{if(!(event.ctrlKey||event.metaKey)||event.target.matches('input[type="text"],textarea'))return;if(event.key.toLowerCase()==='z'){event.preventDefault();$(event.shiftKey?'redo':'undo').click();}else if(event.key.toLowerCase()==='y'){event.preventDefault();$('redo').click();}});
-  root.querySelectorAll('[data-background]').forEach(button=>button.addEventListener('click',()=>{preferences.background=button.dataset.background;paint();persist();}));
+  // A color swatch also turns off a background picture, so the chosen color shows.
+  root.querySelectorAll('[data-background]').forEach(button=>button.addEventListener('click',()=>{preferences.background=button.dataset.background;if(images[bgPic(state)]){preferences.selected='custom';changeTo({...state,bgUse:'none'});}else{paint();persist();}}));
   $('custom-bg-btn').addEventListener('click',()=>openColorSheet($('custom-bg-color'),'Preview background',$('custom-bg-btn')));
   $('custom-bg-color').addEventListener('input',()=>{preferences.customBackground=$('custom-bg-color').value.toLowerCase();preferences.background='custom';paint();rememberSoon();});
   $('custom-bg-color').addEventListener('change',persist);
