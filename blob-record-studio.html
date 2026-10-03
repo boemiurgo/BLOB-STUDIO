@@ -2283,9 +2283,9 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   #blob-app.options-hidden .settings-panel,#blob-app.uploads-hidden .upload-panel {padding:var(--pp);overflow-y:visible;}
   #blob-app.options-hidden .settings-panel > :not(#toggle-options):not(.panel-rail):not([hidden]),
   #blob-app.uploads-hidden .upload-panel > :not(#toggle-uploads):not(.panel-rail):not([hidden]),
-  #blob-app.downloads-hidden .download-panel > :not(#toggle-downloads):not([hidden]) {display:revert!important;}
+  #blob-app.downloads-hidden .download-panel > :not(#toggle-downloads):not(.download-rail):not([hidden]) {display:revert!important;}
   #blob-app.downloads-hidden .download-panel {display:block;}
-  #blob-app.downloads-hidden .download-panel .download-rail {display:none!important;}
+  #blob-app #download-panel .download-rail {display:flex!important;flex-flow:row wrap;justify-content:center;gap:6px;margin-bottom:12px;}
   #blob-app.options-hidden .settings-panel .panel-rail,#blob-app.uploads-hidden .upload-panel .panel-rail {display:none;}
   /* Phone order: toolbar, preview (pinned to the top while scrolling), uploads, options, downloads */
   #blob-app .logo-stage {position:sticky;top:0;z-index:5;}
