@@ -1125,7 +1125,7 @@ html>body{padding:0}</style>
         <label class="slider-field first-slider"><span>Depth<output data-value="depth">50%</output></span><input type="range" min="0" max="100" value="50" data-setting="depth" aria-label="Backdrop depth"></label>
         <label class="slider-field"><span>Shadow<output data-value="shadow">60%</output></span><input type="range" min="0" max="100" value="60" data-setting="shadow" aria-label="Shadow"></label>
       </div></section>
-        <section class="control-section bg-section" id="camera-section" data-3d-only hidden aria-labelledby="camera-heading"><h2 id="camera-heading">Camera</h2><div class="menu-controls camera-options">
+        <section class="control-section bg-section" id="camera-section" aria-labelledby="camera-heading"><h2 id="camera-heading">Camera</h2><div class="menu-controls camera-options">
         <div class="camera-presets" role="group" aria-label="Camera view"><button type="button" data-camera-preset="angle" aria-pressed="false" title="Three-quarter view">3/4 view</button><button type="button" data-camera-preset="front" aria-pressed="false" title="Seen from the front">Front</button><button type="button" data-camera-preset="top" aria-pressed="false" title="Looking down from above">Top</button><button type="button" data-camera-preset="left" aria-pressed="false" title="Seen from the left">Left</button><button type="button" data-camera-preset="right" aria-pressed="false" title="Seen from the right">Right</button><button type="button" data-camera-preset="back" aria-pressed="false" title="Seen from behind: the back cover and side B">Back</button></div>
         <label class="slider-field"><span>Orbit<output data-camera-value="yaw">0°</output></span><input type="range" min="-180" max="180" value="0" data-camera="yaw" aria-label="Camera orbit, all the way around"></label>
         <label class="slider-field"><span>Height<output data-camera-value="pitch">0°</output></span><input type="range" min="-20" max="90" value="0" data-camera="pitch" aria-label="Camera height angle"></label>
@@ -2249,7 +2249,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
 #blob-app.downloads-hidden .download-panel #toggle-downloads {margin:0;}
 #blob-app.downloads-hidden #toggle-downloads .chev {transform:translateY(2px) rotate(-135deg);}
 /* Background panel: the toolbar's Background header opens backdrop, light and camera controls below it */
-#blob-app .preview-toolbar #toggle-lights {display:flex;width:auto;margin:0;padding:4px 2px;}
+#blob-app .preview-toolbar #toggle-lights {display:flex;width:auto;margin:0 16px 0 0;padding:4px 2px;}
 #blob-app #toggle-lights .chev {transform:translateY(2px) rotate(-135deg);}
 #blob-app.lights-hidden #toggle-lights .chev {transform:translateY(-2px) rotate(45deg);}
 #blob-app .background-body {flex:1 1 100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:0 24px;max-height:28vh;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--dmg-mid) transparent;padding:8px 2px 6px;border-top:2px dotted #cfd1c7;}
@@ -3553,6 +3553,8 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     paint();persist();
     notice(preferences.view3d?'3D view on. Drag the preview to turn the camera; every setting shapes the 3D record.':'Back to the flat view.');
   });
+  // The camera controls stay in the Lights & camera panel; touching them in the flat view switches to 3D.
+  $('camera-section').addEventListener('pointerdown',event=>{if(!is3d()&&event.target.closest('button,input'))$('toggle-3d').click();},true);
   // Flat view: drag the record to move it (anywhere when there is no background photo), Shift + drag to
   // turn it, two fingers to move and pinch to resize, mouse wheel or trackpad pinch to resize, trackpad
   // scroll to move, double-click to reset. While a gesture runs only the group's transform changes;
