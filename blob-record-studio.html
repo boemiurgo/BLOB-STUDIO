@@ -2286,6 +2286,8 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   #blob-app.downloads-hidden .download-panel > :not(#toggle-downloads):not(.download-rail):not([hidden]) {display:revert!important;}
   #blob-app.downloads-hidden .download-panel {display:block;}
   #blob-app #download-panel .download-rail {display:flex!important;flex-flow:row wrap;justify-content:center;gap:6px;margin-bottom:12px;}
+  /* Phone: the icon row replaces the big download buttons; the PNG size picker stays */
+  #blob-app #download-panel .export-controls > .button {display:none!important;}
   #blob-app.options-hidden .settings-panel .panel-rail,#blob-app.uploads-hidden .upload-panel .panel-rail {display:none;}
   /* Phone order: toolbar, preview (pinned to the top while scrolling), uploads, options, downloads */
   #blob-app .logo-stage {position:sticky;top:0;z-index:5;}
