@@ -2205,8 +2205,10 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
 /* Collapsed side panels become a thin rail: arrow + icon shortcuts */
 #blob-app .panel-rail {display:none;}
 #blob-app.options-hidden .settings-panel,#blob-app.uploads-hidden .upload-panel {padding:8px 5px;overflow:hidden auto;scrollbar-width:none;}
-#blob-app.options-hidden .settings-panel > :not(#toggle-options):not(.panel-rail),
-#blob-app.uploads-hidden .upload-panel > :not(#toggle-uploads):not(.panel-rail) {display:none!important;}
+@media(min-width:661px) {
+  #blob-app.options-hidden .settings-panel > :not(#toggle-options):not(.panel-rail),
+  #blob-app.uploads-hidden .upload-panel > :not(#toggle-uploads):not(.panel-rail) {display:none!important;}
+}
 #blob-app.options-hidden #toggle-options,#blob-app.uploads-hidden #toggle-uploads {justify-content:center;padding:8px 0;margin-bottom:8px;}
 #blob-app.options-hidden #toggle-options,#blob-app.uploads-hidden #toggle-uploads {flex-direction:column-reverse;gap:10px;}
 #blob-app.options-hidden #toggle-options .panel-toggle-label,#blob-app.uploads-hidden #toggle-uploads .panel-toggle-label {writing-mode:vertical-rl;letter-spacing:.14em;}
@@ -2245,7 +2247,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
 /* Desktop: segment buttons share space by label length so long labels stay on one line */
 @media(min-width:661px) {#blob-app .settings-panel .mode-picker button {flex:1 1 auto;}}
 /* Downloads hidden: only the header bar stays */
-#blob-app.downloads-hidden .download-panel > :not(#toggle-downloads):not(.download-rail) {display:none!important;}
+@media(min-width:661px) {#blob-app.downloads-hidden .download-panel > :not(#toggle-downloads):not(.download-rail) {display:none!important;}}
 #blob-app.downloads-hidden .download-panel #toggle-downloads {margin:0;}
 #blob-app.downloads-hidden #toggle-downloads .chev {transform:translateY(2px) rotate(-135deg);}
 /* Background panel: the toolbar's Background header opens backdrop, light and camera controls below it */
@@ -2281,13 +2283,13 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   #blob-app .upload-panel .art-thumb.wide {width:112px;height:56px;}
   #blob-app .panel-toggle {display:none;}
   #blob-app.options-hidden .settings-panel,#blob-app.uploads-hidden .upload-panel {padding:var(--pp);overflow-y:visible;}
-  #blob-app.options-hidden .settings-panel > :not(#toggle-options):not(.panel-rail):not([hidden]),
-  #blob-app.uploads-hidden .upload-panel > :not(#toggle-uploads):not(.panel-rail):not([hidden]),
-  #blob-app.downloads-hidden .download-panel > :not(#toggle-downloads):not(.download-rail):not([hidden]) {display:revert!important;}
   #blob-app.downloads-hidden .download-panel {display:block;}
   #blob-app #download-panel .download-rail {display:flex!important;flex-flow:row wrap;justify-content:center;gap:6px;margin-bottom:12px;}
   /* Phone: the icon row replaces the big download buttons; the PNG size picker stays */
   #blob-app #download-panel .export-controls > .button {display:none!important;}
+  /* Phone: Lights & camera in one column, camera views three per row */
+  #blob-app .background-body {grid-template-columns:minmax(0,1fr);gap:12px;max-height:45vh;}
+  #blob-app .background-body .camera-presets {grid-template-columns:repeat(3,1fr);}
   #blob-app.options-hidden .settings-panel .panel-rail,#blob-app.uploads-hidden .upload-panel .panel-rail {display:none;}
   /* Phone order: toolbar, preview (pinned to the top while scrolling), uploads, options, downloads */
   #blob-app .logo-stage {position:sticky;top:0;z-index:5;}
