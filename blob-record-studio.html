@@ -3991,12 +3991,15 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   $('photos-toggle').addEventListener('click',()=>{const open=$('photos-toggle').getAttribute('aria-expanded')!=='true';showPhotos(open);try{localStorage.setItem('blob-record-photos-open',String(open));}catch(e){}});
   // Hide or show the side panels and the download bar.
   function showPanel(key,open){const btn=$('toggle-'+key),words=(open?'Hide ':'Show ')+key;root.classList.toggle(key+'-hidden',!open);btn.setAttribute('aria-expanded',String(open));btn.title=words;btn.setAttribute('aria-label',words);}
-  // Every visit opens with Uploads showing and Options and Downloads tucked away.
-  const PANEL_OPEN={options:false,uploads:true,downloads:false};
+  // Every visit opens with Downloads tucked away; on a desktop Options shows and Uploads is a rail, on a phone the other way round.
+  const desktop=matchMedia('(min-width:661px)').matches;
+  const PANEL_OPEN={options:desktop,uploads:!desktop,downloads:false};
   for(const key of Object.keys(PANEL_OPEN)){
     showPanel(key,PANEL_OPEN[key]);
     $('toggle-'+key).addEventListener('click',()=>showPanel(key,$('toggle-'+key).getAttribute('aria-expanded')!=='true'));
   }
+  // Double-clicking an icon on the collapsed Options rail picks it and opens the full panel.
+  root.querySelector('.settings-panel .panel-rail').addEventListener('dblclick',event=>{if(event.target.closest('button'))showPanel('options',true);});
   // Rail shortcuts open the same file picker as the full upload buttons.
   root.querySelectorAll('[data-upload-for]').forEach(btn=>btn.addEventListener('click',()=>$(btn.dataset.uploadFor).click()));
   // Quick download icons press the real buttons and mirror their enabled state and zip count.
