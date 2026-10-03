@@ -1115,8 +1115,8 @@ html>body{padding:0}</style>
       <p id="notice" class="notice" role="status" aria-live="polite">Upload a cover to get started.</p>
     </aside>
     <section class="preview-panel" aria-label="Record preview and downloads" tabindex="0">
-      <div class="preview-toolbar">
-        <div class="backdrops" role="group" aria-label="Preview background"><button type="button" class="panel-toggle" id="toggle-background" aria-expanded="true" aria-controls="background-body" title="Hide background"><span class="panel-toggle-label">Background</span><span class="chev" aria-hidden="true"></span></button><button type="button" data-background="checker" class="swatch checker" aria-label="Transparent preview" aria-pressed="false"></button><button type="button" data-background="light" class="swatch light" aria-label="Light preview" aria-pressed="false"></button><button type="button" data-background="dark" class="swatch dark" aria-label="Dark preview" aria-pressed="false"></button><button type="button" data-background="custom" id="custom-bg-btn" class="swatch custom-bg" aria-label="Custom preview color" aria-pressed="true"></button><input id="custom-bg-color" type="color" value="#e6e2da" class="color-input-hidden" tabindex="-1" aria-hidden="true"><button type="button" id="cover-bg-btn" class="swatch cover-bg" aria-pressed="false" aria-label="Front cover as background" title="Use the front cover as the background"></button><span class="bg-image-group"><button type="button" id="bg-image-btn" class="swatch image-bg" aria-label="Background image" title="Background image from your computer"></button><button type="button" id="bg-image-menu-btn" class="bg-menu-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="bg-image-menu" title="Background image options" aria-label="Background image options"></button></span><div id="bg-image-menu" class="bg-menu" role="group" aria-label="Background image options" hidden><label class="slider-field"><span>Blur<output data-value="bgBlur">30%</output></span><input type="range" min="0" max="100" value="30" data-setting="bgBlur" aria-label="Background blur"></label><label class="slider-field"><span>Zoom<output data-value="bgZoom">100%</output></span><input type="range" min="100" max="300" value="100" data-setting="bgZoom" aria-label="Background zoom"></label><label class="slider-field"><span>Horizontal<output data-value="bgX">0%</output></span><input type="range" min="-100" max="100" value="0" data-setting="bgX" aria-label="Background horizontal position"></label><label class="slider-field"><span>Vertical<output data-value="bgY">0%</output></span><input type="range" min="-100" max="100" value="0" data-setting="bgY" aria-label="Background vertical position"></label><div class="button-row"><button type="button" id="bg-upload" class="button secondary">Choose image</button><button type="button" id="bg-remove" class="button secondary" disabled>Remove</button></div><p class="bg-menu-note bg-note">Tip: drag the preview to move the background.</p></div></div>
+      <div class="preview-toolbar"><button type="button" class="panel-toggle" id="toggle-lights" aria-expanded="true" aria-controls="background-body" title="Hide lights and camera"><span class="panel-toggle-label">Lights &amp; camera</span><span class="chev" aria-hidden="true"></span></button>
+        <div class="backdrops" role="group" aria-label="Preview background"><span class="background-label">Background</span><button type="button" data-background="checker" class="swatch checker" aria-label="Transparent preview" aria-pressed="false"></button><button type="button" data-background="light" class="swatch light" aria-label="Light preview" aria-pressed="false"></button><button type="button" data-background="dark" class="swatch dark" aria-label="Dark preview" aria-pressed="false"></button><button type="button" data-background="custom" id="custom-bg-btn" class="swatch custom-bg" aria-label="Custom preview color" aria-pressed="true"></button><input id="custom-bg-color" type="color" value="#e6e2da" class="color-input-hidden" tabindex="-1" aria-hidden="true"><span class="bg-image-group"><button type="button" id="cover-bg-btn" class="swatch cover-bg" aria-pressed="false" aria-label="Cover art as background" title="Use the cover art as the background"></button><button type="button" id="cover-bg-menu-btn" class="bg-menu-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="cover-bg-menu" title="Cover background options" aria-label="Cover background options"></button></span><div id="cover-bg-menu" class="bg-menu" role="group" aria-label="Cover background options" hidden><div class="mode-picker cover-bg-parts" role="group" aria-label="Artwork used as background"><button type="button" data-choice="coverBgPart" data-option="front" aria-pressed="true">Front</button><button type="button" data-choice="coverBgPart" data-option="back" aria-pressed="false">Back</button><button type="button" data-choice="coverBgPart" data-option="a" aria-pressed="false">Label A</button><button type="button" data-choice="coverBgPart" data-option="b" aria-pressed="false">Label B</button><button type="button" data-choice="coverBgPart" data-option="c" data-show="double" aria-pressed="false">Label C</button><button type="button" data-choice="coverBgPart" data-option="d" data-show="double" aria-pressed="false">Label D</button></div><label class="slider-field"><span>Blur<output data-value="coverBlur">30%</output></span><input type="range" min="0" max="100" value="30" data-setting="coverBlur" aria-label="Cover background blur"></label><label class="slider-field"><span>Zoom<output data-value="coverZoom">100%</output></span><input type="range" min="100" max="300" value="100" data-setting="coverZoom" aria-label="Cover background zoom"></label><label class="slider-field"><span>Horizontal<output data-value="coverX">0%</output></span><input type="range" min="-100" max="100" value="0" data-setting="coverX" aria-label="Cover background horizontal position"></label><label class="slider-field"><span>Vertical<output data-value="coverY">0%</output></span><input type="range" min="-100" max="100" value="0" data-setting="coverY" aria-label="Cover background vertical position"></label><div class="button-row"><button type="button" id="cover-bg-off" class="button secondary">Turn off</button></div><p class="bg-menu-note">Tip: drag the preview to move the background.</p></div><span class="bg-image-group"><button type="button" id="bg-image-btn" class="swatch image-bg" aria-label="Background image" title="Background image from your computer"></button><button type="button" id="bg-image-menu-btn" class="bg-menu-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="bg-image-menu" title="Background image options" aria-label="Background image options"></button></span><div id="bg-image-menu" class="bg-menu" role="group" aria-label="Background image options" hidden><label class="slider-field"><span>Blur<output data-value="bgBlur">30%</output></span><input type="range" min="0" max="100" value="30" data-setting="bgBlur" aria-label="Background blur"></label><label class="slider-field"><span>Zoom<output data-value="bgZoom">100%</output></span><input type="range" min="100" max="300" value="100" data-setting="bgZoom" aria-label="Background zoom"></label><label class="slider-field"><span>Horizontal<output data-value="bgX">0%</output></span><input type="range" min="-100" max="100" value="0" data-setting="bgX" aria-label="Background horizontal position"></label><label class="slider-field"><span>Vertical<output data-value="bgY">0%</output></span><input type="range" min="-100" max="100" value="0" data-setting="bgY" aria-label="Background vertical position"></label><div class="button-row"><button type="button" id="bg-upload" class="button secondary">Choose image</button><button type="button" id="bg-remove" class="button secondary" disabled>Remove</button></div><p class="bg-menu-note bg-note">Tip: drag the preview to move the background.</p></div></div>
         <div class="background-body" id="background-body">
         <section class="control-section bg-section" id="light-menu" aria-labelledby="light-heading"><h2 id="light-heading">Backdrop &amp; light</h2><div class="menu-controls">
         <div class="mode-picker three" role="group" aria-label="Backdrop"><button type="button" data-choice="backdrop" data-option="none" aria-pressed="false">Plain</button><button type="button" data-choice="backdrop" data-option="studio" aria-pressed="true">Studio</button><button type="button" data-choice="backdrop" data-option="wall" aria-pressed="false">Wall + floor</button></div>
@@ -2058,6 +2058,12 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
 #blob-app .swatch.image-bg {background:#ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2 12l4-5 3 3.5 2-2.5 3 4z' fill='%23000'/%3E%3Crect x='10' y='3' width='3' height='3' fill='%23000'/%3E%3C/svg%3E") center/14px no-repeat;}
 #blob-app .swatch.cover-bg {background:#ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='3' y='3' width='10' height='10' fill='none' stroke='%23000' stroke-width='1.6'/%3E%3Ccircle cx='8' cy='8' r='2' fill='%23000'/%3E%3C/svg%3E") center/14px no-repeat;}
 #blob-app .swatch.cover-bg.has-art {background-size:cover;background-position:center;}
+#blob-app .swatch.cover-bg.is-on + .bg-menu-toggle {display:block;}
+#blob-app .swatch.is-on {outline:2px solid var(--dmg-dark);outline-offset:2px;}
+#blob-app:has(.swatch.is-on) .swatch[data-background][aria-pressed="true"] {outline:none;}
+#blob-app .cover-bg-parts {flex-wrap:wrap;margin-bottom:12px;}
+#blob-app .cover-bg-parts button {flex:1 1 30%;}
+#blob-app .cover-bg-parts button:disabled {opacity:.4;cursor:not-allowed;}
 #blob-app .swatch.image-bg.has-image {background-size:cover;background-position:center;}
 #blob-app .bg-menu-toggle {display:none;width:18px;height:24px;margin-left:4px;padding:0;border:2px solid var(--pixel-ink);border-radius:0;background:var(--panel);position:relative;color:var(--pixel-ink);}
 #blob-app .swatch.image-bg.has-art + .bg-menu-toggle {display:block;}
@@ -2243,9 +2249,9 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
 #blob-app.downloads-hidden .download-panel #toggle-downloads {margin:0;}
 #blob-app.downloads-hidden #toggle-downloads .chev {transform:translateY(2px) rotate(-135deg);}
 /* Background panel: the toolbar's Background header opens backdrop, light and camera controls below it */
-#blob-app .preview-toolbar #toggle-background {display:flex;width:auto;margin:0;padding:4px 2px;}
-#blob-app #toggle-background .chev {transform:translateY(2px) rotate(-135deg);}
-#blob-app.background-hidden #toggle-background .chev {transform:translateY(-2px) rotate(45deg);}
+#blob-app .preview-toolbar #toggle-lights {display:flex;width:auto;margin:0;padding:4px 2px;}
+#blob-app #toggle-lights .chev {transform:translateY(2px) rotate(-135deg);}
+#blob-app.lights-hidden #toggle-lights .chev {transform:translateY(-2px) rotate(45deg);}
 #blob-app .background-body {flex:1 1 100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:0 24px;max-height:28vh;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--dmg-mid) transparent;padding:8px 2px 6px;border-top:2px dotted #cfd1c7;}
 #blob-app .background-body .bg-section {margin:0;padding:0;border:0;}
 #blob-app .background-body .bg-section[hidden] {display:none;}
@@ -2259,7 +2265,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
 #blob-app .background-body .camera-presets button {padding:4px 2px;min-height:0;}
 #blob-app .background-body #camera-note {display:none;}
 #blob-app .background-body #reset-camera {margin:0;padding-top:4px;padding-bottom:4px;}
-#blob-app.background-hidden .background-body {display:none;}
+#blob-app.lights-hidden .background-body {display:none;}
 #blob-app .header-right .history-actions {display:flex;flex-wrap:nowrap;gap:2px;}
 @media(min-width:661px) {#blob-app .preview-toolbar .backdrops {margin-left:auto;}}
 @media(min-width:661px) {#blob-app .upload-panel {min-height:0;height:100%;}}
@@ -2314,10 +2320,14 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     marble:{finish:'marble',vinylColor:'#7a1f2b',vinylColor2:'#f3dccd',clarity:70,grooves:45,sheen:60,labelColor:'#f3dccd'},
     splatter:{finish:'splatter',vinylColor:'#f1ece2',vinylColor2:'#1b1b1b',clarity:70,grooves:45,sheen:55,labelColor:'#1b1b1b'}
   };
-  const defaults={mode:'both',scene:'slide',cover:'single',discs:'single',position:50,...looks.classic,disc2Color:'#b3342b',patternSeed:7,labelMode:'color',labelSize:34,sleeveColor:'#d8c4a4',sleeveGloss:35,texture:20,wear:0,backdrop:'studio',light:'left',depth:50,shadow:60,coverView:'front',gateOpen:'closed',insideColor:'#efe9df',recordSide:'a',bgBlur:30,bgZoom:100,bgX:0,bgY:0,artId:null,backArtId:null,insideArtId:null,bgArtId:null,labelAId:null,labelBId:null,labelCId:null,labelDId:null,placeX:0,placeY:0,placeZoom:100,placeRot:0};
+  const defaults={mode:'both',scene:'slide',cover:'single',discs:'single',position:50,...looks.classic,disc2Color:'#b3342b',patternSeed:7,labelMode:'color',labelSize:34,sleeveColor:'#d8c4a4',sleeveGloss:35,texture:20,wear:0,backdrop:'studio',light:'left',depth:50,shadow:60,coverView:'front',gateOpen:'closed',insideColor:'#efe9df',recordSide:'a',bgBlur:30,bgZoom:100,bgX:0,bgY:0,bgUse:'image',coverBgPart:'front',coverBlur:30,coverZoom:100,coverX:0,coverY:0,artId:null,backArtId:null,insideArtId:null,bgArtId:null,labelAId:null,labelBId:null,labelCId:null,labelDId:null,placeX:0,placeY:0,placeZoom:100,placeRot:0};
   const artKeys=['artId','backArtId','insideArtId','bgArtId','labelAId','labelBId','labelCId','labelDId'];
+  // The background picture is the uploaded image or one of the record's own artworks; each source keeps its own blur, zoom and position.
+  const coverBgKeys={front:'artId',back:'backArtId',a:'labelAId',b:'labelBId',c:'labelCId',d:'labelDId'};
+  const bgPic=st=>st.bgUse==='cover'?st[coverBgKeys[st.coverBgPart]]:st.bgUse==='image'?st.bgArtId:null;
+  const bgK=(st,k)=>(st.bgUse==='cover'?'cover':'bg')+k,bgV=(st,k)=>st[bgK(st,k)];
   const legacyArtKeys={labelAId:'labelArtId',labelCId:'label2ArtId'};
-  const resetValues={position:50,clarity:70,grooves:70,sheen:60,labelSize:34,sleeveGloss:35,texture:20,wear:0,depth:50,shadow:60,bgBlur:30,bgZoom:100,bgX:0,bgY:0,placeX:0,placeY:0,placeZoom:100,placeRot:0};
+  const resetValues={position:50,clarity:70,grooves:70,sheen:60,labelSize:34,sleeveGloss:35,texture:20,wear:0,depth:50,shadow:60,bgBlur:30,bgZoom:100,bgX:0,bgY:0,coverBlur:30,coverZoom:100,coverX:0,coverY:0,placeX:0,placeY:0,placeZoom:100,placeRot:0};
   let state={...defaults}, committed={...defaults}, undoStack=[], redoStack=[], savedVersions=[], photos=[], legacyBulk=[], saveTimer=null;
   // Uploaded images live outside the settings so undo and versions only carry a short id.
   let images={};
@@ -2343,9 +2353,9 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     if(!value||typeof value!=='object'||Array.isArray(value))throw Error('This file does not contain record settings.');
     const next={...defaults};
     for(const name of ['vinylColor','vinylColor2','disc2Color','labelColor','sleeveColor','insideColor'])if(/^#[0-9a-f]{6}$/i.test(value[name]||''))next[name]=value[name].toLowerCase();
-    const ranges={position:[0,100],clarity:[0,100],grooves:[0,100],sheen:[0,100],labelSize:[24,40],sleeveGloss:[0,100],texture:[0,100],wear:[0,100],depth:[0,100],shadow:[0,100],bgBlur:[0,100],bgZoom:[100,300],bgX:[-100,100],bgY:[-100,100],placeX:[-200,200],placeY:[-200,200],placeZoom:[30,300],placeRot:[-180,180],patternSeed:[1,99999]};
+    const ranges={position:[0,100],clarity:[0,100],grooves:[0,100],sheen:[0,100],labelSize:[24,40],sleeveGloss:[0,100],texture:[0,100],wear:[0,100],depth:[0,100],shadow:[0,100],bgBlur:[0,100],bgZoom:[100,300],bgX:[-100,100],bgY:[-100,100],coverBlur:[0,100],coverZoom:[100,300],coverX:[-100,100],coverY:[-100,100],placeX:[-200,200],placeY:[-200,200],placeZoom:[30,300],placeRot:[-180,180],patternSeed:[1,99999]};
     for(const [name,[min,max]] of Object.entries(ranges))if(typeof value[name]==='number'&&Number.isFinite(value[name]))next[name]=Math.round(Math.max(min,Math.min(max,value[name])));
-    for(const [name,values] of Object.entries({mode:['cover','record','both'],scene:['slide','side','flat'],cover:['single','gatefold'],discs:['single','double'],finish:['solid','translucent','marble','splatter'],labelMode:['color','upload'],backdrop:['none','studio','wall'],light:['left','top','right'],coverView:['front','back','both'],gateOpen:['closed','open'],recordSide:['a','b']}))if(values.includes(value[name]))next[name]=value[name];else if(name==='labelMode'&&value[name]==='art')next[name]='upload';
+    for(const [name,values] of Object.entries({mode:['cover','record','both'],scene:['slide','side','flat'],cover:['single','gatefold'],discs:['single','double'],finish:['solid','translucent','marble','splatter'],labelMode:['color','upload'],backdrop:['none','studio','wall'],light:['left','top','right'],coverView:['front','back','both'],gateOpen:['closed','open'],recordSide:['a','b'],bgUse:['image','cover','none'],coverBgPart:Object.keys(coverBgKeys)}))if(values.includes(value[name]))next[name]=value[name];else if(name==='labelMode'&&value[name]==='art')next[name]='upload';
     for(const key of artKeys){const id=value[key]??value[legacyArtKeys[key]];next[key]=typeof id==='string'&&images[id]?id:null;}
     return next;
   }
@@ -2526,14 +2536,14 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   // of it sticks out past the view, so it can never uncover an edge.
   let bgPan=null,lastFrame=null;
   function placeBackground(frame){
-    const id=state.bgArtId;if(!images[id])return;
+    const id=bgPic(state);if(!images[id])return;
     const stage=$('stage'),cs=getComputedStyle(stage),w=stage.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight),h=stage.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);
     let [x,y,fw,fh]=frame;const r=w>0&&h>0?w/h:fw/fh;
     if(r>fw/fh){const nw=fh*r;x-=(nw-fw)/2;fw=nw;}else{const nh=fw/r;y-=(nh-fh)/2;fh=nh;}
     const m=.06,vx=x-fw*m,vy=y-fh*m,vw=fw*(1+2*m),vh=fh*(1+2*m);
     const pic=imageReady(id)?imgEls[id]:null,iw=pic?pic.naturalWidth:vw,ih=pic?pic.naturalHeight:vh;
-    const k=Math.max(vw/iw,vh/ih)*state.bgZoom/100,iw2=iw*k,ih2=ih*k,maxX=(iw2-vw)/2,maxY=(ih2-vh)/2;
-    const cx=vx+vw/2+state.bgX/100*maxX,cy=vy+vh/2+state.bgY/100*maxY;
+    const k=Math.max(vw/iw,vh/ih)*bgV(state,'Zoom')/100,iw2=iw*k,ih2=ih*k,maxX=(iw2-vw)/2,maxY=(ih2-vh)/2;
+    const cx=vx+vw/2+bgV(state,'X')/100*maxX,cy=vy+vh/2+bgV(state,'Y')/100*maxY;
     bgPan={maxX,maxY,unitsPerPx:w>0?fw/w:1};
     const el=svg.querySelector('#bg-art');el.setAttribute('preserveAspectRatio','none');
     [['x',cx-iw2/2],['y',cy-ih2/2],['width',iw2],['height',ih2]].forEach(([key,v])=>el.setAttribute(key,round(v)));
@@ -2685,14 +2695,14 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
       '<linearGradient id="fold"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".38" stop-color="#000" stop-opacity=".08"/><stop offset=".5" stop-color="#000" stop-opacity=".26"/><stop offset=".62" stop-color="#000" stop-opacity=".08"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient>'+
       '<linearGradient id="sleeve-gloss" '+glossDir+'><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset=".3" stop-color="#fff" stop-opacity=".12"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset=".85" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity=".1"/></linearGradient>';
     let body='';
-    const photo=!!images[st.bgArtId];
+    const photo=!!images[bgPic(st)];
     if(photo){
       // A background photo, softened like a shallow depth of field, with the studio light on top.
-      defs+='<filter id="bg-blur" x="0" y="0" width="1" height="1"><feGaussianBlur stdDeviation="'+round(st.bgBlur/100*S*.025)+'"/></filter>';
+      defs+='<filter id="bg-blur" x="0" y="0" width="1" height="1"><feGaussianBlur stdDeviation="'+round(bgV(st,'Blur')/100*S*.025)+'"/></filter>';
       const [fx,fy,fw,fh]=frame,rect=fill=>'<rect x="'+round(fx-fw*2)+'" y="'+round(fy-fh*2)+'" width="'+round(fw*5)+'" height="'+round(fh*5)+'" fill="'+fill+'"/>';
       defs+='<radialGradient id="bd-light" gradientUnits="userSpaceOnUse" cx="'+round(fx+fw/2-dir*fw*.22)+'" cy="'+round(fy+fh*.3)+'" r="'+round(Math.max(fw,fh)*.95)+'"><stop offset="0" stop-color="#fff" stop-opacity="'+round(.22*dp)+'"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/></radialGradient>'+
         '<radialGradient id="bd-vignette" gradientUnits="userSpaceOnUse" cx="'+round(fx+fw/2)+'" cy="'+round(fy+fh/2)+'" r="'+round(Math.hypot(fw,fh)*.62)+'"><stop offset=".45" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="'+round(.38*dp)+'"/></radialGradient>';
-      body+='<g id="backdrop">'+rect(bg||'#000000')+'<use href="#bg-art"'+(st.bgBlur?' filter="url(#bg-blur)"':'')+'/>'+(st.backdrop!=='none'?rect('url(#bd-light)')+rect('url(#bd-vignette)'):'')+'</g>';
+      body+='<g id="backdrop">'+rect(bg||'#000000')+'<use href="#bg-art"'+(bgV(st,'Blur')?' filter="url(#bg-blur)"':'')+'/>'+(st.backdrop!=='none'?rect('url(#bd-light)')+rect('url(#bd-vignette)'):'')+'</g>';
     }else if(bg){
       // Backdrop: a big sheet in the background color, lit like a small photo studio.
       const [fx,fy,fw,fh]=frame,bx=fx-fw*2,by=fy-fh*2,bw=fw*5,bh=fh*5,rect=(fill,y=by,h=bh)=>'<rect x="'+round(bx)+'" y="'+round(y)+'" width="'+round(bw)+'" height="'+round(h)+'" fill="'+fill+'"/>';
@@ -3001,9 +3011,9 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   }
   // The background photo, softened by Background blur (on a square canvas; the shader keeps its shape).
   function photoTexture(st){
-    const id=st.bgArtId,pic=imgEls[id];
-    return cachedTexture(['photo',id,st.bgBlur].join('|'),()=>{
-      const N=Math.min(2048,gl3d.maxTex),c=document.createElement('canvas');c.width=c.height=N;const ctx=c.getContext('2d'),b=st.bgBlur/100*.009*N;
+    const id=bgPic(st),pic=imgEls[id];
+    return cachedTexture(['photo',id,bgV(st,'Blur')].join('|'),()=>{
+      const N=Math.min(2048,gl3d.maxTex),c=document.createElement('canvas');c.width=c.height=N;const ctx=c.getContext('2d'),b=bgV(st,'Blur')/100*.009*N;
       ctx.drawImage(pic,0,0,N,N);
       if(b>.3){ctx.filter='blur('+b.toFixed(1)+'px)';const m=b*3;ctx.drawImage(pic,-m,-m,N+2*m,N+2*m);ctx.filter='none';}
       return c;
@@ -3147,7 +3157,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     const t=Math.tan(c.fov*Math.PI/360),dist=viewHalfH/c.zoom/t,yaw=c.yaw*Math.PI/180,pitch=c.pitch*Math.PI/180,tg=scene.target,pan=[c.panX/100*viewHalfH,c.panY/100*viewHalfH];
     const view=M4.mul(M4.translate(-pan[0],-pan[1],-dist),M4.rotX(pitch),M4.rotY(yaw),M4.translate(-tg[0],-tg[1],-tg[2]));
     const eye=M4.apply(M4.mul(M4.translate(...tg),M4.rotY(-yaw),M4.rotX(-pitch)),[pan[0],pan[1],dist]);
-    const bg=previewBackground(),photo=!!(images[st.bgArtId]&&imageReady(st.bgArtId)),floorY=scene.floorY,onFloor=eye[1]>floorY+1;
+    const bg=previewBackground(),photo=!!(images[bgPic(st)]&&imageReady(bgPic(st))),floorY=scene.floorY,onFloor=eye[1]>floorY+1;
     const sweep=onFloor&&!!bg&&!photo&&st.backdrop!=='none',shadowK=onFloor?st.shadow/100:0;
     // The lights travel round with the camera like a photographer's, so every side of the record is lit
     // and the floor shadow keeps its place in the picture; turning still moves the highlights.
@@ -3176,9 +3186,9 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     // Background: the photo filling the view, or the backdrop sweep, then the shadow on the floor.
     gl.uniform1f(u.uScreen,0);
     if(photo){
-      const pic=imgEls[st.bgArtId],ia=pic.naturalWidth/pic.naturalHeight,a=width/height,z=st.bgZoom/100;
+      const pic=imgEls[bgPic(st)],ia=pic.naturalWidth/pic.naturalHeight,a=width/height,z=bgV(st,'Zoom')/100;
       let fx=a>ia?1:a/ia,fy=a>ia?ia/a:1;fx/=z;fy/=z;
-      const cx=.5-st.bgX/100*(1-fx)/2,cy=.5-st.bgY/100*(1-fy)/2;
+      const cx=.5-bgV(st,'X')/100*(1-fx)/2,cy=.5-bgV(st,'Y')/100*(1-fy)/2;
       gl.depthMask(false);gl.uniform1f(u.uScreen,1);draw('quad',M4.ident(),{kind:5,tex:photoTexture(st),rect:[cx-fx/2,cy-fy/2,fx,fy]});gl.uniform1f(u.uScreen,0);gl.depthMask(true);
     }
     const ground=M4.translate(tg[0],floorY,tg[2]);
@@ -3261,16 +3271,19 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     setImageHref('cover-art',art?images[state.artId]:null);
     setImageHref('back-art',images[state.backArtId]||null);
     setImageHref('inside-art',images[state.insideArtId]||null);
-    setImageHref('bg-art',images[state.bgArtId]||null);
+    setImageHref('bg-art',images[bgPic(state)]||null);
     for(const [key,slot] of Object.entries(slots)){
       const id=state[key]&&images[state[key]]?state[key]:null;
       if(shownThumb[key]!==id){$(slot.thumb).style.backgroundImage=id?'url("'+images[id]+'")':'';shownThumb[key]=id;}
       $(slot.thumb).classList.toggle('has-art',!!id);root.querySelectorAll('[data-thumb="'+slot.thumb+'"]').forEach(el=>el.classList.toggle('has-art',!!id));$(slot.remove).disabled=!id;if(slot.words)$(slot.upload).textContent=slot.words[id?1:0];
     }
-    // The cover swatch shows the front cover and lights up while it is the background.
-    const coverId=images[state.artId]?state.artId:null,coverBtn=$('cover-bg-btn');
+    // Background swatches: the cover swatch previews the chosen artwork; the source in use is outlined.
+    const partId=p=>images[state[coverBgKeys[p]]]?state[coverBgKeys[p]]:null;
+    const coverId=partId(state.coverBgPart)||Object.keys(coverBgKeys).map(partId).find(Boolean)||null,coverBtn=$('cover-bg-btn'),coverOn=state.bgUse==='cover'&&!!images[bgPic(state)];
     if(coverBtn.dataset.art!==(coverId||'')){coverBtn.style.backgroundImage=coverId?'url("'+images[coverId]+'")':'';coverBtn.dataset.art=coverId||'';}
-    coverBtn.classList.toggle('has-art',!!coverId);coverBtn.setAttribute('aria-pressed',String(!!coverId&&state.bgArtId===coverId));
+    coverBtn.classList.toggle('has-art',!!coverId);coverBtn.classList.toggle('is-on',coverOn);coverBtn.setAttribute('aria-pressed',String(coverOn));
+    $('bg-image-btn').classList.toggle('is-on',state.bgUse==='image'&&!!images[state.bgArtId]);
+    root.querySelectorAll('[data-choice="coverBgPart"]').forEach(b=>b.disabled=!partId(b.dataset.option));
     updateDiscs(state);
     const L=layout(state);exportBox=L.box;
     // The preview frame covers the slider's whole range, so moving it moves the record instead of
@@ -3288,7 +3301,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     root.querySelectorAll('[data-record-controls]').forEach(el=>el.hidden=state.mode==='cover');
     root.querySelectorAll('[data-layout-controls]').forEach(el=>el.hidden=state.mode!=='both');
     const effect=['marble','splatter'].includes(state.finish);
-    const show={accent:effect,pattern:effect,clarity:state.finish==='translucent',double:state.discs==='double',labelUpload:state.labelMode==='upload',gatefold:state.cover==='gatefold',closedView:!(state.cover==='gatefold'&&state.gateOpen==='open'),coverOnly:state.mode==='cover',labelColor:state.labelMode==='color'||!labelFor(state,0),labelArtNote:state.labelMode==='upload',noBackground:!previewBackground()&&!images[state.bgArtId],bgImage:!!images[state.bgArtId]};
+    const show={accent:effect,pattern:effect,clarity:state.finish==='translucent',double:state.discs==='double',labelUpload:state.labelMode==='upload',gatefold:state.cover==='gatefold',closedView:!(state.cover==='gatefold'&&state.gateOpen==='open'),coverOnly:state.mode==='cover',labelColor:state.labelMode==='color'||!labelFor(state,0),labelArtNote:state.labelMode==='upload',noBackground:!previewBackground()&&!images[bgPic(state)],bgImage:!!images[bgPic(state)]};
     const double=state.discs==='double';
     root.querySelectorAll('[data-side-label]').forEach(el=>el.textContent=el.dataset.sideLabel==='a'?(double?'Sides A + C':'Side A'):(double?'Sides B + D':'Side B'));
     root.querySelectorAll('[data-show]').forEach(el=>el.hidden=!show[el.dataset.show]);
@@ -3301,7 +3314,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     $('undo').disabled=undoStack.length===0;$('redo').disabled=redoStack.length===0;
     $('stage').className='logo-stage '+preferences.background;
     $('stage').style.background=preferences.background==='custom'?preferences.customBackground:'';
-    $('stage').classList.toggle('has-bg',!!images[state.bgArtId]);
+    $('stage').classList.toggle('has-bg',!!images[bgPic(state)]);
     $('custom-bg-btn').style.setProperty('--custom-bg',preferences.customBackground);
     $('custom-bg-color').value=preferences.customBackground;
     root.querySelectorAll('[data-background]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.background===preferences.background)));
@@ -3408,7 +3421,9 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   window.addEventListener('resize',placeColorSheet);
   // The background photo is fitted to the preview's shape, so refit it when the window changes.
   let resizeFrame=0;
-  window.addEventListener('resize',()=>{if(!images[state.bgArtId])return;cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(paint);});
+  const refit=()=>{if(!images[bgPic(state)])return;cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(paint);};
+  // The stage also changes size when panels open or close, not only with the window.
+  window.addEventListener('resize',refit);if(window.ResizeObserver)new ResizeObserver(refit).observe($('stage'));
   matchMedia('(max-width:660px)').addEventListener('change',()=>paint());
   // Preview colour picker: while the colour window is open, the preview is rendered to a canvas
   // so the colour under the pointer can be read, shown in a small bubble and picked with a click.
@@ -3458,14 +3473,14 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   // Drag the preview to move the background photo. While dragging only the photo moves; the
   // full repaint and undo step happen on release.
   stageEl.addEventListener('pointerdown',event=>{
-    if(is3d()||!$('color-sheet').hidden||!images[state.bgArtId]||event.button!==0||!bgPan||event.target.closest('#subject,.view3d-bar')||event.shiftKey||event.pointerType==='touch')return;
+    if(is3d()||!$('color-sheet').hidden||!images[bgPic(state)]||event.button!==0||!bgPan||event.target.closest('#subject,.view3d-bar')||event.shiftKey||event.pointerType==='touch')return;
     event.preventDefault();stageEl.setPointerCapture(event.pointerId);stageEl.classList.add('panning');
-    const start={x:event.clientX,y:event.clientY,bx:state.bgX,by:state.bgY};let moved=false;
+    const start={x:event.clientX,y:event.clientY,bx:bgV(state,'X'),by:bgV(state,'Y')};let moved=false;
     const axis=(from,deltaPx,max)=>max>0?Math.max(-100,Math.min(100,Math.round(from+deltaPx*bgPan.unitsPerPx/max*100))):0;
     const move=e=>{
       const nx=axis(start.bx,e.clientX-start.x,bgPan.maxX),ny=axis(start.by,e.clientY-start.y,bgPan.maxY);
-      if(nx===state.bgX&&ny===state.bgY)return;
-      state.bgX=nx;state.bgY=ny;moved=true;placeBackground(lastFrame);
+      if(nx===bgV(state,'X')&&ny===bgV(state,'Y'))return;
+      state[bgK(state,'X')]=nx;state[bgK(state,'Y')]=ny;moved=true;placeBackground(lastFrame);
       sceneEl.querySelectorAll('use[href="#bg-art"]').forEach(use=>use.replaceWith(use.cloneNode(false)));
     };
     const up=()=>{
@@ -3559,7 +3574,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   function placeStart(){const f=placeTouches.size===2?placeFingers():[...placeTouches.values()][0];return {...f,x0:state.placeX,y0:state.placeY,z0:state.placeZoom,r0:state.placeRot};}
   stageEl.addEventListener('pointerdown',event=>{
     if(is3d()||!$('color-sheet').hidden||event.button>0||event.target.closest('.view3d-bar'))return;
-    if(images[state.bgArtId]&&!event.target.closest('#subject')&&!event.shiftKey&&event.pointerType!=='touch'&&!placeTouches.size)return;
+    if(images[bgPic(state)]&&!event.target.closest('#subject')&&!event.shiftKey&&event.pointerType!=='touch'&&!placeTouches.size)return;
     event.preventDefault();try{stageEl.setPointerCapture(event.pointerId);}catch(e){}
     placeTouches.set(event.pointerId,{x:event.clientX,y:event.clientY});
     placeGesture={...placeStart(),turn:event.shiftKey||event.altKey};stageEl.classList.add('panning');
@@ -3734,8 +3749,8 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
       // Show what was just added: the back, the opened inside spread, or the label.
       if(key==='bgArtId')preferences.includeBackground=true;
       const letter=key.startsWith('label')?key[5]:'';
-      const reveal={artId:{},backArtId:state.coverView==='both'?{}:{coverView:'back'},insideArtId:{cover:'gatefold',gateOpen:'open'},bgArtId:{}}[key]||{labelMode:'upload',recordSide:'BD'.includes(letter)?'b':'a',...('CD'.includes(letter)?{discs:'double'}:{})};
-      changeTo({...state,[key]:id,...reveal,...(key==='artId'&&state.artId&&state.bgArtId===state.artId?{bgArtId:id}:{})});
+      const reveal={artId:{},backArtId:state.coverView==='both'?{}:{coverView:'back'},insideArtId:{cover:'gatefold',gateOpen:'open'},bgArtId:{bgUse:'image'}}[key]||{labelMode:'upload',recordSide:'BD'.includes(letter)?'b':'a',...('CD'.includes(letter)?{discs:'double'}:{})};
+      changeTo({...state,[key]:id,...reveal});
       notice(storageOK?{artId:'Front cover added.',backArtId:'Back cover added.',insideArtId:'Inside spread added.',bgArtId:'Background image added.'}[key]||'Label art added.':'Artwork kept for this visit. Use Save project for a backup.',!storageOK);
     }catch(e){notice('Could not use that image: '+e.message,true);}
   }
@@ -3746,16 +3761,22 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   }
   // Background image: the toolbar swatch picks an image; the arrow next to it opens its options.
   const bgMenu=$('bg-image-menu'),bgToggle=$('bg-image-menu-btn');
-  const openBgMenu=open=>{bgMenu.hidden=!open;bgToggle.setAttribute('aria-expanded',String(open));};
-  $('bg-image-btn').addEventListener('click',()=>{if(!state.bgArtId){uploadKey='bgArtId';$('art-file').click();}else openBgMenu(bgMenu.hidden);});
+  const openBgMenu=open=>{bgMenu.hidden=!open;bgToggle.setAttribute('aria-expanded',String(open));if(open)openCoverMenu(false);};
+  $('bg-image-btn').addEventListener('click',()=>{if(!state.bgArtId){uploadKey='bgArtId';$('art-file').click();}else if(state.bgUse!=='image'){preferences.selected='custom';preferences.includeBackground=true;changeTo({...state,bgUse:'image'});notice('The uploaded image is the background.');}else openBgMenu(bgMenu.hidden);});
   bgToggle.addEventListener('click',e=>{e.stopPropagation();openBgMenu(bgMenu.hidden);});
-  // Front cover as background: shares the cover image; a second click turns it off.
+  // Cover art as background: its own source and menu, picking the front, back or a label.
+  const coverMenu=$('cover-bg-menu'),coverToggle=$('cover-bg-menu-btn');
+  function openCoverMenu(open){coverMenu.hidden=!open;coverToggle.setAttribute('aria-expanded',String(open));if(open)openBgMenu(false);}
   $('cover-bg-btn').addEventListener('click',()=>{
-    if(!images[state.artId]){notice('Upload a front cover first.');return;}
-    preferences.selected='custom';
-    if(state.bgArtId===state.artId){changeTo({...state,bgArtId:null});notice('Cover background removed.');return;}
-    preferences.includeBackground=true;changeTo({...state,bgArtId:state.artId});notice('The front cover is now the background. The arrow next to the image icon sets blur and zoom.');
+    if(state.bgUse==='cover'&&images[bgPic(state)]){openCoverMenu(coverMenu.hidden);return;}
+    const has=p=>!!images[state[coverBgKeys[p]]],part=has(state.coverBgPart)?state.coverBgPart:Object.keys(coverBgKeys).find(has);
+    if(!part){notice('Upload a cover or a label first.');return;}
+    preferences.selected='custom';preferences.includeBackground=true;changeTo({...state,bgUse:'cover',coverBgPart:part});notice('The cover art is the background.');
   });
+  coverToggle.addEventListener('click',e=>{e.stopPropagation();openCoverMenu(coverMenu.hidden);});
+  $('cover-bg-off').addEventListener('click',()=>{preferences.selected='custom';changeTo({...state,bgUse:'none'});openCoverMenu(false);notice('Cover background turned off.');});
+  document.addEventListener('pointerdown',e=>{if(!coverMenu.hidden&&!coverMenu.contains(e.target)&&!coverToggle.contains(e.target)&&e.target.id!=='cover-bg-btn')openCoverMenu(false);});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!coverMenu.hidden){openCoverMenu(false);coverToggle.focus();}});
   $('bg-remove').addEventListener('click',()=>openBgMenu(false));
   document.addEventListener('pointerdown',e=>{if(!bgMenu.hidden&&!bgMenu.contains(e.target)&&!bgToggle.contains(e.target)&&e.target.id!=='bg-image-btn')openBgMenu(false);});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!bgMenu.hidden){openBgMenu(false);bgToggle.focus();}});
@@ -3888,7 +3909,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   }
   // Downloads carry the backdrop whenever the preview shows one (a background colour or image);
   // with the transparent preview they are transparent, shadows included.
-  const includeBackdrop=()=>!!(previewBackground()||images[state.bgArtId]);
+  const includeBackdrop=()=>!!(previewBackground()||images[bgPic(state)]);
   async function svgExport(box=exportBox){
     await finishDiscs();
     const copy=svg.cloneNode(true);
@@ -3896,7 +3917,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     copy.removeAttribute('style');copy.querySelector('title').textContent=preferences.name.trim()||'Vinyl record';
     const record=(state.discs==='double'?'double ':'')+{solid:'solid',translucent:'clear',marble:'marble',splatter:'splatter'}[state.finish]+' vinyl record',sleeve=(state.cover==='gatefold'?'gatefold':'standard')+' sleeve';
     copy.querySelector('desc').textContent={cover:'A '+sleeve,record:'A '+record,both:'A '+record+' with a '+sleeve}[state.mode]+'. Exported from Blob Record Studio.';
-    for(const [key,id] of [['artId','cover-art'],['backArtId','back-art'],['insideArtId','inside-art'],['bgArtId','bg-art']])if(!images[state[key]])copy.querySelector('#'+id).remove();
+    for(const [key,id] of [['artId','cover-art'],['backArtId','back-art'],['insideArtId','inside-art'],['bg','bg-art']])if(!images[key==='bg'?bgPic(state):state[key]])copy.querySelector('#'+id).remove();
     for(let i=discCount(state);i<2;i++)copy.querySelector('#disc-'+i).remove();
     if(!includeBackdrop()){copy.querySelector('#backdrop')?.remove();copy.querySelector('#bg-art')?.remove();}
     return '<?xml version="1.0" encoding="UTF-8"?>\n'+new XMLSerializer().serializeToString(copy);
@@ -4021,9 +4042,9 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   try{showPhotos(localStorage.getItem('blob-record-photos-open')!=='false');}catch(e){showPhotos(true);}
   $('photos-toggle').addEventListener('click',()=>{const open=$('photos-toggle').getAttribute('aria-expanded')!=='true';showPhotos(open);try{localStorage.setItem('blob-record-photos-open',String(open));}catch(e){}});
   // Hide or show the side panels and the download bar.
-  function showPanel(key,open){const btn=$('toggle-'+key),words=(open?'Hide ':'Show ')+key;root.classList.toggle(key+'-hidden',!open);btn.setAttribute('aria-expanded',String(open));btn.title=words;btn.setAttribute('aria-label',words);}
+  function showPanel(key,open){const btn=$('toggle-'+key),words=(open?'Hide ':'Show ')+(key==='lights'?'lights and camera':key);root.classList.toggle(key+'-hidden',!open);btn.setAttribute('aria-expanded',String(open));btn.title=words;btn.setAttribute('aria-label',words);}
   // Every visit opens with all panels tucked away.
-  const PANEL_OPEN={options:false,uploads:false,downloads:false,background:false};
+  const PANEL_OPEN={options:false,uploads:false,downloads:false,lights:false};
   for(const key of Object.keys(PANEL_OPEN)){
     showPanel(key,PANEL_OPEN[key]);
     $('toggle-'+key).addEventListener('click',()=>showPanel(key,$('toggle-'+key).getAttribute('aria-expanded')!=='true'));
